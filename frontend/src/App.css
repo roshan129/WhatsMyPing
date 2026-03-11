@@ -34,6 +34,36 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.target-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+}
+
+.target-select select {
+  background-color: #020617;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  padding: 0.35rem 0.75rem;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.mode-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .primary-button,
 .secondary-button {
   border-radius: 999px;

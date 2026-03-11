@@ -16,12 +16,20 @@ const getPingQuality = (latencyMs) => {
   return { label: 'Poor', color: '#ef4444' }
 }
 
+const TARGETS = [
+  { id: 'backend', label: 'Local backend (HTTP)', query: 'backend' },
+  { id: 'google-dns', label: 'Google DNS (8.8.8.8)', query: 'google-dns' },
+  { id: 'cloudflare', label: 'Cloudflare (1.1.1.1)', query: 'cloudflare' },
+]
+
 function App() {
   const [latencyMs, setLatencyMs] = useState(null)
   const [isTesting, setIsTesting] = useState(false)
   const [isContinuous, setIsContinuous] = useState(false)
   const [error, setError] = useState(null)
   const [history, setHistory] = useState([])
+  const [target, setTarget] = useState(TARGETS[0].id)
+  const [mode, setMode] = useState('http')
   const intervalRef = useRef(null)
 
   const recordPing = (latency) => {
@@ -39,15 +47,24 @@ function App() {
 
     try {
       const start = performance.now()
-      const response = await fetch('/api/ping')
+      const endpoint =
+        mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
+      const response = await fetch(
+        `${endpoint}?target=${encodeURIComponent(target)}`
+      )
 
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`)
       }
 
-      await response.json()
-      const end = performance.now()
-      const latency = Math.round(end - start)
+      const data = await response.json()
+      let latency
+      if (mode === 'icmp' && typeof data.latencyMs === 'number') {
+        latency = Math.round(data.latencyMs)
+      } else {
+        const end = performance.now()
+        latency = Math.round(end - start)
+      }
       recordPing(latency)
     } catch (err) {
       setError('Could not reach the ping server. Make sure the backend is running.')
@@ -72,13 +89,22 @@ function App() {
     const runPing = async () => {
       try {
         const start = performance.now()
-        const response = await fetch('/api/ping')
+        const endpoint =
+          mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
+        const response = await fetch(
+          `${endpoint}?target=${encodeURIComponent(target)}`
+        )
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)
         }
-        await response.json()
-        const end = performance.now()
-        const latency = Math.round(end - start)
+        const data = await response.json()
+        let latency
+        if (mode === 'icmp' && typeof data.latencyMs === 'number') {
+          latency = Math.round(data.latencyMs)
+        } else {
+          const end = performance.now()
+          latency = Math.round(end - start)
+        }
         recordPing(latency)
         setError(null)
       } catch (err) {
@@ -96,7 +122,7 @@ function App() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isContinuous])
+  }, [isContinuous, mode, target])
 
   const toggleContinuous = () => {
     setIsContinuous((prev) => !prev)
@@ -121,6 +147,41 @@ function App() {
 
       <div className="card">
         <div className="controls">
+          <label className="target-select">
+            <span>Ping target</span>
+            <select
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
+            >
+              {TARGETS.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="mode-toggle">
+            <span>Mode</span>
+            <div className="mode-buttons">
+              <button
+                type="button"
+                className={`secondary-button ${mode === 'http' ? 'active' : ''}`}
+                onClick={() => setMode('http')}
+              >
+                HTTP
+              </button>
+              <button
+                type="button"
+                className={`secondary-button ${mode === 'icmp' ? 'active' : ''}`}
+                onClick={() => setMode('icmp')}
+                disabled={target === 'backend'}
+              >
+                ICMP
+              </button>
+            </div>
+          </div>
+
           <button onClick={handleCheckPing} disabled={isTesting} className="primary-button">
             {isTesting ? 'Testing…' : 'Check Ping Once'}
           </button>
