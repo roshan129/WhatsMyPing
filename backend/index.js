@@ -18,6 +18,7 @@ app.get('/health', (req, res) => {
 })
 
 const ALLOWED_TARGETS = ['backend', 'google-dns', 'cloudflare']
+const DEFAULT_TARGET = process.env.DEFAULT_PING_TARGET || 'backend'
 
 const pingLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -33,10 +34,14 @@ app.get('/api/ping', pingLimiter, (req, res) => {
     return res.status(400).json({ error: 'Invalid target' })
   }
 
+  if (!target && !ALLOWED_TARGETS.includes(DEFAULT_TARGET)) {
+    return res.status(500).json({ error: 'Invalid DEFAULT_PING_TARGET' })
+  }
+
   res.status(200).json({
     message: 'pong',
     serverTime: Date.now(),
-    target: target || 'backend',
+    target: target || DEFAULT_TARGET,
     mode: 'http',
   })
 })
@@ -82,4 +87,3 @@ const PORT = process.env.PORT || 4001
 app.listen(PORT, () => {
   console.log(`Backend server listening on port ${PORT}`)
 })
-

@@ -452,6 +452,37 @@ Goal: Make the app easy to deploy and maintain in real environments.
 
 ---
 
+## Environment Configuration (Implemented)
+
+Backend (`backend/.env.example`)
+- `PORT` (default `4001`)
+- `DEFAULT_PING_TARGET` (`backend`, `google-dns`, `cloudflare`)
+
+Frontend (`frontend/.env.example`)
+- `VITE_API_BASE_URL` (leave blank in dev to use Vite proxy)
+
+Notes
+- In development, leave `VITE_API_BASE_URL` empty and run the backend on `http://localhost:4001`.
+- In production, set `VITE_API_BASE_URL` to your backend origin, e.g. `https://api.example.com`.
+
+## Deployment Checklist (Simple)
+
+1. Backend
+   - Set environment variables from `backend/.env.example`.
+   - Install deps: `npm install` in `backend/`.
+   - Start server: `npm run start`.
+2. Frontend (static hosting)
+   - Set `VITE_API_BASE_URL` to the backend URL.
+   - Install deps: `npm install` in `frontend/`.
+   - Build: `npm run build` (outputs `frontend/dist`).
+   - Deploy `frontend/dist` to your static host.
+3. Frontend (served by backend)
+   - Build frontend: `npm run build` in `frontend/`.
+   - Configure Express to serve `frontend/dist` (optional enhancement).
+   - Start backend with the same environment variables.
+
+---
+
 ## Developer Setup – Step-by-Step Summary
 
 Once the scaffolding is in place, a developer should be able to:
@@ -478,4 +509,3 @@ Once the scaffolding is in place, a developer should be able to:
    - Observe ping value and quality label.
 
 This `README.md` is the guiding document for implementing the "What's My Ping?" application step by step using sprints and stories. As features are implemented, we can update this file with more details, screenshots, and any architectural decisions made along the way.
-

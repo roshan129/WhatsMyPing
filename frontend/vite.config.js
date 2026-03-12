@@ -5,15 +5,17 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:4001',
-        changeOrigin: true,
-      },
-      '/health': {
-        target: 'http://localhost:4001',
-        changeOrigin: true,
-      },
-    },
+    proxy: process.env.VITE_API_BASE_URL
+      ? undefined
+      : {
+          '/api': {
+            target: 'http://localhost:4001',
+            changeOrigin: true,
+          },
+          '/health': {
+            target: 'http://localhost:4001',
+            changeOrigin: true,
+          },
+        },
   },
 })

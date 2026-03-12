@@ -31,6 +31,7 @@ function App() {
   const [target, setTarget] = useState(TARGETS[0].id)
   const [mode, setMode] = useState('http')
   const intervalRef = useRef(null)
+  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
   const recordPing = (latency) => {
     setLatencyMs(latency)
@@ -50,7 +51,7 @@ function App() {
       const endpoint =
         mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
       const response = await fetch(
-        `${endpoint}?target=${encodeURIComponent(target)}`
+        `${apiBase}${endpoint}?target=${encodeURIComponent(target)}`
       )
 
       if (!response.ok) {
@@ -92,7 +93,7 @@ function App() {
         const endpoint =
           mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
         const response = await fetch(
-          `${endpoint}?target=${encodeURIComponent(target)}`
+          `${apiBase}${endpoint}?target=${encodeURIComponent(target)}`
         )
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)
@@ -140,12 +141,25 @@ function App() {
 
   return (
     <main className="app">
-      <h1>What's My Ping?</h1>
-      <p className="subtitle">
-        Check your current network latency. Lower ping usually means smoother online gaming.
-      </p>
+      <header className="hero">
+        <div className="hero-text">
+          <p className="eyebrow">Realtime latency check</p>
+          <h1>What's My Ping?</h1>
+          <p className="subtitle">
+            Measure your network latency and see whether it is ready for ranked, raids, or casual
+            play.
+          </p>
+        </div>
+        <div className="hero-card">
+          <p className="hero-label">Session status</p>
+          <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
+          <p className="hero-meta">
+            {mode.toUpperCase()} mode · {target.replace('-', ' ')}
+          </p>
+        </div>
+      </header>
 
-      <div className="card">
+      <section className="card" aria-label="Ping controls and results">
         <div className="controls">
           <label className="target-select">
             <span>Ping target</span>
@@ -195,42 +209,87 @@ function App() {
 
         {error && <p className="error">{error}</p>}
 
-        {latencyMs != null && !error && (
-          <div className="results">
-            <p className="ping-value">
-              Current ping: <span>{latencyMs}</span> ms
-            </p>
-            {quality && (
-              <p className="ping-quality">
-                Status:{' '}
-                <span style={{ color: quality.color, fontWeight: 600 }}>
-                  {quality.label}
-                </span>
+        <div className="results-grid">
+          {latencyMs != null && !error && (
+            <div className="results" data-reveal="1">
+              <p className="ping-label">Current ping</p>
+              <p className="ping-value">
+                <span>{latencyMs}</span> ms
               </p>
-            )}
-          </div>
-        )}
+              {quality && (
+                <p className="ping-quality">
+                  Status:{' '}
+                  <span style={{ color: quality.color, fontWeight: 600 }}>
+                    {quality.label}
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
 
-        {stats && !error && (
-          <div className="stats">
-            <h2>Session stats ({stats.count} samples)</h2>
-            <ul>
-              <li>
-                <strong>Average:</strong> {stats.average} ms
-              </li>
-              <li>
-                <strong>Minimum:</strong> {stats.min} ms
-              </li>
-              <li>
-                <strong>Maximum:</strong> {stats.max} ms
-              </li>
-            </ul>
-          </div>
-        )}
+          {stats && !error && (
+            <div className="stats" data-reveal="2">
+              <h2>Session stats ({stats.count} samples)</h2>
+              <ul>
+                <li>
+                  <strong>Average:</strong> {stats.average} ms
+                </li>
+                <li>
+                  <strong>Minimum:</strong> {stats.min} ms
+                </li>
+                <li>
+                  <strong>Maximum:</strong> {stats.max} ms
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
 
         {history.length > 0 && !error && (
-          <div className="history">
+          <div className="history" data-reveal="3">
             <h2>Recent pings</h2>
+            {history.length > 1 && (
+              <div className="history-chart" role="img" aria-label="Ping history chart">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="pingLine" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0%" stopColor="#38bdf8" />
+                      <stop offset="100%" stopColor="#f97316" />
+                    </linearGradient>
+                    <linearGradient id="pingFill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stopColor="rgba(56, 189, 248, 0.35)" />
+                      <stop offset="100%" stopColor="rgba(2, 6, 23, 0)" />
+                    </linearGradient>
+                  </defs>
+                  {(() => {
+                    const samples = history.slice(-60)
+                    const values = samples.map((point) => point.latency)
+                    const min = Math.min(...values)
+                    const max = Math.max(...values)
+                    const range = Math.max(8, max - min)
+                    const stepX = 100 / (samples.length - 1)
+                    const points = samples.map((point, index) => {
+                      const x = index * stepX
+                      const normalized = (point.latency - min) / range
+                      const y = 34 - normalized * 28
+                      return `${x},${y}`
+                    })
+                    const line = `M ${points.join(' L ')}`
+                    const fill = `${line} L 100,38 L 0,38 Z`
+                    return (
+                      <>
+                        <path d={fill} fill="url(#pingFill)" stroke="none" />
+                        <path d={line} fill="none" stroke="url(#pingLine)" strokeWidth="1.6" />
+                      </>
+                    )
+                  })()}
+                </svg>
+                <div className="chart-legend">
+                  <span>Last {Math.min(history.length, 60)} samples</span>
+                  <span>Range: {stats ? `${stats.min}–${stats.max} ms` : '—'}</span>
+                </div>
+              </div>
+            )}
             <table>
               <thead>
                 <tr>
@@ -258,7 +317,63 @@ function App() {
             </table>
           </div>
         )}
-      </div>
+      </section>
+
+      <section className="learn" aria-label="Ping explanation">
+        <div className="learn-header">
+          <h2>What does ping mean?</h2>
+          <p>
+            Ping is the round trip time for a signal to leave your device, reach a server, and come
+            back. Lower values feel instant, while higher values introduce delay and can make fast
+            reactions feel sluggish.
+          </p>
+        </div>
+
+        <div className="range-grid">
+          <div className="range-card">
+            <h3>Excellent</h3>
+            <p>0–30 ms. Competitive play feels instant.</p>
+          </div>
+          <div className="range-card">
+            <h3>Good</h3>
+            <p>31–60 ms. Most online games feel smooth.</p>
+          </div>
+          <div className="range-card">
+            <h3>Playable</h3>
+            <p>61–100 ms. Still usable, but reactions feel slower.</p>
+          </div>
+          <div className="range-card">
+            <h3>Poor</h3>
+            <p>100+ ms. Expect noticeable lag and delays.</p>
+          </div>
+        </div>
+
+        <div className="faq">
+          <h2>Quick answers</h2>
+          <ul>
+            <li>
+              <strong>Why does this differ from in-game ping?</strong> Each game server, tick rate,
+              and routing path is different. This tool measures a basic round trip to a selected
+              target.
+            </li>
+            <li>
+              <strong>What affects ping the most?</strong> Distance to the server, Wi‑Fi congestion,
+              background downloads, and ISP routing.
+            </li>
+            <li>
+              <strong>How can I improve it?</strong> Use wired Ethernet, choose closer servers,
+              update Wi‑Fi firmware, and pause large downloads while playing.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <p>
+          Tip: Run a continuous test while you play to spot spikes or unstable routing in real
+          time.
+        </p>
+      </footer>
     </main>
   )
 }
