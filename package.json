@@ -1,0 +1,9 @@
+{
+  "name": "whats-my-ping",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start:single": "npm --prefix frontend run build && SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run start",
+    "dev:single": "SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run dev"
+  }
+}

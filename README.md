@@ -457,6 +457,9 @@ Goal: Make the app easy to deploy and maintain in real environments.
 Backend (`backend/.env.example`)
 - `PORT` (default `4001`)
 - `DEFAULT_PING_TARGET` (`backend`, `google-dns`, `cloudflare`)
+- `SERVE_FRONTEND` (`true` to serve the built frontend from Express)
+- `FRONTEND_DIST_PATH` (path to `frontend/dist`)
+- `ENABLE_CORS` (`true` when frontend is hosted separately)
 
 Frontend (`frontend/.env.example`)
 - `VITE_API_BASE_URL` (leave blank in dev to use Vite proxy)
@@ -464,6 +467,7 @@ Frontend (`frontend/.env.example`)
 Notes
 - In development, leave `VITE_API_BASE_URL` empty and run the backend on `http://localhost:4001`.
 - In production, set `VITE_API_BASE_URL` to your backend origin, e.g. `https://api.example.com`.
+ - If you enable `SERVE_FRONTEND=true`, you can leave `VITE_API_BASE_URL` empty and use a single origin.
 
 ## Deployment Checklist (Simple)
 
@@ -478,7 +482,8 @@ Notes
    - Deploy `frontend/dist` to your static host.
 3. Frontend (served by backend)
    - Build frontend: `npm run build` in `frontend/`.
-   - Configure Express to serve `frontend/dist` (optional enhancement).
+   - Set `SERVE_FRONTEND=true` in `backend/.env`.
+   - Optionally set `FRONTEND_DIST_PATH` if you deploy the frontend build elsewhere.
    - Start backend with the same environment variables.
 
 ---

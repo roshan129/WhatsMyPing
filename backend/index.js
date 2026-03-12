@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
 const { exec } = require('child_process')
+const path = require('path')
 
 const app = express()
 
@@ -10,7 +11,10 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(cors())
+const ENABLE_CORS = process.env.ENABLE_CORS === 'true'
+if (ENABLE_CORS) {
+  app.use(cors())
+}
 app.use(express.json())
 
 app.get('/health', (req, res) => {
@@ -83,6 +87,16 @@ app.get('/api/ping-icmp', pingLimiter, (req, res) => {
 })
 
 const PORT = process.env.PORT || 4001
+const FRONTEND_DIST_PATH =
+  process.env.FRONTEND_DIST_PATH ||
+  path.join(__dirname, '..', 'frontend', 'dist')
+
+if (process.env.SERVE_FRONTEND === 'true') {
+  app.use(express.static(FRONTEND_DIST_PATH))
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIST_PATH, 'index.html'))
+  })
+}
 
 app.listen(PORT, () => {
   console.log(`Backend server listening on port ${PORT}`)
