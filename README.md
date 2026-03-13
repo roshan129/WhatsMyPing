@@ -29,8 +29,27 @@ The implementation is organized into **sprints** and **user stories**, with task
     - Optionally provide WebSocket for streaming periodic ping results.
 
 - **Communication Pattern**
-  - Initial version: Frontend calls a REST endpoint like `GET /api/ping` repeatedly, measures server response times, and uses those as "ping" values.
-  - Possible enhancement: Backend sends timestamp, frontend compares with client timestamp to adjust for clock differences if necessary.
+  - Current version: Frontend calls `GET /api/ping`, and the backend performs ICMP pings to external targets and returns an averaged latency.
+  - The client uses the returned `latencyMs` directly rather than measuring HTTP round-trip time.
+
+---
+
+## Current Implementation Notes (As Built)
+
+Ping logic (backend)
+- Targets are fixed to reliable global DNS anycast IPs:
+  - Cloudflare DNS: `1.1.1.1`
+  - Google DNS: `8.8.8.8`
+- For each test cycle, the backend:
+  - Pings each target N times (default `4`).
+  - Computes average per target.
+  - Computes final ping = average of Cloudflare avg and Google avg.
+- `/api/ping` supports `?samples=` (clamped `1` to `5`) for sample count control.
+
+Frontend behavior
+- Default UI is simplified: users just click a button, no target or mode selection.
+- Single ping uses `samples=4`.
+- Continuous mode uses `samples=2` and runs once per second.
 
 ---
 
@@ -155,12 +174,12 @@ Goal: Provide a minimal, working version of "ping" based on HTTP request/respons
 
 **Tasks**
 - In `backend/index.js`, add a route `GET /api/ping` that:
-  - Returns current server timestamp, e.g. `{ serverTime: Date.now() }`.
-  - Optionally includes a message like `{ message: 'pong' }`.
+  - Returns an averaged latency result (server-side ICMP) plus a message like `{ message: 'pong' }`.
+  - Uses Cloudflare and Google DNS as fixed targets.
 - Ensure CORS is enabled for the frontend origin in development.
 
 **Acceptance Criteria**
-- `GET /api/ping` returns a 200 response with JSON in less than ~10 ms locally (excluding network overhead).
+- `GET /api/ping` returns a 200 response with JSON (time depends on network latency).
 - Endpoint is documented in `README.md` (or a small `backend/README.md`).
 
 ---
@@ -229,9 +248,9 @@ Goal: Allow users to run continuous ping tests and see trends.
 **Tasks**
 - In the frontend:
   - Add a "Start Test" / "Stop Test" toggle.
-  - When test is started:
-    - Run a ping every N milliseconds (e.g. 1 second) using the same `/api/ping` endpoint.
-    - Use `setInterval` or `requestAnimationFrame`-based loop (with care to avoid drift).
+- When test is started:
+  - Run a ping every 1 second using the same `/api/ping` endpoint.
+  - In continuous mode, use fewer samples (2 per target) to keep updates fast.
   - When stopped:
     - Clear the interval and stop making requests.
 - Decide on maximum history size (e.g. keep last 60 measurements, 1 minute).
@@ -288,7 +307,7 @@ Goal: Allow users to run continuous ping tests and see trends.
 
 Goal: Provide more realistic ping measurements (e.g. ICMP ping, game servers), and more robust backend behavior.
 
-### Story 3.1 – Configurable Ping Target
+### Story 3.1 – Configurable Ping Target (Not in current UI)
 
 **As a** power user  
 **I want** to choose what server to ping  
@@ -296,8 +315,8 @@ Goal: Provide more realistic ping measurements (e.g. ICMP ping, game servers), a
 
 **Tasks**
 - Backend:
-  - Extend `/api/ping` to accept a query parameter like `targetHost`.
-  - Validate `targetHost` against an allowlist or pattern to avoid abuse (e.g. only known domains, or a predefined set of regions).
+- Extend `/api/ping` to accept a query parameter like `targetHost`.
+- Validate `targetHost` against an allowlist or pattern to avoid abuse (e.g. only known domains, or a predefined set of regions).
 - Frontend:
   - Add a dropdown or input field:
     - Example options: "Google DNS (8.8.8.8)", "Cloudflare (1.1.1.1)", "Custom (advanced)".
