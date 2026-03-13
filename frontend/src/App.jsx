@@ -28,8 +28,6 @@ function App() {
   const [isContinuous, setIsContinuous] = useState(false)
   const [error, setError] = useState(null)
   const [history, setHistory] = useState([])
-  const [target, setTarget] = useState(TARGETS[0].id)
-  const [mode, setMode] = useState('http')
   const intervalRef = useRef(null)
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
@@ -48,10 +46,9 @@ function App() {
 
     try {
       const start = performance.now()
-      const endpoint =
-        mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
+      const endpoint = '/api/ping'
       const response = await fetch(
-        `${apiBase}${endpoint}?target=${encodeURIComponent(target)}`
+        `${apiBase}${endpoint}`
       )
 
       if (!response.ok) {
@@ -60,7 +57,7 @@ function App() {
 
       const data = await response.json()
       let latency
-      if (mode === 'icmp' && typeof data.latencyMs === 'number') {
+      if (typeof data.latencyMs === 'number') {
         latency = Math.round(data.latencyMs)
       } else {
         const end = performance.now()
@@ -90,17 +87,16 @@ function App() {
     const runPing = async () => {
       try {
         const start = performance.now()
-        const endpoint =
-          mode === 'icmp' ? '/api/ping-icmp' : '/api/ping'
+        const endpoint = '/api/ping'
         const response = await fetch(
-          `${apiBase}${endpoint}?target=${encodeURIComponent(target)}`
+          `${apiBase}${endpoint}`
         )
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)
         }
         const data = await response.json()
         let latency
-        if (mode === 'icmp' && typeof data.latencyMs === 'number') {
+        if (typeof data.latencyMs === 'number') {
           latency = Math.round(data.latencyMs)
         } else {
           const end = performance.now()
@@ -123,7 +119,7 @@ function App() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isContinuous, mode, target])
+  }, [isContinuous])
 
   const toggleContinuous = () => {
     setIsContinuous((prev) => !prev)
@@ -153,49 +149,12 @@ function App() {
         <div className="hero-card">
           <p className="hero-label">Session status</p>
           <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
-          <p className="hero-meta">
-            {mode.toUpperCase()} mode · {target.replace('-', ' ')}
-          </p>
+          <p className="hero-meta">Using reliable global DNS targets</p>
         </div>
       </header>
 
       <section className="card" aria-label="Ping controls and results">
         <div className="controls">
-          <label className="target-select">
-            <span>Ping target</span>
-            <select
-              value={target}
-              onChange={(e) => setTarget(e.target.value)}
-            >
-              {TARGETS.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div className="mode-toggle">
-            <span>Mode</span>
-            <div className="mode-buttons">
-              <button
-                type="button"
-                className={`secondary-button ${mode === 'http' ? 'active' : ''}`}
-                onClick={() => setMode('http')}
-              >
-                HTTP
-              </button>
-              <button
-                type="button"
-                className={`secondary-button ${mode === 'icmp' ? 'active' : ''}`}
-                onClick={() => setMode('icmp')}
-                disabled={target === 'backend'}
-              >
-                ICMP
-              </button>
-            </div>
-          </div>
-
           <button onClick={handleCheckPing} disabled={isTesting} className="primary-button">
             {isTesting ? 'Testing…' : 'Check Ping Once'}
           </button>

@@ -23,6 +23,10 @@ app.get('/health', (req, res) => {
 
 const ALLOWED_TARGETS = ['backend', 'google-dns', 'cloudflare']
 const DEFAULT_TARGET = process.env.DEFAULT_PING_TARGET || 'backend'
+const EXTERNAL_TARGETS = [
+  { id: 'cloudflare', host: '1.1.1.1' },
+  { id: 'google', host: '8.8.8.8' },
+]
 
 const pingLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -32,22 +36,57 @@ const pingLimiter = rateLimit({
 })
 
 app.get('/api/ping', pingLimiter, (req, res) => {
-  const { target } = req.query
+  const pingHost = (host, count = 4) =>
+    new Promise((resolve, reject) => {
+      exec(`ping -c ${count} ${host}`, { timeout: 8000 }, (error, stdout) => {
+        if (error) {
+          return reject(error)
+        }
 
-  if (target && !ALLOWED_TARGETS.includes(target)) {
-    return res.status(400).json({ error: 'Invalid target' })
-  }
+        const matches = [...stdout.matchAll(/time[=<]([0-9.]+)\s*ms/g)]
+        if (!matches.length) {
+          return reject(new Error('No latency data found'))
+        }
 
-  if (!target && !ALLOWED_TARGETS.includes(DEFAULT_TARGET)) {
-    return res.status(500).json({ error: 'Invalid DEFAULT_PING_TARGET' })
-  }
+        const times = matches.map((match) => parseFloat(match[1]))
+        const average = times.reduce((sum, value) => sum + value, 0) / times.length
 
-  res.status(200).json({
-    message: 'pong',
-    serverTime: Date.now(),
-    target: target || DEFAULT_TARGET,
-    mode: 'http',
-  })
+        resolve({
+          host,
+          times,
+          average,
+        })
+      })
+    })
+
+  Promise.all(EXTERNAL_TARGETS.map((target) => pingHost(target.host)))
+    .then((results) => {
+      const cloudflare = results[0]
+      const google = results[1]
+      const finalPing = (cloudflare.average + google.average) / 2
+
+      res.status(200).json({
+        message: 'pong',
+        serverTime: Date.now(),
+        mode: 'external-icmp',
+        cloudflare: {
+          host: EXTERNAL_TARGETS[0].host,
+          times: cloudflare.times,
+          average: cloudflare.average,
+        },
+        google: {
+          host: EXTERNAL_TARGETS[1].host,
+          times: google.times,
+          average: google.average,
+        },
+        finalPing: Math.round(finalPing),
+        latencyMs: Math.round(finalPing),
+      })
+    })
+    .catch((error) => {
+      console.error('External ping error:', error.message)
+      res.status(500).json({ error: 'External ping failed' })
+    })
 })
 
 const ICMP_TARGET_MAP = {
