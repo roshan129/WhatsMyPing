@@ -48,7 +48,7 @@ function App() {
       const start = performance.now()
       const endpoint = '/api/ping'
       const response = await fetch(
-        `${apiBase}${endpoint}`
+        `${apiBase}${endpoint}?samples=4`
       )
 
       if (!response.ok) {
@@ -89,7 +89,7 @@ function App() {
         const start = performance.now()
         const endpoint = '/api/ping'
         const response = await fetch(
-          `${apiBase}${endpoint}`
+          `${apiBase}${endpoint}?samples=2`
         )
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)

@@ -36,7 +36,11 @@ const pingLimiter = rateLimit({
 })
 
 app.get('/api/ping', pingLimiter, (req, res) => {
-  const pingHost = (host, count = 4) =>
+  const parsedSamples = Number.parseInt(req.query.samples, 10)
+  const samples = Number.isFinite(parsedSamples) ? parsedSamples : 4
+  const clampedSamples = Math.min(Math.max(samples, 1), 5)
+
+  const pingHost = (host, count) =>
     new Promise((resolve, reject) => {
       exec(`ping -c ${count} ${host}`, { timeout: 8000 }, (error, stdout) => {
         if (error) {
@@ -59,7 +63,7 @@ app.get('/api/ping', pingLimiter, (req, res) => {
       })
     })
 
-  Promise.all(EXTERNAL_TARGETS.map((target) => pingHost(target.host)))
+  Promise.all(EXTERNAL_TARGETS.map((target) => pingHost(target.host, clampedSamples)))
     .then((results) => {
       const cloudflare = results[0]
       const google = results[1]
@@ -79,6 +83,7 @@ app.get('/api/ping', pingLimiter, (req, res) => {
           times: google.times,
           average: google.average,
         },
+        samples: clampedSamples,
         finalPing: Math.round(finalPing),
         latencyMs: Math.round(finalPing),
       })
