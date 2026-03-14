@@ -27,6 +27,10 @@ const EXTERNAL_TARGETS = [
   { id: 'cloudflare', host: '1.1.1.1' },
   { id: 'google', host: '8.8.8.8' },
 ]
+const HTTP_FALLBACK_TARGETS = [
+  { id: 'cloudflare', url: 'https://cloudflare-dns.com/dns-query?name=example.com&type=A' },
+  { id: 'google', url: 'https://dns.google/resolve?name=example.com&type=A' },
+]
 
 const pingLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -63,6 +67,36 @@ app.get('/api/ping', pingLimiter, (req, res) => {
       })
     })
 
+  const httpPing = async (url, count) => {
+    const times = []
+    for (let i = 0; i < count; i += 1) {
+      const controller = new AbortController()
+      const start = process.hrtime.bigint()
+      const timeoutId = setTimeout(() => controller.abort(), 3000)
+
+      try {
+        const cacheBuster = `t=${Date.now()}-${i}`
+        const separator = url.includes('?') ? '&' : '?'
+        const response = await fetch(`${url}${separator}${cacheBuster}`, {
+          headers: { accept: 'application/dns-json' },
+          signal: controller.signal,
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP ping failed with ${response.status}`)
+        }
+      } finally {
+        clearTimeout(timeoutId)
+      }
+
+      const end = process.hrtime.bigint()
+      const durationMs = Number(end - start) / 1e6
+      times.push(durationMs)
+    }
+
+    const average = times.reduce((sum, value) => sum + value, 0) / times.length
+    return { times, average, url }
+  }
+
   Promise.all(EXTERNAL_TARGETS.map((target) => pingHost(target.host, clampedSamples)))
     .then((results) => {
       const cloudflare = results[0]
@@ -90,7 +124,37 @@ app.get('/api/ping', pingLimiter, (req, res) => {
     })
     .catch((error) => {
       console.error('External ping error:', error.message)
-      res.status(500).json({ error: 'External ping failed' })
+      Promise.all(
+        HTTP_FALLBACK_TARGETS.map((target) => httpPing(target.url, clampedSamples))
+      )
+        .then((results) => {
+          const cloudflare = results[0]
+          const google = results[1]
+          const finalPing = (cloudflare.average + google.average) / 2
+
+          res.status(200).json({
+            message: 'pong',
+            serverTime: Date.now(),
+            mode: 'external-http',
+            cloudflare: {
+              url: HTTP_FALLBACK_TARGETS[0].url,
+              times: cloudflare.times,
+              average: cloudflare.average,
+            },
+            google: {
+              url: HTTP_FALLBACK_TARGETS[1].url,
+              times: google.times,
+              average: google.average,
+            },
+            samples: clampedSamples,
+            finalPing: Math.round(finalPing),
+            latencyMs: Math.round(finalPing),
+          })
+        })
+        .catch((fallbackError) => {
+          console.error('HTTP fallback error:', fallbackError.message)
+          res.status(500).json({ error: 'External ping failed' })
+        })
     })
 })
 
