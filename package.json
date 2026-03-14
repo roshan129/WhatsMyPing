@@ -3,6 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "start": "npm --prefix frontend run build && SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run start",
+    "build": "npm --prefix frontend run build",
     "start:single": "npm --prefix frontend run build && SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run start",
     "dev:single": "SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run dev"
   }
