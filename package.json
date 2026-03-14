@@ -5,6 +5,7 @@
   "scripts": {
     "start": "npm --prefix frontend run build && SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run start",
     "build": "npm --prefix frontend run build",
+    "postinstall": "npm --prefix frontend install",
     "start:single": "npm --prefix frontend run build && SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run start",
     "dev:single": "SERVE_FRONTEND=true ENABLE_CORS=false npm --prefix backend run dev"
   }
