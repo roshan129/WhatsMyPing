@@ -1,8 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
-const { exec } = require('child_process')
 const path = require('path')
+const { TARGETS, clampSamples, measurePing, measureTarget } = require('./pingService')
 
 const app = express()
 
@@ -17,20 +17,41 @@ if (ENABLE_CORS) {
 }
 app.use(express.json())
 
+app.get('/sitemap.xml', (req, res) => {
+  const baseUrl = `${req.protocol}://${req.get('host')}`
+  const paths = ['/', '/ping-test', '/ping-google', '/ping-cloudflare', '/ping-discord', '/ping-youtube', '/ping-aws']
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${paths
+  .map(
+    (routePath) => `  <url>
+    <loc>${baseUrl}${routePath}</loc>
+  </url>`
+  )
+  .join('\n')}
+</urlset>`
+
+  res.type('application/xml')
+  res.send(xml)
+})
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' })
 })
 
-const ALLOWED_TARGETS = ['backend', 'google-dns', 'cloudflare']
-const DEFAULT_TARGET = process.env.DEFAULT_PING_TARGET || 'backend'
-const EXTERNAL_TARGETS = [
-  { id: 'cloudflare', host: '1.1.1.1' },
-  { id: 'google', host: '8.8.8.8' },
-]
-const HTTP_FALLBACK_TARGETS = [
-  { id: 'cloudflare', url: 'https://cloudflare-dns.com/dns-query?name=example.com&type=A' },
-  { id: 'google', url: 'https://dns.google/resolve?name=example.com&type=A' },
-]
+app.get('/api/targets', (req, res) => {
+  res.status(200).json({
+    targets: Object.fromEntries(
+      Object.entries(TARGETS).map(([id, target]) => [
+        id,
+        {
+          label: target.label,
+          host: target.host,
+        },
+      ])
+    ),
+  })
+})
 
 const pingLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -39,159 +60,49 @@ const pingLimiter = rateLimit({
   legacyHeaders: false,
 })
 
-app.get('/api/ping', pingLimiter, (req, res) => {
-  const parsedSamples = Number.parseInt(req.query.samples, 10)
-  const samples = Number.isFinite(parsedSamples) ? parsedSamples : 4
-  const clampedSamples = Math.min(Math.max(samples, 1), 5)
+app.get('/api/ping', pingLimiter, async (req, res) => {
+  const samples = clampSamples(req.query.samples)
+  const targetId = typeof req.query.target === 'string' ? req.query.target.trim() : ''
 
-  const pingHost = (host, count) =>
-    new Promise((resolve, reject) => {
-      exec(`ping -c ${count} ${host}`, { timeout: 8000 }, (error, stdout) => {
-        if (error) {
-          return reject(error)
-        }
-
-        const matches = [...stdout.matchAll(/time[=<]([0-9.]+)\s*ms/g)]
-        if (!matches.length) {
-          return reject(new Error('No latency data found'))
-        }
-
-        const times = matches.map((match) => parseFloat(match[1]))
-        const average = times.reduce((sum, value) => sum + value, 0) / times.length
-
-        resolve({
-          host,
-          times,
-          average,
-        })
-      })
-    })
-
-  const httpPing = async (url, count) => {
-    const times = []
-    for (let i = 0; i < count; i += 1) {
-      const controller = new AbortController()
-      const start = process.hrtime.bigint()
-      const timeoutId = setTimeout(() => controller.abort(), 3000)
-
-      try {
-        const cacheBuster = `t=${Date.now()}-${i}`
-        const separator = url.includes('?') ? '&' : '?'
-        const response = await fetch(`${url}${separator}${cacheBuster}`, {
-          headers: { accept: 'application/dns-json' },
-          signal: controller.signal,
-        })
-        if (!response.ok) {
-          throw new Error(`HTTP ping failed with ${response.status}`)
-        }
-      } finally {
-        clearTimeout(timeoutId)
-      }
-
-      const end = process.hrtime.bigint()
-      const durationMs = Number(end - start) / 1e6
-      times.push(durationMs)
-    }
-
-    const average = times.reduce((sum, value) => sum + value, 0) / times.length
-    return { times, average, url }
+  if (targetId && !TARGETS[targetId]) {
+    return res.status(400).json({ error: 'Unknown target', supportedTargets: Object.keys(TARGETS) })
   }
 
-  Promise.all(EXTERNAL_TARGETS.map((target) => pingHost(target.host, clampedSamples)))
-    .then((results) => {
-      const cloudflare = results[0]
-      const google = results[1]
-      const finalPing = (cloudflare.average + google.average) / 2
-
-      res.status(200).json({
-        message: 'pong',
-        serverTime: Date.now(),
-        mode: 'external-icmp',
-        cloudflare: {
-          host: EXTERNAL_TARGETS[0].host,
-          times: cloudflare.times,
-          average: cloudflare.average,
-        },
-        google: {
-          host: EXTERNAL_TARGETS[1].host,
-          times: google.times,
-          average: google.average,
-        },
-        samples: clampedSamples,
-        finalPing: Math.round(finalPing),
-        latencyMs: Math.round(finalPing),
-      })
-    })
-    .catch((error) => {
-      console.error('External ping error:', error.message)
-      Promise.all(
-        HTTP_FALLBACK_TARGETS.map((target) => httpPing(target.url, clampedSamples))
-      )
-        .then((results) => {
-          const cloudflare = results[0]
-          const google = results[1]
-          const finalPing = (cloudflare.average + google.average) / 2
-
-          res.status(200).json({
-            message: 'pong',
-            serverTime: Date.now(),
-            mode: 'external-http',
-            cloudflare: {
-              url: HTTP_FALLBACK_TARGETS[0].url,
-              times: cloudflare.times,
-              average: cloudflare.average,
-            },
-            google: {
-              url: HTTP_FALLBACK_TARGETS[1].url,
-              times: google.times,
-              average: google.average,
-            },
-            samples: clampedSamples,
-            finalPing: Math.round(finalPing),
-            latencyMs: Math.round(finalPing),
-          })
-        })
-        .catch((fallbackError) => {
-          console.error('HTTP fallback error:', fallbackError.message)
-          res.status(500).json({ error: 'External ping failed' })
-        })
-    })
+  try {
+    const result = await measurePing({ targetId: targetId || null, samples })
+    res.status(200).json(result)
+  } catch (error) {
+    console.error('Ping error:', error.message)
+    res.status(500).json({ error: 'External ping failed' })
+  }
 })
 
-const ICMP_TARGET_MAP = {
-  'google-dns': '8.8.8.8',
-  cloudflare: '1.1.1.1',
-}
+app.get('/api/ping-icmp', pingLimiter, async (req, res) => {
+  const targetId = typeof req.query.target === 'string' ? req.query.target.trim() : ''
 
-app.get('/api/ping-icmp', pingLimiter, (req, res) => {
-  const { target } = req.query
-
-  if (!target || !ICMP_TARGET_MAP[target]) {
+  if (!targetId || !TARGETS[targetId]) {
     return res.status(400).json({ error: 'ICMP ping requires a valid target' })
   }
 
-  const host = ICMP_TARGET_MAP[target]
+  try {
+    const result = await measureTarget(targetId, 1)
 
-  exec(`ping -c 1 ${host}`, { timeout: 4000 }, (error, stdout) => {
-    if (error) {
-      console.error('ICMP ping error:', error.message)
-      return res.status(500).json({ error: 'ICMP ping failed' })
+    if (result.mode !== 'external-icmp') {
+      return res.status(503).json({ error: 'ICMP ping unavailable for this target right now' })
     }
 
-    const match = stdout.match(/time=([0-9.]+)\s*ms/)
-    if (!match) {
-      return res.status(500).json({ error: 'Could not parse ICMP response' })
-    }
-
-    const latencyMs = parseFloat(match[1])
     res.status(200).json({
       message: 'pong',
-      target,
-      host,
+      target: result.target,
+      label: result.label,
+      host: result.host,
       mode: 'icmp',
-      latencyMs,
+      latencyMs: result.latencyMs,
     })
-  })
+  } catch (error) {
+    console.error('ICMP ping error:', error.message)
+    res.status(500).json({ error: 'ICMP ping failed' })
+  }
 })
 
 const PORT = process.env.PORT || 4001
