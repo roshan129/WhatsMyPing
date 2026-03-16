@@ -1,25 +1,31 @@
 # What's My Ping?
 
-What's My Ping is a small full-stack app for checking network latency in a way that feels useful for gaming and general connection quality.
+What's My Ping is a small full-stack latency tool with SEO-friendly ping pages built on top of one shared backend.
 
-The project has two parts:
-- `frontend/`: a React + Vite UI for running ping tests and viewing live stats
-- `backend/`: an Express API that measures latency against public DNS targets
+Current pages:
+- `/`
+- `/ping-test`
+- `/ping-google`
+- `/ping-cloudflare`
+- `/ping-discord`
+- `/ping-youtube`
+- `/ping-aws`
 
-## Current Features
+## Stack
 
-- Run a one-time ping test
-- Start and stop a continuous ping test
-- See current latency in milliseconds
-- View ping quality labels: `Excellent`, `Good`, `Playable`, `Poor`
-- Track recent history with min, max, average, and a small chart
-- Backend fallback from ICMP ping to HTTP-based timing when raw ping is unavailable
+- Frontend: React 19 + Vite
+- Backend: Node.js + Express 5
+- Tooling: ESLint, nodemon
 
-## Tech Stack
+## How It Works
 
-- Frontend: React 19, Vite
-- Backend: Node.js, Express 5
-- Extras: `express-rate-limit`, optional `cors`, `nodemon`
+The frontend renders service-specific ping pages, but all of them call the same backend API.
+
+The backend:
+- reads a shared target map from `backend/targets.js`
+- measures latency with shared logic in `backend/pingService.js`
+- supports both a default blended ping test and single-target tests
+- falls back from ICMP to HTTP timing if needed
 
 ## Project Structure
 
@@ -27,89 +33,32 @@ The project has two parts:
 WhatsMyPing/
 ├── backend/
 │   ├── index.js
-│   ├── package.json
-│   └── package-lock.json
+│   ├── pingService.js
+│   ├── targets.js
+│   └── package.json
 ├── frontend/
+│   ├── public/
 │   ├── src/
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── package.json
-│   └── package-lock.json
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   ├── routes.jsx
+│   │   └── seoContent.js
+│   └── package.json
 └── README.md
 ```
 
-## How It Works
+## Supported Ping Targets
 
-The frontend calls `GET /api/ping` on the backend.
+- `google`
+- `cloudflare`
+- `discord`
+- `youtube`
+- `aws`
 
-The backend:
-- pings Cloudflare DNS at `1.1.1.1`
-- pings Google DNS at `8.8.8.8`
-- averages the results
-- returns the final latency as `latencyMs`
-
-If ICMP ping is blocked in the runtime environment, the backend falls back to measuring HTTP request timing against public DNS-over-HTTPS endpoints.
-
-## Prerequisites
-
-- Node.js 18+
-- npm
-
-## Local Setup
-
-Install dependencies in both apps:
-
-```bash
-cd backend
-npm install
-```
-
-```bash
-cd frontend
-npm install
-```
-
-## Running Locally
-
-Start the backend:
-
-```bash
-cd backend
-npm run dev
-```
-
-The backend runs on `http://localhost:4001` by default.
-
-Start the frontend in a second terminal:
-
-```bash
-cd frontend
-npm run dev
-```
-
-The frontend runs on Vite's local dev server, typically `http://localhost:5173`.
-
-In local development, the frontend proxies `/api` and `/health` requests to `http://localhost:4001` unless `VITE_API_BASE_URL` is set.
-
-## Environment Variables
-
-### Backend
-
-- `PORT`: backend port, default `4001`
-- `ENABLE_CORS`: set to `true` to enable CORS middleware
-- `SERVE_FRONTEND`: set to `true` to serve the built frontend from Express
-- `FRONTEND_DIST_PATH`: custom path to the frontend build output
-
-Note:
-- `DEFAULT_PING_TARGET` exists in the backend code but is not currently used by the main `/api/ping` route.
-
-### Frontend
-
-- `VITE_API_BASE_URL`: optional base URL for API requests
-
-Examples:
-- leave it unset for local proxy-based development
-- set it to something like `http://localhost:4001` if you want the frontend to call the backend directly
+Default `/ping-test` behavior:
+- pings `google`
+- pings `cloudflare`
+- returns an average latency
 
 ## API
 
@@ -121,48 +70,128 @@ Returns:
 { "status": "ok" }
 ```
 
-### `GET /api/ping?samples=4`
+### `GET /api/targets`
 
-Query params:
-- `samples`: number of samples to collect, clamped from `1` to `5`
+Returns the configured target list:
 
-Returns a payload like:
+```json
+{
+  "targets": {
+    "google": { "label": "Google DNS", "host": "8.8.8.8" }
+  }
+}
+```
+
+### `GET /api/ping`
+
+Default mode runs the blended ping test against Google and Cloudflare.
+
+Example response:
 
 ```json
 {
   "message": "pong",
-  "serverTime": 1710000000000,
-  "mode": "external-icmp",
   "samples": 4,
-  "finalPing": 32,
-  "latencyMs": 32
+  "targets": {
+    "google": 24,
+    "cloudflare": 21
+  },
+  "average": 23,
+  "latencyMs": 23,
+  "mode": "external-icmp"
 }
 ```
 
-The full response also includes per-target timing details for Cloudflare and Google.
+### `GET /api/ping?target=google`
+
+Single-target mode runs a focused test.
+
+Example response:
+
+```json
+{
+  "message": "pong",
+  "target": "google",
+  "label": "Google DNS",
+  "host": "8.8.8.8",
+  "latencyMs": 22,
+  "mode": "external-icmp",
+  "samples": 4
+}
+```
 
 ### `GET /api/ping-icmp?target=cloudflare`
 
-Supported targets:
-- `cloudflare`
-- `google-dns`
+Runs a direct one-sample ICMP test for a supported target when ICMP is available.
 
-This endpoint runs a direct one-shot ICMP ping to the requested host and returns the parsed latency.
+### `GET /sitemap.xml`
+
+Returns an XML sitemap containing the current public pages.
 
 ## Frontend Behavior
 
-- `Check Ping Once` sends `/api/ping?samples=4`
-- `Start Continuous Test` sends `/api/ping?samples=2` every second
-- The UI keeps the last 60 samples in memory for stats and charting
-- Recent results are shown in a table with local time formatting
+- `/ping-test` runs the default blended test
+- service pages like `/ping-google` or `/ping-discord` run a target-specific test
+- all pages support:
+  - single ping checks
+  - continuous testing
+  - history chart
+  - min / max / average stats
+  - page-specific title and meta description
+  - 200-300 words of static SEO content
 
-## Notes and Limitations
+## Local Setup
 
-- The UI currently does not expose target selection even though the code contains an unused target list.
-- Ping values from this app may differ from game-reported ping because game servers, routes, and tick rates are different.
-- ICMP ping depends on OS/runtime support and may be restricted in some hosting environments.
+Prerequisites:
+- Node.js 18+
+- npm
 
-## Production Build
+Install dependencies:
+
+```bash
+cd backend
+npm install
+```
+
+```bash
+cd frontend
+npm install
+```
+
+Run the backend:
+
+```bash
+cd backend
+npm run dev
+```
+
+Run the frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Defaults:
+- backend: `http://localhost:4001`
+- frontend: `http://localhost:5173`
+
+## Environment Variables
+
+### Backend
+
+- `PORT`: backend port, default `4001`
+- `ENABLE_CORS`: set to `true` to enable CORS
+- `SERVE_FRONTEND`: set to `true` to serve the built frontend from Express
+- `FRONTEND_DIST_PATH`: custom path to the frontend build output
+
+### Frontend
+
+- `VITE_API_BASE_URL`: optional API base URL
+
+If `VITE_API_BASE_URL` is not set, the Vite dev server proxies `/api` and `/health` to `http://localhost:4001`.
+
+## Build
 
 Build the frontend:
 
@@ -171,11 +200,15 @@ cd frontend
 npm run build
 ```
 
-To serve the built frontend from the backend:
+Serve the built frontend from the backend:
 
 ```bash
 cd backend
 SERVE_FRONTEND=true npm start
 ```
 
-By default, the backend will look for the frontend build at `../frontend/dist`.
+## SEO Notes
+
+- Each tool page has its own title, meta description, heading, and static content.
+- The sitemap is available at `/sitemap.xml`.
+- For production indexing, register your real deployed domain in Google Search Console and submit the sitemap from that live domain.
