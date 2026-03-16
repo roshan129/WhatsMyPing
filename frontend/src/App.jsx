@@ -3,10 +3,26 @@ import './App.css'
 import PingPage from './pages/PingPage'
 import { getRouteForPath } from './routes'
 
-function App() {
-  const [pathname, setPathname] = useState(window.location.pathname)
+const getInitialPathname = (initialPath) => {
+  if (initialPath) {
+    return initialPath
+  }
+
+  if (typeof window !== 'undefined') {
+    return window.location.pathname
+  }
+
+  return '/'
+}
+
+function App({ initialPath = null }) {
+  const [pathname, setPathname] = useState(() => getInitialPathname(initialPath))
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined
+    }
+
     const handleLocationChange = () => {
       setPathname(window.location.pathname)
     }

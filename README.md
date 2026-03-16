@@ -200,6 +200,12 @@ cd frontend
 npm run build
 ```
 
+The frontend build now prerenders the public SEO pages into static HTML files such as:
+- `dist/index.html`
+- `dist/ping-test/index.html`
+- `dist/ping-google/index.html`
+- `dist/ping-discord/index.html`
+
 Serve the built frontend from the backend:
 
 ```bash
@@ -211,4 +217,5 @@ SERVE_FRONTEND=true npm start
 
 - Each tool page has its own title, meta description, heading, and static content.
 - The sitemap is available at `/sitemap.xml`.
+- The frontend build prerenders the route HTML so crawlers can see page content without waiting for client-side rendering.
 - For production indexing, register your real deployed domain in Google Search Console and submit the sitemap from that live domain.

@@ -30,6 +30,7 @@ This folder contains the React + Vite client for What's My Ping.
 
 - The app uses a lightweight route system based on `window.location.pathname`.
 - All pages share the same ping UI and only change metadata, copy, and target configuration.
+- `npm run build` performs a client build, an SSR render pass, and writes prerendered HTML files for the public routes into `dist/`.
 - During local development, `/api` and `/health` are proxied to `http://localhost:4001` unless `VITE_API_BASE_URL` is set.
 
 See the root README for the full project overview and backend API documentation.
