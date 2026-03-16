@@ -8,7 +8,7 @@ export const pingPages = [
     description:
       'Run a fast ping test, compare latency to major services, and understand whether your connection is stable enough for gaming, streaming, and voice chat.',
     eyebrow: 'Realtime latency tools',
-    h1: "What's My Ping?",
+    h1: 'Check Your Ping Instantly',
     subtitle:
       'Measure latency in seconds, watch it over time, and jump into focused tests for Google, Cloudflare, Discord, YouTube, and AWS.',
     heroNote: 'Start with the default blended ping test or open a service-specific tool below.',
