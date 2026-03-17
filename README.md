@@ -26,6 +26,7 @@ The backend:
 - measures latency with shared logic in `backend/pingService.js`
 - supports both a default blended ping test and single-target tests
 - falls back from ICMP to HTTP timing if needed
+- measures latency from the backend host, not directly from the browser
 
 ## Project Structure
 
@@ -91,10 +92,20 @@ Example response:
 ```json
 {
   "message": "pong",
+  "serverTime": 1710000000000,
   "samples": 4,
   "targets": {
     "google": 24,
     "cloudflare": 21
+  },
+  "details": {
+    "google": {
+      "label": "Google DNS",
+      "host": "8.8.8.8",
+      "latencyMs": 24,
+      "times": [23.5, 24.2, 24.0, 24.1],
+      "mode": "external-icmp"
+    }
   },
   "average": 23,
   "latencyMs": 23,
@@ -111,18 +122,26 @@ Example response:
 ```json
 {
   "message": "pong",
+  "serverTime": 1710000000000,
   "target": "google",
   "label": "Google DNS",
   "host": "8.8.8.8",
   "latencyMs": 22,
   "mode": "external-icmp",
-  "samples": 4
+  "samples": 4,
+  "times": [21.4, 22.1, 22.7, 21.8]
 }
 ```
 
 ### `GET /api/ping-icmp?target=cloudflare`
 
 Runs a direct one-sample ICMP test for a supported target when ICMP is available.
+
+## Backend Notes
+
+- Ping requests are rate-limited to 120 requests per minute per client IP.
+- `/api/ping` may return `mode: "external-icmp"`, `mode: "external-http"`, or `mode: "mixed"` depending on whether ICMP succeeds for each target.
+- Continuous testing in the frontend calls `/api/ping` once per second while running.
 
 ### `GET /sitemap.xml`
 
