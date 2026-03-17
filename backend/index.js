@@ -5,6 +5,7 @@ const path = require('path')
 const { TARGETS, clampSamples, measurePing, measureTarget } = require('./pingService')
 
 const app = express()
+app.set('trust proxy', 1)
 
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.path}`)

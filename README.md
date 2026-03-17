@@ -207,6 +207,7 @@ Defaults:
 ### Frontend
 
 - `VITE_API_BASE_URL`: optional API base URL
+- `VITE_CLOUDFLARE_ANALYTICS_TOKEN`: optional Cloudflare Web Analytics token for loading the analytics beacon in the browser
 
 If `VITE_API_BASE_URL` is not set, the Vite dev server proxies `/api` and `/health` to `http://localhost:4001`.
 
