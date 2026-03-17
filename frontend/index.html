@@ -10,11 +10,9 @@
     />
     <title>WhatsMyPing</title>
     <script>
+      const cloudflareAnalyticsPlaceholder = '%VITE_CLOUDFLARE_ANALYTICS_TOKEN%'
       const cloudflareAnalyticsToken = '%VITE_CLOUDFLARE_ANALYTICS_TOKEN%'
-      if (
-        cloudflareAnalyticsToken &&
-        cloudflareAnalyticsToken !== '%VITE_CLOUDFLARE_ANALYTICS_TOKEN%'
-      ) {
+      if (cloudflareAnalyticsToken && cloudflareAnalyticsToken !== cloudflareAnalyticsPlaceholder) {
         const script = document.createElement('script')
         script.defer = true
         script.src = 'https://static.cloudflareinsights.com/beacon.min.js'
