@@ -11,6 +11,7 @@ describe('normalizePath', () => {
 describe('getRouteForPath', () => {
   it('returns the matching route config for known paths', () => {
     expect(getRouteForPath('/ping-google').target).toBe('google')
+    expect(getRouteForPath('/what-is-my-ip').toolType).toBe('ip')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

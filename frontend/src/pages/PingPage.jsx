@@ -341,6 +341,24 @@ function PingPage({ page }) {
             </table>
           </div>
         )}
+
+        <div className="related-links">
+          <h2>Related checks</h2>
+          <div className="tool-grid">
+            <AppLink href="/what-is-my-ip" className="tool-card">
+              <span className="tool-card-title">Check Your IP</span>
+              <span className="tool-card-copy">
+                See the public IP address and IP version your browser is using right now.
+              </span>
+            </AppLink>
+            <AppLink href="/ip-check" className="tool-card">
+              <span className="tool-card-title">Run An IP Check</span>
+              <span className="tool-card-copy">
+                Verify your current public IP before troubleshooting routing, access, or VPN issues.
+              </span>
+            </AppLink>
+          </div>
+        </div>
       </section>
 
       <section className="learn" aria-label={page.introHeading}>

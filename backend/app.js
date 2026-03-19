@@ -3,6 +3,7 @@ const cors = require('cors')
 const rateLimit = require('express-rate-limit')
 const path = require('path')
 const pingService = require('./pingService')
+const { detectIpVersion, getRequestIp } = require('./ipService')
 
 const createApp = (services = pingService) => {
   const { TARGETS, clampSamples, measurePing, measureTarget } = services
@@ -30,6 +31,11 @@ const createApp = (services = pingService) => {
       '/ping-discord',
       '/ping-youtube',
       '/ping-aws',
+      '/what-is-my-ip',
+      '/ip-check',
+      '/check-my-ip',
+      '/my-ip-address',
+      '/ip-lookup',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -61,6 +67,16 @@ ${paths
           },
         ])
       ),
+    })
+  })
+
+  app.get('/api/ip', (req, res) => {
+    const ip = getRequestIp(req)
+
+    res.status(200).json({
+      ip,
+      version: detectIpVersion(ip),
+      userAgent: req.get('user-agent') || null,
     })
   })
 

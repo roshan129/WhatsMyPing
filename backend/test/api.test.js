@@ -67,4 +67,40 @@ describe('backend API', () => {
       samples: 2,
     })
   })
+
+  it('returns normalized IP information from the request', async () => {
+    const response = await request(app)
+      .get('/api/ip')
+      .set('X-Forwarded-For', '::ffff:203.0.113.10, 10.0.0.1')
+      .set('User-Agent', 'Vitest Agent')
+
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({
+      ip: '203.0.113.10',
+      version: 4,
+      userAgent: 'Vitest Agent',
+    })
+  })
+
+  it('falls back to the socket/request IP when no proxy header is present', async () => {
+    const response = await request(app).get('/api/ip')
+
+    expect(response.status).toBe(200)
+    expect(response.body).toMatchObject({
+      version: expect.any(Number),
+      userAgent: null,
+    })
+    expect(response.body.ip).toBeTruthy()
+  })
+
+  it('includes the IP pages in the sitemap output', async () => {
+    const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
+
+    expect(response.status).toBe(200)
+    expect(response.text).toContain('<loc>http://example.com/what-is-my-ip</loc>')
+    expect(response.text).toContain('<loc>http://example.com/ip-check</loc>')
+    expect(response.text).toContain('<loc>http://example.com/check-my-ip</loc>')
+    expect(response.text).toContain('<loc>http://example.com/my-ip-address</loc>')
+    expect(response.text).toContain('<loc>http://example.com/ip-lookup</loc>')
+  })
 })
