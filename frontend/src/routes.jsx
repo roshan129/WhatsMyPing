@@ -1,4 +1,4 @@
-import { pingPageMap } from './seoContent'
+import { pageMap } from './seoContent'
 
 export const normalizePath = (pathname) => {
   if (!pathname) {
@@ -10,4 +10,4 @@ export const normalizePath = (pathname) => {
 }
 
 export const getRouteForPath = (pathname) =>
-  pingPageMap[normalizePath(pathname)] ?? pingPageMap['/ping-test']
+  pageMap[normalizePath(pathname)] ?? pageMap['/ping-test']

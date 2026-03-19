@@ -239,6 +239,218 @@ export const pingPages = [
   },
 ]
 
+export const ipPages = [
+  {
+    path: '/what-is-my-ip',
+    toolType: 'ip',
+    navLabel: 'What Is My IP',
+    shortLabel: 'IP Lookup',
+    showInNav: true,
+    title: 'What Is My IP Address? Check It Instantly',
+    description:
+      'Find your public IP address instantly, see whether you are using IPv4 or IPv6, and understand what your IP says about your connection.',
+    eyebrow: 'Public IP lookup',
+    h1: 'What Is My IP Address?',
+    subtitle:
+      'Check your current public IP address in seconds and confirm how your browser appears to the wider internet.',
+    heroNote: 'Fast lookup for your current public IP and address version.',
+    introHeading: 'Why check your IP address?',
+    introBody:
+      'A quick IP lookup helps you confirm how your network appears to websites and services. It can be useful when setting up remote access, checking VPN behavior, troubleshooting connection issues, or simply confirming whether your public address has changed.',
+    quickFactsHeading: 'Use this page when you need to:',
+    quickFacts: [
+      'Confirm your current public IP before sharing it with support or an admin.',
+      'Check whether your home or office connection has changed addresses recently.',
+      'Verify what websites and remote services can see from your browser session.',
+    ],
+    sections: [
+      {
+        title: 'What an IP address does',
+        body:
+          'An IP address is the identifier your network uses to send and receive traffic across the internet. When you open a website or connect to an app, that service sees your public IP and uses it to return data to your device. It is one of the most basic pieces of network identity online.',
+      },
+      {
+        title: 'Why your public IP can change',
+        body:
+          'Many home internet connections use dynamic public IP addresses, which means your ISP can rotate them over time. Restarting a router, reconnecting after maintenance, or switching networks can lead to a new address. That is why a simple IP check is useful whenever you need to confirm what is active right now.',
+      },
+      {
+        title: 'When this tool is useful',
+        body:
+          'Use this page when testing a VPN, configuring allowlists, checking remote access rules, or comparing how different networks present themselves online. It is also handy when a support article asks for your IP or when you want to verify whether a proxy or privacy tool is actually changing what websites see.',
+      },
+    ],
+  },
+  {
+    path: '/ip-check',
+    toolType: 'ip',
+    navLabel: 'IP Check',
+    shortLabel: 'IP Check',
+    showInNav: false,
+    title: 'IP Check Tool - Find Your Public IP Fast',
+    description:
+      'Run a quick IP check to see your current public IP address, confirm your IP version, and verify how your connection appears online.',
+    eyebrow: 'Quick network check',
+    h1: 'Run a Fast IP Check',
+    subtitle:
+      'Verify your public IP address instantly and confirm whether your network is reaching the internet over IPv4 or IPv6.',
+    heroNote: 'A quick way to confirm your current internet-facing IP.',
+    introHeading: 'Why use an IP check tool?',
+    introBody:
+      'An IP check is one of the fastest network sanity checks you can run. It tells you what address websites see, which can help when a VPN seems stuck, a proxy looks misconfigured, or a service asks you to confirm the IP you are connecting from.',
+    quickFactsHeading: 'This IP check is especially useful for:',
+    quickFacts: [
+      'Troubleshooting allowlist or firewall rules that depend on your current public IP.',
+      'Checking whether a VPN or proxy is actually changing your outward-facing address.',
+      'Confirming whether your connection is using IPv4 or IPv6 before deeper debugging.',
+    ],
+    sections: [
+      {
+        title: 'A fast troubleshooting signal',
+        body:
+          'Sometimes the simplest test is the most useful. If a service is rejecting your connection or a firewall rule is not behaving as expected, checking your current IP can quickly confirm whether you are coming from the address you expect. That alone can save time before deeper debugging.',
+      },
+      {
+        title: 'Checking VPN and proxy behavior',
+        body:
+          'If you use a VPN or proxy, this page helps you confirm whether traffic is actually leaving through the route you intended. If your IP does not change when the tool is enabled, your traffic may still be using your original path. If it does change, the service is likely working as expected.',
+      },
+      {
+        title: 'Why IP version matters',
+        body:
+          'Some networks connect over IPv4, some over IPv6, and some support both. Knowing the version in use can help during compatibility checks, firewall work, and DNS troubleshooting. It is a small detail, but it can explain why behavior differs between devices or networks.',
+      },
+    ],
+  },
+  {
+    path: '/check-my-ip',
+    toolType: 'ip',
+    navLabel: 'Check My IP',
+    shortLabel: 'Check My IP',
+    showInNav: false,
+    title: 'Check My IP - See My Public IP Address Now',
+    description:
+      'Check my IP instantly to see the public address your browser is using right now and confirm what websites can detect from your connection.',
+    eyebrow: 'Instant address lookup',
+    h1: 'Check My IP Address',
+    subtitle:
+      'See the public IP your browser is using right now and confirm how your current network appears to external services.',
+    heroNote: 'Useful when your connection changes or you switch networks.',
+    introHeading: 'Why would you check your IP?',
+    introBody:
+      'There are plenty of moments when you need to know your public IP quickly. Maybe you just switched Wi-Fi networks, turned on a VPN, restarted a router, or need to give your address to a coworker or admin. A fast lookup removes the guesswork.',
+    quickFactsHeading: 'Common moments to check your IP:',
+    quickFacts: [
+      'Right after switching from one Wi-Fi network or hotspot to another.',
+      'Before testing access to a private dashboard, server, or staging environment.',
+      'After enabling or disabling a VPN to confirm which route is actually active.',
+    ],
+    sections: [
+      {
+        title: 'Your IP can vary by network',
+        body:
+          'Moving between home Wi-Fi, office internet, mobile tethering, and VPN connections can completely change the address websites see. That is why checking your IP after a network switch is useful. It confirms your current path instead of relying on assumptions about which route is active.',
+      },
+      {
+        title: 'Helpful for access control',
+        body:
+          'Some dashboards, staging sites, and private tools restrict access to approved IP addresses. If you are troubleshooting an allowlist problem, your first question should often be simple: what IP am I actually using right now? This page helps answer that immediately.',
+      },
+      {
+        title: 'A good first step before deeper tests',
+        body:
+          'IP checks do not replace full diagnostics, but they are a strong first step. Once you confirm the public address in use, you can move on to ping tests, DNS checks, or application-specific debugging with more confidence about the network path you are starting from.',
+      },
+    ],
+  },
+  {
+    path: '/my-ip-address',
+    toolType: 'ip',
+    navLabel: 'My IP Address',
+    shortLabel: 'My IP Address',
+    showInNav: false,
+    title: 'My IP Address - Find My Current Public IP',
+    description:
+      'Find my current public IP address, understand the difference between public and local IPs, and verify the address websites see from this connection.',
+    eyebrow: 'Network basics',
+    h1: 'Find My Current IP Address',
+    subtitle:
+      'Look up the public IP tied to your current connection and understand how it differs from the local address inside your home or office network.',
+    heroNote: 'Shows the public address that external services can see.',
+    introHeading: 'Public IP vs local IP',
+    introBody:
+      'People often hear “my IP address” and assume there is only one. In practice, you usually have a local IP inside your own network and a public IP that the wider internet sees. This page is focused on that public address, because that is the one most websites and remote services care about.',
+    quickFactsHeading: 'This page helps clarify:',
+    quickFacts: [
+      'The difference between your router-assigned local IP and your internet-facing public IP.',
+      'Why multiple devices in one home can still appear under a single public address.',
+      'Which address matters when websites, APIs, and firewall rules identify your connection.',
+    ],
+    sections: [
+      {
+        title: 'Why local and public IPs differ',
+        body:
+          'Your laptop or phone usually has a local address assigned by your router, but that address is not what most external services see. Your router or gateway typically uses network address translation to send many devices through a single public IP. That is why your “internet IP” often looks different from the address shown in device settings.',
+      },
+      {
+        title: 'Why this matters in real life',
+        body:
+          'Understanding the public address matters when setting up remote tools, firewall allowlists, hosting small services, or checking whether a VPN is active. If you only look at a device’s internal network settings, you may miss the address that actually matters for outside connections.',
+      },
+      {
+        title: 'What this page can confirm',
+        body:
+          'This tool confirms the address and IP version visible to websites from your current session. It is not a full networking report, but it gives you the exact external identifier most services use as their starting point when making routing or security decisions.',
+      },
+    ],
+  },
+  {
+    path: '/ip-lookup',
+    toolType: 'ip',
+    navLabel: 'IP Lookup',
+    shortLabel: 'IP Lookup',
+    showInNav: false,
+    title: 'IP Lookup Tool - Check Your Current Public IP',
+    description:
+      'Use this IP lookup tool to check your current public IP address, confirm address version, and understand how your connection appears to external websites.',
+    eyebrow: 'Lookup and verification',
+    h1: 'Use This IP Lookup Tool',
+    subtitle:
+      'Look up the public IP for your current session and verify the address external services can detect from your browser.',
+    heroNote: 'Focused on fast public IP lookup without extra noise.',
+    introHeading: 'What an IP lookup tells you',
+    introBody:
+      'An IP lookup at its simplest tells you what public address is attached to your current request. That can help you confirm routing, identify the visible address behind a VPN or proxy, and double-check whether your current network setup matches what you expect before moving on to other tests.',
+    quickFactsHeading: 'A quick lookup is useful before you:',
+    quickFacts: [
+      'Request access to a tool that only allows known IP addresses.',
+      'Compare how your connection looks with and without a VPN or proxy enabled.',
+      'Move on to latency or DNS tests that depend on knowing your current route first.',
+    ],
+    sections: [
+      {
+        title: 'Useful before remote setup',
+        body:
+          'If you need to connect to a remote admin panel, development environment, or private service, an IP lookup helps you confirm the address that may need to be allowlisted first. It is a quick step, but it often prevents access errors caused by stale or incorrect IP assumptions.',
+      },
+      {
+        title: 'Why lookup tools stay relevant',
+        body:
+          'Even though IP addresses are a basic networking concept, they are still central to access control, routing, diagnostics, and privacy tools. A simple lookup remains useful because it answers a direct, practical question: what address am I using right now from the perspective of the outside world?',
+      },
+      {
+        title: 'How this pairs with ping testing',
+        body:
+          'An IP lookup tells you identity, while a ping test tells you responsiveness. Together they make a useful starting toolkit. First confirm the route and address you are using, then test latency to understand how responsive that same connection feels under real network conditions.',
+      },
+    ],
+  },
+]
+
+export const pageMap = Object.fromEntries([...pingPages, ...ipPages].map((page) => [page.path, page]))
+
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const toolPages = pingPages.filter((page) => page.path !== '/')
+export const toolPages = [...pingPages, ...ipPages].filter(
+  (page) => page.path !== '/' && page.showInNav !== false
+)

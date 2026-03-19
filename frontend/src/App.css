@@ -34,6 +34,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
+  min-width: 0;
 }
 
 .nav-link {
@@ -62,6 +63,7 @@
 .hero-text h1 {
   font-size: clamp(2.5rem, 3vw, 3.5rem);
   margin: 0.35rem 0 0.5rem;
+  overflow-wrap: anywhere;
 }
 
 .eyebrow {
@@ -77,6 +79,7 @@
   color: var(--muted);
   font-size: 1.05rem;
   max-width: 42rem;
+  overflow-wrap: anywhere;
 }
 
 .hero-card {
@@ -190,6 +193,7 @@
   border-radius: 1rem;
   background: rgba(15, 23, 42, 0.45);
   border: 1px solid rgba(148, 163, 184, 0.25);
+  min-width: 0;
 }
 
 .ping-label,
@@ -204,6 +208,14 @@
 .ping-value {
   font-size: 1.4rem;
   margin: 0 0 0.35rem;
+  overflow-wrap: anywhere;
+}
+
+.ip-value {
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  margin: 0;
+  font-weight: 700;
+  word-break: break-word;
 }
 
 .ping-value span {
@@ -214,6 +226,12 @@
 .ping-quality,
 .target-latency {
   margin: 0;
+}
+
+.loading-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .stats h2,
@@ -231,6 +249,14 @@
   display: grid;
   gap: 0.45rem;
   font-size: 0.95rem;
+}
+
+.stats li {
+  overflow-wrap: anywhere;
+}
+
+.ip-detail-list li {
+  overflow-wrap: anywhere;
 }
 
 .target-breakdown {
@@ -317,6 +343,7 @@
   margin: 0;
   color: var(--muted);
   max-width: 50rem;
+  overflow-wrap: anywhere;
 }
 
 .range-grid {
@@ -346,9 +373,23 @@
   margin: 0;
   color: var(--muted);
   font-size: 0.95rem;
+  overflow-wrap: anywhere;
 }
 
 .tool-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.related-links {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quick-facts {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -416,18 +457,71 @@
     padding: 1.25rem 1rem 2.5rem;
   }
 
+  .app {
+    gap: 1.5rem;
+  }
+
   .card,
   .learn {
     padding: 1.25rem;
+  }
+
+  .top-nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+  }
+
+  .nav-link {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2rem, 10vw, 2.5rem);
+  }
+
+  .subtitle {
+    font-size: 0.98rem;
   }
 
   .controls {
     grid-template-columns: 1fr;
   }
 
+  .results-grid,
+  .target-grid,
+  .tool-grid,
+  .seo-copy,
+  .range-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ping-value span {
+    font-size: 2rem;
+  }
+
+  .ip-value {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+
   .chart-legend,
   .site-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .chart-legend {
+    gap: 0.35rem;
+  }
+
+  .history {
+    overflow-x: auto;
+  }
+
+  .history table {
+    min-width: 360px;
   }
 }
