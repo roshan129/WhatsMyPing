@@ -164,6 +164,12 @@ function IpPage({ page }) {
                 Check how responsive your current connection feels to a nearby edge network.
               </span>
             </AppLink>
+            <AppLink href="/dns-lookup" className="tool-card">
+              <span className="tool-card-title">Run A DNS Lookup</span>
+              <span className="tool-card-copy">
+                Inspect DNS records after confirming your public IP and before digging into domain-level issues.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

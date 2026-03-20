@@ -19,6 +19,11 @@ export const prerenderRoutes = [
   '/check-my-ip',
   '/my-ip-address',
   '/ip-lookup',
+  '/dns-lookup',
+  '/dns-check',
+  '/check-dns-records',
+  '/mx-lookup',
+  '/txt-lookup',
 ]
 
 export function render(url) {

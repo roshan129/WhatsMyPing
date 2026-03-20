@@ -447,10 +447,235 @@ export const ipPages = [
   },
 ]
 
-export const pageMap = Object.fromEntries([...pingPages, ...ipPages].map((page) => [page.path, page]))
+export const dnsPages = [
+  {
+    path: '/dns-lookup',
+    toolType: 'dns',
+    navLabel: 'DNS Lookup',
+    shortLabel: 'DNS Lookup',
+    showInNav: true,
+    title: 'DNS Lookup Tool - Check DNS Records Fast',
+    description:
+      'Run a DNS lookup for a domain or subdomain, inspect common record types, and verify whether your DNS configuration looks healthy.',
+    eyebrow: 'DNS troubleshooting',
+    h1: 'Run A DNS Lookup',
+    subtitle:
+      'Check common DNS records for a domain in one place and use the result as a fast starting point for debugging routing, mail, and verification issues.',
+    heroNote: 'Checks A, AAAA, CNAME, MX, TXT, and NS records from the same backend utility stack.',
+    lookupFocus: 'All common records',
+    introHeading: 'Why run a DNS lookup?',
+    introBody:
+      'A DNS lookup helps you confirm how a domain is configured before you dig into deeper network issues. It is useful when a website is not resolving, email delivery looks wrong, or you need to verify that a recent DNS change is actually visible.',
+    formHint: 'Enter a domain or subdomain such as example.com or api.example.com.',
+    exampleDomain: 'example.com',
+    quickFactsHeading: 'Use this page when you need to:',
+    quickFacts: [
+      'Verify whether a domain points to the expected IP addresses or aliases.',
+      'Check whether email or verification records appear to be present.',
+      'Confirm that a subdomain is returning the DNS data you expect before deeper debugging.',
+    ],
+    sections: [
+      {
+        title: 'What this tool checks',
+        body:
+          'This page returns a practical set of common DNS records in a single lookup. That makes it a good first stop when you want to verify web routing, mail configuration, domain ownership records, or which name servers appear to be responsible for the zone.',
+      },
+      {
+        title: 'Why DNS matters before anything else',
+        body:
+          'A surprising number of outages and setup issues start with DNS rather than the application itself. If the wrong record is published, a record is missing, or a subdomain points somewhere unexpected, the app can look broken even when the server is healthy. A quick lookup helps narrow that down fast.',
+      },
+      {
+        title: 'How to read the results',
+        body:
+          'Treat the lookup as a configuration snapshot. Look for obvious mismatches first: missing A records, unexpected CNAME targets, missing MX records for a mail domain, or TXT records that do not match the value your provider expects. Once the DNS shape looks right, move on to ping or application-level checks.',
+      },
+    ],
+  },
+  {
+    path: '/dns-check',
+    toolType: 'dns',
+    navLabel: 'DNS Check',
+    shortLabel: 'DNS Check',
+    showInNav: false,
+    title: 'DNS Check Tool - Verify Domain DNS Records',
+    description:
+      'Use this DNS check tool to verify common DNS records and quickly spot whether a domain looks correctly configured.',
+    eyebrow: 'Configuration verification',
+    h1: 'Run A Fast DNS Check',
+    subtitle:
+      'Check whether a domain appears to have the core DNS records it needs before you spend time debugging the wrong layer.',
+    heroNote: 'Best for quick verification when a site, mail setup, or subdomain change is not behaving as expected.',
+    lookupFocus: 'DNS sanity check',
+    introHeading: 'Why use a DNS check tool?',
+    introBody:
+      'A DNS check is often the fastest way to answer a simple question: does this domain look configured at all? When a launch, migration, or verification step is failing, that quick answer can save time before you move into server logs, app settings, or CDN dashboards.',
+    formHint: 'Use this to sanity-check a live domain after a DNS change or deployment.',
+    exampleDomain: 'www.example.com',
+    quickFactsHeading: 'A DNS check is useful for:',
+    quickFacts: [
+      'Verifying that a recent DNS change did not leave a record group empty.',
+      'Checking whether a web or app subdomain has a visible target.',
+      'Confirming that a domain appears configured before testing the app itself.',
+    ],
+    sections: [
+      {
+        title: 'A practical first troubleshooting step',
+        body:
+          'When a site does not load or a new subdomain seems dead, there is no need to guess immediately about application bugs. A DNS check lets you confirm whether the domain is actually publishing the records you expect. That often narrows the problem much faster than diving into the app stack first.',
+      },
+      {
+        title: 'Useful after migrations and cutovers',
+        body:
+          'DNS mistakes are common during domain moves, CDN cutovers, provider changes, and email onboarding. Even a small typo in a record or missing alias can break traffic. This page gives you a quick post-change verification point to see whether the visible record set matches the plan.',
+      },
+      {
+        title: 'What a clean result does and does not mean',
+        body:
+          'A clean DNS response does not guarantee the whole service is healthy, but it does confirm the naming layer is at least returning data. That helps you decide whether to continue with ping, HTTP, TLS, or app-specific checks rather than staying stuck on domain configuration questions.',
+      },
+    ],
+  },
+  {
+    path: '/check-dns-records',
+    toolType: 'dns',
+    navLabel: 'Check DNS Records',
+    shortLabel: 'Check DNS Records',
+    showInNav: false,
+    title: 'Check DNS Records - Inspect Domain Record Types',
+    description:
+      'Check DNS records for a domain and review A, AAAA, CNAME, MX, TXT, and NS data from one place.',
+    eyebrow: 'Record inspection',
+    h1: 'Check DNS Records',
+    subtitle:
+      'Inspect the most common DNS record types for a domain and compare what is published with what you expect to see.',
+    heroNote: 'Focused on record-by-record inspection when you need a more explicit DNS view.',
+    lookupFocus: 'Record-by-record view',
+    introHeading: 'When should you check DNS records?',
+    introBody:
+      'You should check DNS records whenever a domain, website, mail setup, or verification flow seems off and you want to inspect the published data directly. It is especially useful when documentation gives you a record to add and you want to confirm whether that exact value is visible.',
+    formHint: 'Good for reviewing the full record set after adding or changing DNS entries.',
+    exampleDomain: 'mail.example.com',
+    quickFactsHeading: 'This page helps you:',
+    quickFacts: [
+      'Inspect the exact record groups a domain is returning right now.',
+      'Compare published values against provider setup instructions.',
+      'Spot obviously missing mail, verification, or routing records.',
+    ],
+    sections: [
+      {
+        title: 'Why record-level visibility matters',
+        body:
+          'A domain can look mostly healthy while still missing one critical record type. Maybe the A record exists but the MX records do not, or the TXT record for verification never got published correctly. Looking at each record group side by side makes those gaps easier to spot.',
+      },
+      {
+        title: 'Helpful for email and verification work',
+        body:
+          'Record inspection is especially useful when setting up email, SPF, DKIM, or domain ownership verification. Those workflows often depend on exact values rather than broad connectivity alone. This page gives you a simpler way to verify whether the right record type is visible.',
+      },
+      {
+        title: 'How to move from DNS to the next check',
+        body:
+          'If the record list looks right, the problem may be further downstream. That is the right moment to switch to ping tests, application checks, or provider-specific debugging. If the record list looks wrong, you have a much clearer reason to stay focused on DNS until the configuration is corrected.',
+      },
+    ],
+  },
+  {
+    path: '/mx-lookup',
+    toolType: 'dns',
+    navLabel: 'MX Lookup',
+    shortLabel: 'MX Lookup',
+    showInNav: false,
+    title: 'MX Lookup Tool - Check Mail Server Records',
+    description:
+      'Run an MX lookup to inspect mail server records and verify whether a domain appears ready for inbound email routing.',
+    eyebrow: 'Email routing DNS',
+    h1: 'Run An MX Lookup',
+    subtitle:
+      'Check MX records for a domain and confirm which mail servers appear responsible for receiving email.',
+    heroNote: 'Especially useful when onboarding email providers or troubleshooting mail routing.',
+    lookupFocus: 'Mail exchange records',
+    introHeading: 'Why run an MX lookup?',
+    introBody:
+      'MX records tell other mail systems where email for a domain should go. If those records are missing or incorrect, mail delivery can fail even when the rest of the domain appears healthy. That makes MX lookup a valuable step during email setup and troubleshooting.',
+    formHint: 'Use a mail domain or subdomain when you want to check where inbound email is directed.',
+    exampleDomain: 'example.com',
+    quickFactsHeading: 'MX lookups are useful for:',
+    quickFacts: [
+      'Checking whether a domain has visible inbound mail routing configured.',
+      'Comparing MX priorities during a provider migration or rollout.',
+      'Confirming mail records after switching to a hosted email platform.',
+    ],
+    sections: [
+      {
+        title: 'What MX records control',
+        body:
+          'MX records identify the mail servers that should receive email for a domain and define their priority order. When a provider asks you to add mail routing records, these are often the core entries that decide where delivery attempts are sent first.',
+      },
+      {
+        title: 'Why email problems often start in DNS',
+        body:
+          'A mail client can look misconfigured when the actual issue is simpler: the sending system cannot find the correct MX records in the first place. Checking the published MX set is one of the fastest ways to confirm whether the domain is even advertising a destination for inbound mail.',
+      },
+      {
+        title: 'How to use this with TXT checks',
+        body:
+          'MX alone is not the whole email story. After confirming the receiving servers, it is common to check TXT records for SPF, DKIM, or verification tokens as well. That is why this page pairs naturally with a broader DNS lookup or a TXT-focused check.',
+      },
+    ],
+  },
+  {
+    path: '/txt-lookup',
+    toolType: 'dns',
+    navLabel: 'TXT Lookup',
+    shortLabel: 'TXT Lookup',
+    showInNav: false,
+    title: 'TXT Lookup Tool - Check SPF, DKIM, and Verification Records',
+    description:
+      'Use a TXT lookup to inspect DNS text records such as SPF, DKIM-related values, and domain verification tokens.',
+    eyebrow: 'Verification and policy DNS',
+    h1: 'Run A TXT Lookup',
+    subtitle:
+      'Inspect TXT records for a domain when you need to verify ownership, review email policy values, or confirm setup tokens.',
+    heroNote: 'TXT records often contain SPF, verification tokens, and other DNS-based configuration data.',
+    lookupFocus: 'TXT and verification records',
+    introHeading: 'Why check TXT records?',
+    introBody:
+      'TXT records are commonly used for domain verification, email policy, and other service integrations. They can be easy to mistype and hard to confirm by eye in a provider dashboard, so a lookup page gives you a faster way to see what is actually published.',
+    formHint: 'Useful after adding SPF values, domain verification tokens, or provider-issued TXT entries.',
+    exampleDomain: 'example.com',
+    quickFactsHeading: 'TXT lookups help with:',
+    quickFacts: [
+      'Checking whether SPF or other policy text is visible in DNS.',
+      'Confirming domain verification tokens after setup changes.',
+      'Reviewing long TXT values outside a DNS provider dashboard.',
+    ],
+    sections: [
+      {
+        title: 'Why TXT records matter so often',
+        body:
+          'Many services use TXT records because they are flexible and easy to query. You will see them in email authentication, domain verification, security tooling, and third-party service setup. That makes TXT lookups one of the most practical DNS checks for real-world troubleshooting.',
+      },
+      {
+        title: 'Common problems with TXT records',
+        body:
+          'TXT values are easy to copy incorrectly, split strangely, or publish under the wrong name. Even when a provider dashboard looks right, it helps to check what the DNS system is actually returning. This page gives you that external view of the published result.',
+      },
+      {
+        title: 'How this page fits into a DNS workflow',
+        body:
+          'Start here when a service says your verification token or SPF record is missing. If the TXT value appears correctly, move on to propagation timing or provider-specific checks. If it is absent or wrong, you can stay focused on DNS with much more confidence about where the issue lives.',
+      },
+    ],
+  },
+]
+
+export const pageMap = Object.fromEntries(
+  [...pingPages, ...ipPages, ...dnsPages].map((page) => [page.path, page])
+)
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const toolPages = [...pingPages, ...ipPages].filter(
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages].filter(
   (page) => page.path !== '/' && page.showInNav !== false
 )
