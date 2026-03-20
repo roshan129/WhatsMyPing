@@ -357,6 +357,12 @@ function PingPage({ page }) {
                 Verify your current public IP before troubleshooting routing, access, or VPN issues.
               </span>
             </AppLink>
+            <AppLink href="/dns-lookup" className="tool-card">
+              <span className="tool-card-title">Run A DNS Lookup</span>
+              <span className="tool-card-copy">
+                Inspect DNS records when latency is fine but a domain, mail route, or subdomain still looks wrong.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
