@@ -3,10 +3,23 @@ const cors = require('cors')
 const rateLimit = require('express-rate-limit')
 const path = require('path')
 const pingService = require('./pingService')
+const dnsService = require('./dnsService')
 const { detectIpVersion, getRequestIp } = require('./ipService')
 
-const createApp = (services = pingService) => {
-  const { TARGETS, clampSamples, measurePing, measureTarget } = services
+const createApp = (services = {}) => {
+  const {
+    TARGETS,
+    clampSamples,
+    measurePing,
+    measureTarget,
+  } = {
+    ...pingService,
+    ...services,
+  }
+  const { lookupDnsRecords, validateDomain } = {
+    ...dnsService,
+    ...services,
+  }
   const app = express()
   app.set('trust proxy', 1)
 
@@ -36,6 +49,11 @@ const createApp = (services = pingService) => {
       '/check-my-ip',
       '/my-ip-address',
       '/ip-lookup',
+      '/dns-lookup',
+      '/dns-check',
+      '/check-dns-records',
+      '/mx-lookup',
+      '/txt-lookup',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -78,6 +96,22 @@ ${paths
       version: detectIpVersion(ip),
       userAgent: req.get('user-agent') || null,
     })
+  })
+
+  app.get('/api/dns', async (req, res) => {
+    const { domain, error } = validateDomain(req.query.domain)
+
+    if (error) {
+      return res.status(400).json({ error })
+    }
+
+    try {
+      const result = await lookupDnsRecords(domain)
+      res.status(200).json(result)
+    } catch (lookupError) {
+      console.error('DNS lookup error:', lookupError.message)
+      res.status(502).json({ error: 'DNS lookup failed' })
+    }
   })
 
   const pingLimiter = rateLimit({
