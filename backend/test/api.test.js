@@ -22,6 +22,24 @@ describe('backend API', () => {
     })
   })
 
+  it('returns a healthy status payload', async () => {
+    const response = await request(app).get('/health')
+
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({ status: 'ok' })
+  })
+
+  it('returns supported ping targets without exposing internal http URLs', async () => {
+    const response = await request(app).get('/api/targets')
+
+    expect(response.status).toBe(200)
+    expect(response.body.targets.google).toEqual({
+      label: 'Google DNS',
+      host: '8.8.8.8',
+    })
+    expect(response.body.targets.google.httpUrl).toBeUndefined()
+  })
+
   it('rejects unsupported targets before running a ping', async () => {
     const response = await request(app).get('/api/ping?target=unknown')
 
@@ -70,6 +88,23 @@ describe('backend API', () => {
       target: 'google',
       latencyMs: 22,
       samples: 2,
+    })
+  })
+
+  it('returns a 503 from the ICMP endpoint when the target falls back to HTTP timing', async () => {
+    measureTargetMock.mockResolvedValue({
+      target: 'cloudflare',
+      label: 'Cloudflare DNS',
+      host: '1.1.1.1',
+      latencyMs: 18,
+      mode: 'external-http',
+    })
+
+    const response = await request(app).get('/api/ping-icmp?target=cloudflare')
+
+    expect(response.status).toBe(503)
+    expect(response.body).toEqual({
+      error: 'ICMP ping unavailable for this target right now',
     })
   })
 
