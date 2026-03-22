@@ -1,6 +1,6 @@
 # What's My Ping?
 
-What's My Ping is a small full-stack latency tool with SEO-friendly ping pages built on top of one shared backend.
+What's My Ping is a small full-stack network utility site with SEO-friendly tool pages built on top of one shared backend.
 
 Current pages:
 - `/`
@@ -10,21 +10,27 @@ Current pages:
 - `/ping-discord`
 - `/ping-youtube`
 - `/ping-aws`
+- `/what-is-my-ip`
+- `/ip-check`
+- `/check-my-ip`
+- `/my-ip-address`
+- `/ip-lookup`
 
 ## Stack
 
 - Frontend: React 19 + Vite
 - Backend: Node.js + Express 5
-- Tooling: ESLint, nodemon
+- Tooling: ESLint, Vitest, nodemon
 
 ## How It Works
 
-The frontend renders service-specific ping pages, but all of them call the same backend API.
+The frontend renders tool-specific pages, but all of them call the same backend API layer.
 
 The backend:
 - reads a shared target map from `backend/targets.js`
 - measures latency with shared logic in `backend/pingService.js`
 - supports both a default blended ping test and single-target tests
+- exposes a public IP lookup endpoint with shared logic in `backend/ipService.js`
 - falls back from ICMP to HTTP timing if needed
 - measures latency from the backend host, not directly from the browser
 
@@ -33,8 +39,11 @@ The backend:
 ```text
 WhatsMyPing/
 ├── backend/
+│   ├── app.js
 │   ├── index.js
+│   ├── ipService.js
 │   ├── pingService.js
+│   ├── test/
 │   ├── targets.js
 │   └── package.json
 ├── frontend/
@@ -42,9 +51,12 @@ WhatsMyPing/
 │   ├── src/
 │   │   ├── pages/
 │   │   ├── App.jsx
+│   │   ├── entry-server.jsx
 │   │   ├── routes.jsx
-│   │   └── seoContent.js
+│   │   ├── seoContent.js
+│   │   └── test/
 │   └── package.json
+├── SPRINT.md
 └── README.md
 ```
 
@@ -137,11 +149,26 @@ Example response:
 
 Runs a direct one-sample ICMP test for a supported target when ICMP is available.
 
+### `GET /api/ip`
+
+Returns the current request IP as seen by the backend, along with the detected IP version and user agent.
+
+Example response:
+
+```json
+{
+  "ip": "203.0.113.10",
+  "version": 4,
+  "userAgent": "Mozilla/5.0 ..."
+}
+```
+
 ## Backend Notes
 
 - Ping requests are rate-limited to 120 requests per minute per client IP.
 - `/api/ping` may return `mode: "external-icmp"`, `mode: "external-http"`, or `mode: "mixed"` depending on whether ICMP succeeds for each target.
 - Continuous testing in the frontend calls `/api/ping` once per second while running.
+- `/api/ip` normalizes IPv4-mapped IPv6 values such as `::ffff:127.0.0.1`.
 
 ### `GET /sitemap.xml`
 
@@ -151,13 +178,25 @@ Returns an XML sitemap containing the current public pages.
 
 - `/ping-test` runs the default blended test
 - service pages like `/ping-google` or `/ping-discord` run a target-specific test
+- IP pages like `/what-is-my-ip` and `/ip-check` run a public IP lookup
 - all pages support:
+  - page-specific title and meta description
+  - prerendered HTML for SEO routes
+  - internal linking between related tools
+  - responsive layouts for mobile and desktop
+  - 200-300 words of static SEO content
+
+- ping pages additionally support:
   - single ping checks
   - continuous testing
   - history chart
   - min / max / average stats
   - page-specific title and meta description
-  - 200-300 words of static SEO content
+
+- IP pages additionally support:
+  - current public IP lookup
+  - IP version display
+  - user-agent display
 
 ## Local Setup
 
@@ -174,6 +213,12 @@ npm install
 
 ```bash
 cd frontend
+npm install
+```
+
+Or install everything from the project root:
+
+```bash
 npm install
 ```
 
@@ -194,6 +239,22 @@ npm run dev
 Defaults:
 - backend: `http://localhost:4001`
 - frontend: `http://localhost:5173`
+
+## Tests
+
+Backend tests:
+
+```bash
+cd backend
+npm test
+```
+
+Frontend tests:
+
+```bash
+cd frontend
+npm test
+```
 
 ## Environment Variables
 
@@ -225,6 +286,11 @@ The frontend build now prerenders the public SEO pages into static HTML files su
 - `dist/ping-test/index.html`
 - `dist/ping-google/index.html`
 - `dist/ping-discord/index.html`
+- `dist/what-is-my-ip/index.html`
+- `dist/ip-check/index.html`
+- `dist/check-my-ip/index.html`
+- `dist/my-ip-address/index.html`
+- `dist/ip-lookup/index.html`
 
 Serve the built frontend from the backend:
 
@@ -238,4 +304,5 @@ SERVE_FRONTEND=true npm start
 - Each tool page has its own title, meta description, heading, and static content.
 - The sitemap is available at `/sitemap.xml`.
 - The frontend build prerenders the route HTML so crawlers can see page content without waiting for client-side rendering.
+- Ping pages and IP pages link to related tools internally.
 - For production indexing, register your real deployed domain in Google Search Console and submit the sitemap from that live domain.

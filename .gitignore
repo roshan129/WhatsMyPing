@@ -1,5 +1,6 @@
 # Node.js dependencies
 node_modules/
+.npm-cache/
 
 # Build outputs
 dist/
@@ -11,4 +12,3 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
-

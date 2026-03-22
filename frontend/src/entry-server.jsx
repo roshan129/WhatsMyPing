@@ -14,6 +14,16 @@ export const prerenderRoutes = [
   '/ping-discord',
   '/ping-youtube',
   '/ping-aws',
+  '/what-is-my-ip',
+  '/ip-check',
+  '/check-my-ip',
+  '/my-ip-address',
+  '/ip-lookup',
+  '/dns-lookup',
+  '/dns-check',
+  '/check-dns-records',
+  '/mx-lookup',
+  '/txt-lookup',
 ]
 
 export function render(url) {
