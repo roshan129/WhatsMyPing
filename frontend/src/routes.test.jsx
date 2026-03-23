@@ -13,6 +13,7 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/ping-google').target).toBe('google')
     expect(getRouteForPath('/what-is-my-ip').toolType).toBe('ip')
     expect(getRouteForPath('/dns-lookup').toolType).toBe('dns')
+    expect(getRouteForPath('/json-formatter').toolType).toBe('json')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

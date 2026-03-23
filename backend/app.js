@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit')
 const path = require('path')
 const pingService = require('./pingService')
 const dnsService = require('./dnsService')
+const jsonService = require('./jsonService')
 const { detectIpVersion, getRequestIp } = require('./ipService')
 
 const createApp = (services = {}) => {
@@ -18,6 +19,10 @@ const createApp = (services = {}) => {
   }
   const { lookupDnsRecords, validateDomain } = {
     ...dnsService,
+    ...services,
+  }
+  const { formatJson } = {
+    ...jsonService,
     ...services,
   }
   const app = express()
@@ -54,6 +59,10 @@ const createApp = (services = {}) => {
       '/check-dns-records',
       '/mx-lookup',
       '/txt-lookup',
+      '/json-formatter',
+      '/json-pretty-print',
+      '/json-validator',
+      '/json-viewer',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -111,6 +120,31 @@ ${paths
     } catch (lookupError) {
       console.error('DNS lookup error:', lookupError.message)
       res.status(502).json({ error: 'DNS lookup failed' })
+    }
+  })
+
+  app.post('/api/json/format', (req, res) => {
+    const input = typeof req.body?.input === 'string' ? req.body.input : ''
+
+    if (!input.trim()) {
+      return res.status(400).json({
+        valid: false,
+        error: 'Input required',
+      })
+    }
+
+    try {
+      const formatted = formatJson(input)
+      return res.status(200).json({
+        valid: true,
+        formatted,
+      })
+    } catch (error) {
+      return res.status(400).json({
+        valid: false,
+        error: error.message,
+        details: error.details || null,
+      })
     }
   })
 
