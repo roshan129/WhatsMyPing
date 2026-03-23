@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
+import JsonPage from './pages/JsonPage'
 import PingPage from './pages/PingPage'
 import { getRouteForPath } from './routes'
 
@@ -43,6 +44,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'dns') {
     return <DnsPage page={page} />
+  }
+
+  if (page.toolType === 'json') {
+    return <JsonPage page={page} />
   }
 
   return <PingPage page={page} />

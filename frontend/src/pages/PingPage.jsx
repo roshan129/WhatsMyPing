@@ -363,6 +363,12 @@ function PingPage({ page }) {
                 Inspect DNS records when latency is fine but a domain, mail route, or subdomain still looks wrong.
               </span>
             </AppLink>
+            <AppLink href="/json-formatter" className="tool-card">
+              <span className="tool-card-title">Format JSON</span>
+              <span className="tool-card-copy">
+                Clean up raw API responses and payloads when the network looks fine but the data still needs debugging.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
