@@ -1,25 +1,48 @@
 const request = require('supertest')
 const { createApp } = require('../app')
 const dnsService = require('../dnsService')
+const jsonService = require('../jsonService')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
   let measurePingMock
   let measureTargetMock
   let lookupDnsRecordsMock
+  let formatJsonMock
   let app
 
   beforeEach(() => {
     measurePingMock = vi.fn()
     measureTargetMock = vi.fn()
     lookupDnsRecordsMock = vi.fn()
+    formatJsonMock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
+      ...jsonService,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
+      formatJson: formatJsonMock,
     })
+  })
+
+  it('returns a healthy status payload', async () => {
+    const response = await request(app).get('/health')
+
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({ status: 'ok' })
+  })
+
+  it('returns supported ping targets without exposing internal http URLs', async () => {
+    const response = await request(app).get('/api/targets')
+
+    expect(response.status).toBe(200)
+    expect(response.body.targets.google).toEqual({
+      label: 'Google DNS',
+      host: '8.8.8.8',
+    })
+    expect(response.body.targets.google.httpUrl).toBeUndefined()
   })
 
   it('rejects unsupported targets before running a ping', async () => {
@@ -70,6 +93,23 @@ describe('backend API', () => {
       target: 'google',
       latencyMs: 22,
       samples: 2,
+    })
+  })
+
+  it('returns a 503 from the ICMP endpoint when the target falls back to HTTP timing', async () => {
+    measureTargetMock.mockResolvedValue({
+      target: 'cloudflare',
+      label: 'Cloudflare DNS',
+      host: '1.1.1.1',
+      latencyMs: 18,
+      mode: 'external-http',
+    })
+
+    const response = await request(app).get('/api/ping-icmp?target=cloudflare')
+
+    expect(response.status).toBe(503)
+    expect(response.body).toEqual({
+      error: 'ICMP ping unavailable for this target right now',
     })
   })
 
@@ -201,7 +241,54 @@ describe('backend API', () => {
     })
   })
 
-  it('includes the IP and DNS pages in the sitemap output', async () => {
+  it('formats valid JSON input through the API', async () => {
+    formatJsonMock.mockReturnValue('{\n  "ok": true\n}')
+
+    const response = await request(app)
+      .post('/api/json/format')
+      .send({ input: '{"ok":true}' })
+
+    expect(response.status).toBe(200)
+    expect(formatJsonMock).toHaveBeenCalledWith('{"ok":true}')
+    expect(response.body).toEqual({
+      valid: true,
+      formatted: '{\n  "ok": true\n}',
+    })
+  })
+
+  it('rejects empty JSON input before calling the formatter', async () => {
+    const response = await request(app)
+      .post('/api/json/format')
+      .send({ input: '   ' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      valid: false,
+      error: 'Input required',
+    })
+    expect(formatJsonMock).not.toHaveBeenCalled()
+  })
+
+  it('returns a stable validation error for invalid JSON', async () => {
+    formatJsonMock.mockImplementation(() => {
+      const error = new Error('Invalid JSON. Please paste a valid JSON object or array.')
+      error.details = 'Unexpected token } in JSON at position 10'
+      throw error
+    })
+
+    const response = await request(app)
+      .post('/api/json/format')
+      .send({ input: '{"ok":}' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      valid: false,
+      error: 'Invalid JSON. Please paste a valid JSON object or array.',
+      details: 'Unexpected token } in JSON at position 10',
+    })
+  })
+
+  it('includes the IP, DNS, and JSON pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
     expect(response.status).toBe(200)
@@ -215,5 +302,9 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/check-dns-records</loc>')
     expect(response.text).toContain('<loc>http://example.com/mx-lookup</loc>')
     expect(response.text).toContain('<loc>http://example.com/txt-lookup</loc>')
+    expect(response.text).toContain('<loc>http://example.com/json-formatter</loc>')
+    expect(response.text).toContain('<loc>http://example.com/json-pretty-print</loc>')
+    expect(response.text).toContain('<loc>http://example.com/json-validator</loc>')
+    expect(response.text).toContain('<loc>http://example.com/json-viewer</loc>')
   })
 })

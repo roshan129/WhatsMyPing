@@ -24,6 +24,10 @@ export const prerenderRoutes = [
   '/check-dns-records',
   '/mx-lookup',
   '/txt-lookup',
+  '/json-formatter',
+  '/json-pretty-print',
+  '/json-validator',
+  '/json-viewer',
 ]
 
 export function render(url) {

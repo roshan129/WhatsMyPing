@@ -670,12 +670,191 @@ export const dnsPages = [
   },
 ]
 
+export const jsonPages = [
+  {
+    path: '/json-formatter',
+    toolType: 'json',
+    navLabel: 'JSON Formatter',
+    shortLabel: 'JSON Formatter',
+    showInNav: true,
+    title: 'JSON Formatter - Format and Validate JSON Online',
+    description:
+      'Format JSON online, clean up raw API responses, and validate whether your JSON is readable and structurally correct.',
+    eyebrow: 'Developer utility',
+    h1: 'Format JSON Instantly',
+    subtitle:
+      'Paste raw JSON, clean up the structure, and turn dense API payloads into readable output in seconds.',
+    heroNote: 'A fast JSON formatter for debugging API responses, config files, and structured payloads.',
+    toolFocus: 'Format and validate JSON',
+    introHeading: 'Why use a JSON formatter?',
+    introBody:
+      'A JSON formatter turns compressed or messy JSON into something much easier to read. That is useful when you are debugging APIs, checking config output, or comparing nested objects that are hard to scan in their raw form.',
+    formHint: 'Paste a valid JSON object or array to format it with clean indentation.',
+    exampleInput: '{\n  "ok": true,\n  "items": [1, 2, 3]\n}',
+    quickFactsHeading: 'This formatter is useful when you want to:',
+    quickFacts: [
+      'Make raw API responses readable before debugging them.',
+      'Check whether JSON is valid before using it elsewhere.',
+      'Clean up nested payloads copied from logs or tools.',
+    ],
+    sections: [
+      {
+        title: 'What formatting changes',
+        body:
+          'Formatting does not change the underlying JSON data. It only adds whitespace and indentation so the structure becomes easier to read. That can make nested objects, arrays, and repeated keys much easier to inspect when you are debugging data from an API or script.',
+      },
+      {
+        title: 'Why readability matters',
+        body:
+          'Unreadable JSON slows down debugging. Even valid payloads can be hard to scan when everything is packed into one long line. A formatter helps you move faster by making the hierarchy obvious, which reduces the chance of missing a key, array item, or structural problem.',
+      },
+      {
+        title: 'When this page is the right tool',
+        body:
+          'Use this page when you already have JSON and want a quick cleanup step. If the output formats cleanly, you can move on to inspecting values. If it fails, the error message becomes your next clue about where the JSON structure went wrong.',
+      },
+    ],
+  },
+  {
+    path: '/json-pretty-print',
+    toolType: 'json',
+    navLabel: 'JSON Pretty Print',
+    shortLabel: 'JSON Pretty Print',
+    showInNav: false,
+    title: 'JSON Pretty Print Tool - Beautify JSON Output',
+    description:
+      'Pretty print JSON online so nested objects and arrays become easier to read, debug, and compare.',
+    eyebrow: 'Beautify raw output',
+    h1: 'Pretty Print JSON',
+    subtitle:
+      'Turn compact JSON into neatly indented output that is easier to inspect during development and troubleshooting.',
+    heroNote: 'Focused on readability when raw JSON is too dense to scan comfortably.',
+    toolFocus: 'Beautify nested JSON',
+    introHeading: 'Why pretty print JSON?',
+    introBody:
+      'Pretty printing is helpful when JSON is technically valid but frustrating to read. If a payload is deeply nested or packed into one line, beautifying it makes the structure easier to understand without changing the actual values.',
+    formHint: 'Paste compact JSON from an API response, log, or config file to pretty print it.',
+    exampleInput: '{"user":{"id":1,"name":"Rohan"},"roles":["admin","editor"]}',
+    quickFactsHeading: 'Pretty printing is useful for:',
+    quickFacts: [
+      'Scanning deeply nested JSON without losing the structure.',
+      'Comparing response shapes while debugging API changes.',
+      'Making copied JSON easier to share with teammates.',
+    ],
+    sections: [
+      {
+        title: 'How pretty printing helps',
+        body:
+          'Pretty printing adds spacing, line breaks, and indentation so each level of the JSON structure is easier to follow. That becomes especially valuable when arrays contain objects or when you need to compare similar branches of a response without missing subtle differences.',
+      },
+      {
+        title: 'Useful for API and config work',
+        body:
+          'Many developers paste raw JSON from browser tools, logs, or backend responses into a formatter before doing anything else. It is a quick habit that saves time because it turns an unreadable blob into something you can actually inspect with confidence.',
+      },
+      {
+        title: 'What pretty printing does not do',
+        body:
+          'Pretty printing improves presentation, but it does not fix invalid JSON or incorrect data. If the input is broken, the parser will still fail. That is why this page is useful alongside validation: readability when the data is valid, and clear parser feedback when it is not.',
+      },
+    ],
+  },
+  {
+    path: '/json-validator',
+    toolType: 'json',
+    navLabel: 'JSON Validator',
+    shortLabel: 'JSON Validator',
+    showInNav: false,
+    title: 'JSON Validator - Check JSON for Errors Online',
+    description:
+      'Validate JSON online, catch parser errors, and understand why a JSON payload is failing before it reaches your app or API.',
+    eyebrow: 'Validation and debugging',
+    h1: 'Validate JSON Quickly',
+    subtitle:
+      'Check whether your JSON is valid, catch parser errors early, and use readable output when the structure passes.',
+    heroNote: 'Useful when a parser, API, or script keeps rejecting your JSON input.',
+    toolFocus: 'Validation-first workflow',
+    introHeading: 'Why validate JSON?',
+    introBody:
+      'JSON validation helps you catch structural mistakes before they create confusing failures elsewhere. Missing commas, extra braces, invalid quotes, or malformed arrays are easy to overlook by eye, especially in larger payloads.',
+    formHint: 'Paste JSON here to validate and format it.',
+    exampleInput: '{\n  "config": {\n    "enabled": true,\n    "retryCount": 3\n  }\n}',
+    quickFactsHeading: 'Validation helps when you need to:',
+    quickFacts: [
+      'Catch parser errors before sending JSON to an API.',
+      'Debug malformed payloads copied from logs or code.',
+      'Confirm that configuration JSON is structurally valid.',
+    ],
+    sections: [
+      {
+        title: 'Common JSON mistakes',
+        body:
+          'A lot of invalid JSON comes from small syntax mistakes: trailing commas, missing quotes, extra braces, or values copied from JavaScript objects that are not valid JSON. A validator gives you a faster answer than guessing where the structure broke.',
+      },
+      {
+        title: 'Why validation saves time',
+        body:
+          'When an API or script rejects a payload, the root cause is often much simpler than it first appears. Validating JSON early narrows the problem quickly. If the JSON is valid, you can focus on the data itself. If it fails, the parser message gives you the next place to look.',
+      },
+      {
+        title: 'How to use this page well',
+        body:
+          'Start by pasting the exact JSON that is failing. If the formatter succeeds, use the clean output to inspect the shape. If it fails, read the error message carefully and compare it against the surrounding braces, brackets, commas, and quotes near the reported position.',
+      },
+    ],
+  },
+  {
+    path: '/json-viewer',
+    toolType: 'json',
+    navLabel: 'JSON Viewer',
+    shortLabel: 'JSON Viewer',
+    showInNav: false,
+    title: 'JSON Viewer - Read and Inspect JSON Online',
+    description:
+      'Use this JSON viewer to inspect JSON data in a readable layout so objects, arrays, and nested values are easier to understand.',
+    eyebrow: 'Readable data inspection',
+    h1: 'View JSON More Clearly',
+    subtitle:
+      'Inspect JSON in a cleaner, more readable layout when raw payloads are too dense to scan comfortably.',
+    heroNote: 'Best for reviewing structured data after copying it from an API, config file, or log.',
+    toolFocus: 'Readable inspection',
+    introHeading: 'Why use a JSON viewer?',
+    introBody:
+      'A JSON viewer is useful when the data is already valid and you mainly want a clearer way to read it. That is common when you are exploring API responses, inspecting configuration payloads, or checking the shape of nested objects and arrays.',
+    formHint: 'Paste valid JSON to view it in a cleaner, readable format.',
+    exampleInput: '{\n  "project": "WhatsMyPing",\n  "tools": ["ping", "ip", "dns"]\n}',
+    quickFactsHeading: 'A JSON viewer helps you:',
+    quickFacts: [
+      'Inspect nested objects without losing context.',
+      'Read copied API responses more comfortably.',
+      'Understand the shape of arrays and repeated objects faster.',
+    ],
+    sections: [
+      {
+        title: 'Viewing versus validating',
+        body:
+          'A viewer is most useful once the JSON is already structurally correct. At that point the goal shifts from “is this valid?” to “what does this data actually contain?” Clean formatting helps answer that question faster, especially with multi-level payloads.',
+      },
+      {
+        title: 'Useful during exploration',
+        body:
+          'If you are working with a new API or unfamiliar payload, viewing the JSON in a readable format makes it easier to spot keys, nested objects, and repeated patterns. That can speed up integration work because you spend less time deciphering raw output.',
+      },
+      {
+        title: 'How this complements debugging',
+        body:
+          'When debugging structured data, readability matters almost as much as correctness. First make sure the payload is valid, then use a viewer-style layout to understand what it actually says. That combination makes the tool useful for both validation and inspection.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages].map((page) => [page.path, page])
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].map((page) => [page.path, page])
 )
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages].filter(
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
   (page) => page.path !== '/' && page.showInNav !== false
 )

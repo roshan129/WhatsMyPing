@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prerenderRoutes, render } from './entry-server'
 
 describe('prerenderRoutes', () => {
-  it('includes the SEO IP and DNS routes', () => {
+  it('includes the SEO IP, DNS, and JSON routes', () => {
     expect(prerenderRoutes).toContain('/what-is-my-ip')
     expect(prerenderRoutes).toContain('/ip-check')
     expect(prerenderRoutes).toContain('/check-my-ip')
@@ -13,6 +13,10 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/check-dns-records')
     expect(prerenderRoutes).toContain('/mx-lookup')
     expect(prerenderRoutes).toContain('/txt-lookup')
+    expect(prerenderRoutes).toContain('/json-formatter')
+    expect(prerenderRoutes).toContain('/json-pretty-print')
+    expect(prerenderRoutes).toContain('/json-validator')
+    expect(prerenderRoutes).toContain('/json-viewer')
   })
 })
 
@@ -35,5 +39,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Run a DNS lookup for a domain or subdomain')
     expect(result.appHtml).toContain('Run A DNS Lookup')
+  })
+
+  it('returns the expected metadata for a JSON page', () => {
+    const result = render('/json-formatter')
+
+    expect(result.head).toMatchObject({
+      title: 'JSON Formatter - Format and Validate JSON Online',
+    })
+    expect(result.head.description).toContain('Format JSON online')
+    expect(result.appHtml).toContain('Format JSON Instantly')
   })
 })

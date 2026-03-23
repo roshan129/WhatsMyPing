@@ -170,6 +170,12 @@ function IpPage({ page }) {
                 Inspect DNS records after confirming your public IP and before digging into domain-level issues.
               </span>
             </AppLink>
+            <AppLink href="/json-formatter" className="tool-card">
+              <span className="tool-card-title">Format JSON</span>
+              <span className="tool-card-copy">
+                Validate and pretty print API payloads after confirming your connection and public IP details.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
