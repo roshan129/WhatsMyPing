@@ -51,6 +51,22 @@ describe('PingPage', () => {
     ).toBeInTheDocument()
   })
 
+  it('shows only the main tool entries in the top navigation', () => {
+    render(<PingPage page={pingPageMap['/ping-google']} />)
+
+    const nav = screen.getByRole('navigation', { name: 'Popular ping tools' })
+
+    expect(screen.getByRole('link', { name: 'Ping Test' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'What Is My IP' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'DNS Lookup' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'JSON Formatter' })).toBeInTheDocument()
+    expect(nav).not.toHaveTextContent('Ping Google')
+    expect(nav).not.toHaveTextContent('Ping Cloudflare')
+    expect(nav).not.toHaveTextContent('Ping Discord')
+    expect(nav).not.toHaveTextContent('Ping YouTube')
+    expect(nav).not.toHaveTextContent('Ping AWS')
+  })
+
   it('resets the active result when the page changes', async () => {
     fetch.mockResolvedValue({
       ok: true,

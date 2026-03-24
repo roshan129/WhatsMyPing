@@ -37,6 +37,7 @@ export const pingPages = [
     path: '/ping-test',
     target: null,
     navLabel: 'Ping Test',
+    showInNav: true,
     shortLabel: 'Default Ping Test',
     title: 'Ping Test Tool - Check Internet Latency to Google and Cloudflare',
     description:
@@ -71,6 +72,7 @@ export const pingPages = [
     path: '/ping-google',
     target: 'google',
     navLabel: 'Ping Google',
+    showInNav: false,
     shortLabel: 'Google Ping Test',
     title: 'Ping Google Server - Test Latency to Google',
     description:
@@ -105,6 +107,7 @@ export const pingPages = [
     path: '/ping-cloudflare',
     target: 'cloudflare',
     navLabel: 'Ping Cloudflare',
+    showInNav: false,
     shortLabel: 'Cloudflare Ping Test',
     title: 'Ping Cloudflare - Test Latency to Cloudflare DNS',
     description:
@@ -139,6 +142,7 @@ export const pingPages = [
     path: '/ping-discord',
     target: 'discord',
     navLabel: 'Ping Discord',
+    showInNav: false,
     shortLabel: 'Discord Ping Test',
     title: 'Discord Ping Test - Check Latency to Discord',
     description:
@@ -173,6 +177,7 @@ export const pingPages = [
     path: '/ping-youtube',
     target: 'youtube',
     navLabel: 'Ping YouTube',
+    showInNav: false,
     shortLabel: 'YouTube Ping Test',
     title: 'YouTube Ping Test - Check Latency to YouTube',
     description:
@@ -207,6 +212,7 @@ export const pingPages = [
     path: '/ping-aws',
     target: 'aws',
     navLabel: 'Ping AWS',
+    showInNav: false,
     shortLabel: 'AWS Ping Test',
     title: 'AWS Ping Test - Check Latency to Amazon Web Services',
     description:
@@ -855,6 +861,10 @@ export const pageMap = Object.fromEntries(
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
   (page) => page.path !== '/' && page.showInNav !== false
+)
+
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
+  (page) => page.path !== '/'
 )
