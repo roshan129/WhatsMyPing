@@ -2,6 +2,14 @@
 
 What's My Ping is a small full-stack network utility site with SEO-friendly tool pages built on top of one shared backend.
 
+Important current context:
+- this repo still uses the original internal project name `WhatsMyPing`
+- the live public brand/domain is now `roswag.com`
+- `roswag.com` is intended to be a broader multi-utility website, not a ping-only brand
+- this project is already deployed on Railway
+- Railway is used with both `production` and `development` environments
+- the frontend and backend are deployed together as one bundled project/service rather than as two separate deployments
+
 Current pages:
 - `/`
 - `/ping-test`
@@ -21,6 +29,14 @@ Current pages:
 - Frontend: React 19 + Vite
 - Backend: Node.js + Express 5
 - Tooling: ESLint, Vitest, nodemon
+
+## Deployment Context
+
+- Production and development both run on Railway.
+- The frontend and backend are bundled into the same deployable project.
+- In production, Express can serve the built frontend when `SERVE_FRONTEND=true`.
+- During local development, the frontend usually runs through Vite and proxies API requests to the backend.
+- Even though the repository and UI still contain the older `What's My Ping?` branding in places, the intended public-facing brand is now `roswag.com`.
 
 ## How It Works
 
@@ -305,4 +321,5 @@ SERVE_FRONTEND=true npm start
 - The sitemap is available at `/sitemap.xml`.
 - The frontend build prerenders the route HTML so crawlers can see page content without waiting for client-side rendering.
 - Ping pages and IP pages link to related tools internally.
-- For production indexing, register your real deployed domain in Google Search Console and submit the sitemap from that live domain.
+- The current live/root domain context for this project is `roswag.com`.
+- For production indexing, register `roswag.com` in Google Search Console and submit the sitemap from that live domain.
