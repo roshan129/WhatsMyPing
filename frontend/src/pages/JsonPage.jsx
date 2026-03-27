@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react'
 import { toolPages } from '../seoContent'
-
-const updateMetadata = (title, description) => {
-  document.title = title
-
-  let meta = document.querySelector('meta[name="description"]')
-  if (!meta) {
-    meta = document.createElement('meta')
-    meta.setAttribute('name', 'description')
-    document.head.appendChild(meta)
-  }
-  meta.setAttribute('content', description)
-}
+import { trackInteraction, usePageTracking } from '../lib/analytics'
+import { usePageSeo } from '../lib/seo'
+import { buildApiUrl } from '../lib/runtimeConfig'
 
 const AppLink = ({ href, children, className }) => {
   const handleClick = (event) => {
@@ -45,11 +36,9 @@ function JsonPage({ page }) {
   const [errorDetails, setErrorDetails] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [copyLabel, setCopyLabel] = useState('Copy Output')
-  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
-  useEffect(() => {
-    updateMetadata(page.title, page.description)
-  }, [page.description, page.title])
+  usePageSeo(page)
+  usePageTracking(page)
 
   useEffect(() => {
     setInput(page.exampleInput || '{\n  "hello": "world"\n}')
@@ -65,6 +54,7 @@ function JsonPage({ page }) {
       setError('Paste JSON to format it first.')
       setErrorDetails(null)
       setFormatted('')
+      trackInteraction('json_format_blocked_empty', { path: page.path })
       return
     }
 
@@ -75,7 +65,7 @@ function JsonPage({ page }) {
     setCopyLabel('Copy Output')
 
     try {
-      const response = await fetch(`${apiBase}/api/json/format`, {
+      const response = await fetch(buildApiUrl('/api/json/format'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,10 +81,18 @@ function JsonPage({ page }) {
       }
 
       setFormatted(data.formatted || '')
+      trackInteraction('json_format_success', {
+        path: page.path,
+        inputLength: input.length,
+      })
     } catch (err) {
       console.error(err)
       setError(err.message || 'Could not format the JSON right now.')
       setErrorDetails(err.details || null)
+      trackInteraction('json_format_error', {
+        path: page.path,
+        inputLength: input.length,
+      })
     } finally {
       setIsLoading(false)
     }
@@ -106,6 +104,7 @@ function JsonPage({ page }) {
     setError(null)
     setErrorDetails(null)
     setCopyLabel('Copy Output')
+    trackInteraction('json_clear', { path: page.path })
   }
 
   const handleCopy = async () => {
@@ -116,6 +115,10 @@ function JsonPage({ page }) {
     try {
       await navigator.clipboard.writeText(formatted)
       setCopyLabel('Copied')
+      trackInteraction('json_copy_output', {
+        path: page.path,
+        outputLength: formatted.length,
+      })
     } catch (err) {
       console.error(err)
       setCopyLabel('Copy Failed')
@@ -168,9 +171,17 @@ function JsonPage({ page }) {
         </div>
 
         {error && (
-          <div className="error-block">
+          <div className="notice-panel notice-panel-error error-block">
+            <h2>JSON formatting failed</h2>
             <p className="error">{error}</p>
             {errorDetails && <p className="error-detail">Details: {errorDetails}</p>}
+          </div>
+        )}
+
+        {!error && !formatted && !isLoading && (
+          <div className="notice-panel">
+            <h2>Paste raw JSON to begin</h2>
+            <p>Use this tool to validate and pretty-print an object or array before copying it back out.</p>
           </div>
         )}
 

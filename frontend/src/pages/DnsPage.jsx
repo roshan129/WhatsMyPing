@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react'
 import { toolPages } from '../seoContent'
-
-const updateMetadata = (title, description) => {
-  document.title = title
-
-  let meta = document.querySelector('meta[name="description"]')
-  if (!meta) {
-    meta = document.createElement('meta')
-    meta.setAttribute('name', 'description')
-    document.head.appendChild(meta)
-  }
-  meta.setAttribute('content', description)
-}
+import { trackInteraction, usePageTracking } from '../lib/analytics'
+import { usePageSeo } from '../lib/seo'
+import { buildApiUrl } from '../lib/runtimeConfig'
 
 const AppLink = ({ href, children, className }) => {
   const handleClick = (event) => {
@@ -55,11 +46,9 @@ function DnsPage({ page }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
-  useEffect(() => {
-    updateMetadata(page.title, page.description)
-  }, [page.description, page.title])
+  usePageSeo(page)
+  usePageTracking(page)
 
   useEffect(() => {
     setDomain(page.exampleDomain || 'example.com')
@@ -76,7 +65,7 @@ function DnsPage({ page }) {
 
     try {
       const params = new URLSearchParams({ domain })
-      const response = await fetch(`${apiBase}/api/dns?${params.toString()}`)
+      const response = await fetch(`${buildApiUrl('/api/dns')}?${params.toString()}`)
       const nextData = await response.json()
 
       if (!response.ok) {
@@ -84,9 +73,18 @@ function DnsPage({ page }) {
       }
 
       setData(nextData)
+      trackInteraction('dns_lookup_success', {
+        path: page.path,
+        domain: nextData.domain,
+        warnings: nextData.warnings?.length || 0,
+      })
     } catch (err) {
       console.error(err)
       setError(err.message || 'Could not load DNS records. Make sure the backend is running.')
+      trackInteraction('dns_lookup_error', {
+        path: page.path,
+        domain,
+      })
     } finally {
       setIsLoading(false)
     }
@@ -150,13 +148,28 @@ function DnsPage({ page }) {
           <p className="hero-meta">{page.formHint}</p>
         </form>
 
-        {error && <p className="error">{error}</p>}
+        {error && (
+          <div className="notice-panel notice-panel-error">
+            <h2>DNS lookup failed</h2>
+            <p>{error}</p>
+          </div>
+        )}
 
         {!data && !error && !isLoading && (
-          <p className="loading-copy">
-            Enter a domain like <strong>{page.exampleDomain || 'example.com'}</strong> to inspect
-            its DNS records.
-          </p>
+          <div className="notice-panel">
+            <h2>Enter a domain to begin</h2>
+            <p>
+              Try <strong>{page.exampleDomain || 'example.com'}</strong> to inspect common DNS
+              records like A, MX, TXT, and NS.
+            </p>
+          </div>
+        )}
+
+        {!data && !error && isLoading && (
+          <div className="notice-panel">
+            <h2>Looking up DNS records</h2>
+            <p>Querying the resolver and collecting record groups for the requested domain.</p>
+          </div>
         )}
 
         {data && !error && (

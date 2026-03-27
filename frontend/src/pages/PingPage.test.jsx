@@ -37,6 +37,7 @@ describe('PingPage', () => {
     expect(screen.getByText('google')).toBeInTheDocument()
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/api/ping?samples=4&target=google'))
     expect(document.title).toBe('Ping Google Server - Test Latency to Google')
+    expect(document.querySelector('link[rel="canonical"]')?.getAttribute('href')).toContain('/ping-google')
   })
 
   it('shows an error message when the ping request fails', async () => {

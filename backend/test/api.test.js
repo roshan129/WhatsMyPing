@@ -127,6 +127,33 @@ describe('backend API', () => {
     })
   })
 
+  it('accepts analytics events when simple analytics is enabled', async () => {
+    const originalSetting = process.env.ENABLE_SIMPLE_ANALYTICS
+    process.env.ENABLE_SIMPLE_ANALYTICS = 'true'
+
+    const response = await request(app)
+      .post('/api/analytics')
+      .send({ type: 'pageview', path: '/ping-test', title: 'Ping Test Tool' })
+
+    process.env.ENABLE_SIMPLE_ANALYTICS = originalSetting
+
+    expect(response.status).toBe(202)
+    expect(response.body).toEqual({ accepted: true })
+  })
+
+  it('returns no-op analytics responses when simple analytics is disabled', async () => {
+    const originalSetting = process.env.ENABLE_SIMPLE_ANALYTICS
+    delete process.env.ENABLE_SIMPLE_ANALYTICS
+
+    const response = await request(app)
+      .post('/api/analytics')
+      .send({ type: 'pageview', path: '/ping-test' })
+
+    process.env.ENABLE_SIMPLE_ANALYTICS = originalSetting
+
+    expect(response.status).toBe(204)
+  })
+
   it('falls back to the socket/request IP when no proxy header is present', async () => {
     const response = await request(app).get('/api/ip')
 

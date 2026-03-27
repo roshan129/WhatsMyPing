@@ -264,13 +264,20 @@ npm test
 - `ENABLE_CORS`: set to `true` to enable CORS
 - `SERVE_FRONTEND`: set to `true` to serve the built frontend from Express
 - `FRONTEND_DIST_PATH`: custom path to the frontend build output
+- `PUBLIC_SITE_URL`: canonical public site URL used in the sitemap, for example `https://whatsmyping.com`
+- `ENABLE_SIMPLE_ANALYTICS`: set to `true` to accept lightweight first-party analytics events at `/api/analytics`
 
 ### Frontend
 
 - `VITE_API_BASE_URL`: optional API base URL
+- `VITE_SITE_URL`: canonical public site URL used for prerendered canonical and Open Graph URLs
+- `VITE_ENABLE_SIMPLE_ANALYTICS`: set to `true` to send simple first-party pageview and interaction events to `/api/analytics`
 - `VITE_CLOUDFLARE_ANALYTICS_TOKEN`: optional Cloudflare Web Analytics token for loading the analytics beacon in the browser
 
 If `VITE_API_BASE_URL` is not set, the Vite dev server proxies `/api` and `/health` to `http://localhost:4001`.
+For production, prefer either:
+- same-origin deploys, where the backend serves the built frontend and `VITE_API_BASE_URL` stays unset
+- split deploys, where `VITE_API_BASE_URL` points at your backend origin and `ENABLE_CORS=true` is enabled on the backend
 
 ## Build
 
@@ -299,10 +306,27 @@ cd backend
 SERVE_FRONTEND=true npm start
 ```
 
+Recommended production settings:
+
+```bash
+export PUBLIC_SITE_URL=https://your-domain.example
+export VITE_SITE_URL=https://your-domain.example
+export ENABLE_SIMPLE_ANALYTICS=true
+export VITE_ENABLE_SIMPLE_ANALYTICS=true
+```
+
 ## SEO Notes
 
 - Each tool page has its own title, meta description, heading, and static content.
+- Canonical URLs and Open Graph metadata are generated from `VITE_SITE_URL`.
 - The sitemap is available at `/sitemap.xml`.
 - The frontend build prerenders the route HTML so crawlers can see page content without waiting for client-side rendering.
 - Ping pages and IP pages link to related tools internally.
 - For production indexing, register your real deployed domain in Google Search Console and submit the sitemap from that live domain.
+
+## Launch Checklist
+
+- Set `PUBLIC_SITE_URL` and `VITE_SITE_URL` to your live domain before the production build.
+- Decide whether to use Cloudflare Web Analytics, simple first-party analytics, or both.
+- If frontend and backend are on different origins, set `VITE_API_BASE_URL` and enable backend CORS.
+- Run `npm test` in both `backend` and `frontend`, then run a full `npm run build` in `frontend`.

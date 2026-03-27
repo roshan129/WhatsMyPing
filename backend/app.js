@@ -40,7 +40,8 @@ const createApp = (services = {}) => {
   app.use(express.json())
 
   app.get('/sitemap.xml', (req, res) => {
-    const baseUrl = `${req.protocol}://${req.get('host')}`
+    const configuredSiteUrl = typeof process.env.PUBLIC_SITE_URL === 'string' ? process.env.PUBLIC_SITE_URL.trim() : ''
+    const baseUrl = configuredSiteUrl || `${req.protocol}://${req.get('host')}`
     const paths = [
       '/',
       '/ping-test',
@@ -146,6 +147,38 @@ ${paths
         details: error.details || null,
       })
     }
+  })
+
+  app.post('/api/analytics', (req, res) => {
+    if (process.env.ENABLE_SIMPLE_ANALYTICS !== 'true') {
+      return res.status(204).end()
+    }
+
+    const type = typeof req.body?.type === 'string' ? req.body.type.trim() : ''
+    if (!type) {
+      return res.status(400).json({ error: 'Analytics event type is required' })
+    }
+
+    const event = {
+      type,
+      name: typeof req.body?.name === 'string' ? req.body.name.trim() : null,
+      path: typeof req.body?.path === 'string' ? req.body.path.trim() : null,
+      toolType: typeof req.body?.toolType === 'string' ? req.body.toolType.trim() : null,
+      title: typeof req.body?.title === 'string' ? req.body.title.trim() : null,
+      target: typeof req.body?.target === 'string' ? req.body.target.trim() : null,
+      latencyMs: typeof req.body?.latencyMs === 'number' ? req.body.latencyMs : null,
+      version: typeof req.body?.version === 'number' ? req.body.version : null,
+      domain: typeof req.body?.domain === 'string' ? req.body.domain.trim() : null,
+      inputLength: typeof req.body?.inputLength === 'number' ? req.body.inputLength : null,
+      outputLength: typeof req.body?.outputLength === 'number' ? req.body.outputLength : null,
+      warnings: typeof req.body?.warnings === 'number' ? req.body.warnings : null,
+      receivedAt: new Date().toISOString(),
+      clientIp: getRequestIp(req),
+      userAgent: req.get('user-agent') || null,
+    }
+
+    console.log('analytics', JSON.stringify(event))
+    return res.status(202).json({ accepted: true })
   })
 
   const pingLimiter = rateLimit({

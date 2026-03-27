@@ -11,13 +11,20 @@ const serverEntryUrl = pathToFileURL(path.join(distDir, 'server', 'entry-server.
 const { prerenderRoutes, render } = await import(serverEntryUrl)
 const template = await fs.readFile(path.join(distDir, 'index.html'), 'utf8')
 
-const injectDocument = (html, { title, description }) =>
+const injectDocument = (html, { title, description, canonicalUrl }) =>
   html
     .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
     .replace(
       /<meta[\s\S]*?name="description"[\s\S]*?content="[^"]*"[\s\S]*?\/>/,
       `<meta name="description" content="${description}" />`
     )
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${canonicalUrl}" />`)
+    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${title}" />`)
+    .replace(
+      /<meta property="og:description" content="[^"]*" \/>/,
+      `<meta property="og:description" content="${description}" />`
+    )
+    .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${canonicalUrl}" />`)
     .replace('<div id="root"></div>', `<div id="root">${htmlContentPlaceholder}</div>`)
 
 const htmlContentPlaceholder = '__PRERENDERED_APP__'

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { renderToString } from 'react-dom/server'
 import App from './App'
+import { buildCanonicalUrl } from './lib/runtimeConfig'
 import { getRouteForPath } from './routes'
 
 const escapeAttribute = (value) =>
@@ -43,6 +44,7 @@ export function render(url) {
     head: {
       title: page.title,
       description: escapeAttribute(page.description),
+      canonicalUrl: escapeAttribute(buildCanonicalUrl(page.path)),
     },
   }
 }

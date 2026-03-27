@@ -179,6 +179,30 @@
   font-size: 0.9rem;
 }
 
+.notice-panel {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.notice-panel h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.notice-panel p {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.notice-panel-error {
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(69, 10, 10, 0.3);
+}
+
 .error-block {
   margin-top: 0.25rem;
 }

@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { toolPages } from '../seoContent'
+import { trackInteraction, usePageTracking } from '../lib/analytics'
+import { usePageSeo } from '../lib/seo'
+import { buildApiUrl } from '../lib/runtimeConfig'
 
 const getPingQuality = (latencyMs) => {
   if (latencyMs == null) return null
@@ -16,25 +19,13 @@ const getPingQuality = (latencyMs) => {
   return { label: 'Poor', color: '#ef4444' }
 }
 
-const updateMetadata = (title, description) => {
-  document.title = title
-
-  let meta = document.querySelector('meta[name="description"]')
-  if (!meta) {
-    meta = document.createElement('meta')
-    meta.setAttribute('name', 'description')
-    document.head.appendChild(meta)
-  }
-  meta.setAttribute('content', description)
-}
-
-const buildEndpoint = (apiBase, target, samples) => {
+const buildEndpoint = (target, samples) => {
   const params = new URLSearchParams()
   params.set('samples', String(samples))
   if (target) {
     params.set('target', target)
   }
-  return `${apiBase}/api/ping?${params.toString()}`
+  return `${buildApiUrl('/api/ping')}?${params.toString()}`
 }
 
 const AppLink = ({ href, children, className }) => {
@@ -70,11 +61,9 @@ function PingPage({ page }) {
   const [error, setError] = useState(null)
   const [history, setHistory] = useState([])
   const intervalRef = useRef(null)
-  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
-  useEffect(() => {
-    updateMetadata(page.title, page.description)
-  }, [page.description, page.title])
+  usePageSeo(page)
+  usePageTracking(page)
 
   useEffect(() => {
     setLatencyMs(null)
@@ -96,7 +85,7 @@ function PingPage({ page }) {
 
     const runPing = async () => {
       try {
-        const response = await fetch(buildEndpoint(apiBase, page.target, 2))
+        const response = await fetch(buildEndpoint(page.target, 2))
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)
         }
@@ -110,6 +99,11 @@ function PingPage({ page }) {
           return next.slice(-60)
         })
         setError(null)
+        trackInteraction('ping_continuous_sample', {
+          path: page.path,
+          target: page.target || 'default',
+          latencyMs: latency,
+        })
       } catch (err) {
         console.error(err)
         setError('Could not reach the ping server. Make sure the backend is running.')
@@ -125,14 +119,14 @@ function PingPage({ page }) {
         intervalRef.current = null
       }
     }
-  }, [apiBase, isContinuous, page.target])
+  }, [isContinuous, page.path, page.target])
 
   const handleCheckPing = async () => {
     setIsTesting(true)
     setError(null)
 
     try {
-      const response = await fetch(buildEndpoint(apiBase, page.target, 4))
+      const response = await fetch(buildEndpoint(page.target, 4))
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`)
       }
@@ -145,6 +139,11 @@ function PingPage({ page }) {
         const next = [...prev, { timestamp: Date.now(), latency }]
         return next.slice(-60)
       })
+      trackInteraction('ping_check_once', {
+        path: page.path,
+        target: page.target || 'default',
+        latencyMs: latency,
+      })
     } catch (err) {
       setError('Could not reach the ping server. Make sure the backend is running.')
       console.error(err)
@@ -154,7 +153,14 @@ function PingPage({ page }) {
   }
 
   const toggleContinuous = () => {
-    setIsContinuous((prev) => !prev)
+    setIsContinuous((prev) => {
+      const nextValue = !prev
+      trackInteraction(nextValue ? 'ping_continuous_start' : 'ping_continuous_stop', {
+        path: page.path,
+        target: page.target || 'default',
+      })
+      return nextValue
+    })
   }
 
   const quality = getPingQuality(latencyMs)
@@ -220,6 +226,24 @@ function PingPage({ page }) {
         </div>
 
         {error && <p className="error">{error}</p>}
+
+        {!error && latencyMs == null && !isTesting && !isContinuous && (
+          <div className="notice-panel">
+            <h2>Ready to test</h2>
+            <p>
+              {page.target
+                ? `Run a focused latency check for ${page.navLabel}.`
+                : 'Run the default blended check for Google and Cloudflare.'}
+            </p>
+          </div>
+        )}
+
+        {!error && latencyMs == null && (isTesting || isContinuous) && (
+          <div className="notice-panel">
+            <h2>Measuring latency</h2>
+            <p>Collecting live ping samples from the backend. Results will appear here in a moment.</p>
+          </div>
+        )}
 
         <div className="results-grid">
           {latencyMs != null && !error && (

@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react'
 import { toolPages } from '../seoContent'
-
-const updateMetadata = (title, description) => {
-  document.title = title
-
-  let meta = document.querySelector('meta[name="description"]')
-  if (!meta) {
-    meta = document.createElement('meta')
-    meta.setAttribute('name', 'description')
-    document.head.appendChild(meta)
-  }
-  meta.setAttribute('content', description)
-}
+import { trackInteraction, usePageTracking } from '../lib/analytics'
+import { usePageSeo } from '../lib/seo'
+import { buildApiUrl } from '../lib/runtimeConfig'
 
 const AppLink = ({ href, children, className }) => {
   const handleClick = (event) => {
@@ -42,11 +33,9 @@ function IpPage({ page }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
 
-  useEffect(() => {
-    updateMetadata(page.title, page.description)
-  }, [page.description, page.title])
+  usePageSeo(page)
+  usePageTracking(page)
 
   useEffect(() => {
     let isCancelled = false
@@ -57,7 +46,7 @@ function IpPage({ page }) {
       setData(null)
 
       try {
-        const response = await fetch(`${apiBase}/api/ip`)
+        const response = await fetch(buildApiUrl('/api/ip'))
         if (!response.ok) {
           throw new Error(`Server responded with ${response.status}`)
         }
@@ -65,6 +54,10 @@ function IpPage({ page }) {
         const nextData = await response.json()
         if (!isCancelled) {
           setData(nextData)
+          trackInteraction('ip_lookup_loaded', {
+            path: page.path,
+            version: nextData.version || null,
+          })
         }
       } catch (err) {
         console.error(err)
@@ -83,7 +76,7 @@ function IpPage({ page }) {
     return () => {
       isCancelled = true
     }
-  }, [apiBase, page.path])
+  }, [page.path])
 
   return (
     <main className="app">
@@ -122,6 +115,13 @@ function IpPage({ page }) {
       <section className="card" aria-label="IP lookup results">
         {isLoading && <p className="loading-copy">Checking your current public IP address…</p>}
         {error && <p className="error">{error}</p>}
+
+        {!isLoading && !error && !data && (
+          <div className="notice-panel">
+            <h2>Lookup unavailable</h2>
+            <p>The IP lookup finished without data. Try refreshing once or check the backend response.</p>
+          </div>
+        )}
 
         {data && !error && (
           <div className="results-grid">
