@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { toolPages } from '../seoContent'
+import { navPages, toolPages } from '../seoContent'
 
 const updateMetadata = (title, description) => {
   document.title = title
@@ -129,7 +129,7 @@ function JsonPage({ page }) {
           What's My Ping?
         </AppLink>
         <nav className="top-nav" aria-label="Popular tools">
-          {toolPages.map((toolPage) => (
+          {navPages.map((toolPage) => (
             <AppLink
               key={toolPage.path}
               href={toolPage.path}

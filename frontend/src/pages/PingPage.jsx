@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { toolPages } from '../seoContent'
+import { navPages, toolPages } from '../seoContent'
 
 const getPingQuality = (latencyMs) => {
   if (latencyMs == null) return null
@@ -181,7 +181,7 @@ function PingPage({ page }) {
           What's My Ping?
         </AppLink>
         <nav className="top-nav" aria-label="Popular ping tools">
-          {toolPages.map((toolPage) => (
+          {navPages.map((toolPage) => (
             <AppLink
               key={toolPage.path}
               href={toolPage.path}
