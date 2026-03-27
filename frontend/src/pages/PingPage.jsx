@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { navPages, toolPages } from '../seoContent'
 
+const FEATURED_TOOL_PATHS = ['/ping-test', '/what-is-my-ip', '/dns-lookup', '/json-formatter']
+
 const getPingQuality = (latencyMs) => {
   if (latencyMs == null) return null
 
@@ -71,6 +73,7 @@ function PingPage({ page }) {
   const [history, setHistory] = useState([])
   const intervalRef = useRef(null)
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+  const isHomePage = page.path === '/'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
@@ -173,14 +176,17 @@ function PingPage({ page }) {
     : latestResult?.target && typeof latestResult.latencyMs === 'number'
       ? [[latestResult.target, latestResult.latencyMs]]
       : []
+  const featuredTools = toolPages.filter((toolPage) => FEATURED_TOOL_PATHS.includes(toolPage.path))
+  const toolLinkPages = isHomePage ? featuredTools : toolPages
 
   return (
     <main className="app">
       <header className="site-header">
-        <AppLink href="/" className="brand">
-          What's My Ping?
+        <AppLink href="/" className="brand-lockup" aria-label="Roswag home">
+          <span className="brand">Roswag</span>
+          <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
-        <nav className="top-nav" aria-label="Popular ping tools">
+        <nav className="top-nav" aria-label="Popular tools">
           {navPages.map((toolPage) => (
             <AppLink
               key={toolPage.path}
@@ -206,7 +212,37 @@ function PingPage({ page }) {
         </div>
       </header>
 
+      {isHomePage && (
+        <section className="card home-hub" aria-label="Featured Roswag tools">
+          <div className="learn-header home-hub-header">
+            <h2>Fast, Free Online Tools for Developers</h2>
+            <p>
+              Roswag brings your most useful day-to-day checks into one place. Start with ping,
+              IP, DNS, or JSON tools, then jump into the exact page you need.
+            </p>
+          </div>
+          <div className="tool-grid">
+            {featuredTools.map((toolPage) => (
+              <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
+                <span className="tool-card-title">{toolPage.navLabel}</span>
+                <span className="tool-card-copy">{toolPage.description}</span>
+              </AppLink>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="card" aria-label="Ping controls and results">
+        {isHomePage && (
+          <div className="section-intro">
+            <p className="eyebrow">Featured tool</p>
+            <h2>Start With A Ping Test</h2>
+            <p className="hero-meta">
+              Use the default ping experience below for a quick latency baseline, then branch into
+              the other utilities when you need deeper debugging.
+            </p>
+          </div>
+        )}
         <div className="controls">
           <button onClick={handleCheckPing} disabled={isTesting} className="primary-button">
             {isTesting ? 'Testing…' : 'Check Ping Once'}
@@ -408,9 +444,9 @@ function PingPage({ page }) {
         </div>
 
         <div className="tool-links">
-          <h2>Popular Ping Tests</h2>
+          <h2>{isHomePage ? 'Explore Roswag Tools' : 'Popular Ping Tests'}</h2>
           <div className="tool-grid">
-            {toolPages.map((toolPage) => (
+            {toolLinkPages.map((toolPage) => (
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
                 <span className="tool-card-title">{toolPage.navLabel}</span>
                 <span className="tool-card-copy">{toolPage.description}</span>

@@ -19,6 +19,13 @@
   flex-wrap: wrap;
 }
 
+.brand-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
 .brand {
   font-size: 1.35rem;
   font-weight: 800;
@@ -28,6 +35,14 @@
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.2;
 }
 
 .top-nav {
@@ -117,6 +132,30 @@
   box-shadow: var(--panel-shadow);
   border: 1px solid var(--panel-border);
   animation: fadeUp 0.7s ease both;
+}
+
+.home-hub {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background:
+    linear-gradient(180deg, rgba(249, 115, 22, 0.08), rgba(6, 10, 22, 0.78)),
+    var(--panel-strong);
+}
+
+.home-hub-header {
+  max-width: 44rem;
+}
+
+.section-intro {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.section-intro h2 {
+  margin: 0.3rem 0 0.45rem;
+  font-size: 1.35rem;
 }
 
 .controls {

@@ -97,8 +97,9 @@ function DnsPage({ page }) {
   return (
     <main className="app">
       <header className="site-header">
-        <AppLink href="/" className="brand">
-          What's My Ping?
+        <AppLink href="/" className="brand-lockup" aria-label="Roswag home">
+          <span className="brand">Roswag</span>
+          <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
         <nav className="top-nav" aria-label="Popular tools">
           {navPages.map((toolPage) => (

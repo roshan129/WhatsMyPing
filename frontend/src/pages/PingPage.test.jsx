@@ -54,7 +54,7 @@ describe('PingPage', () => {
   it('shows only the main tool entries in the top navigation', () => {
     render(<PingPage page={pingPageMap['/ping-google']} />)
 
-    const nav = screen.getByRole('navigation', { name: 'Popular ping tools' })
+    const nav = screen.getByRole('navigation', { name: 'Popular tools' })
 
     expect(screen.getByRole('link', { name: 'Ping Test' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'What Is My IP' })).toBeInTheDocument()

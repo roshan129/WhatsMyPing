@@ -4,32 +4,32 @@ export const pingPages = [
     target: null,
     navLabel: 'Home',
     shortLabel: 'Ping Test',
-    title: "What's My Ping? Check Internet Latency Instantly",
+    title: 'Roswag - Fast, Free Online Tools for Developers',
     description:
-      'Run a fast ping test, compare latency to major services, and understand whether your connection is stable enough for gaming, streaming, and voice chat.',
-    eyebrow: 'Realtime latency tools',
-    h1: 'Check Your Ping Instantly',
+      'Use Roswag for fast online developer and network tools including ping tests, IP lookup, DNS lookup, and JSON formatting in one place.',
+    eyebrow: 'Developer and network tools',
+    h1: 'Fast, Free Online Tools for Developers',
     subtitle:
-      'Measure latency in seconds, watch it over time, and jump into focused tests for Google, Cloudflare, Discord, YouTube, and AWS.',
-    heroNote: 'Start with the default blended ping test or open a service-specific tool below.',
-    introHeading: 'Popular Ping Tests',
+      'Start with ping, IP, DNS, and JSON utilities, then move into focused tool pages built for quick checks and lightweight troubleshooting.',
+    heroNote: 'Roswag is a growing multi-utility toolkit, with ping tests as one featured experience.',
+    introHeading: 'Why use Roswag?',
     introBody:
-      'This home page gives you a quick way to understand your internet latency without hunting through multiple tools. Use the main ping test to average major DNS endpoints, then open service-specific pages when you want a more targeted signal for voice chat, video delivery, or cloud-hosted workloads.',
+      'Roswag is designed to keep useful web utilities in one clean place instead of spreading them across separate sites and tabs. You can start with a quick ping test, check your current IP, inspect DNS records, or format JSON without leaving the same shared tool hub.',
     sections: [
       {
-        title: 'What a ping test tells you',
+        title: 'A simple multi-tool starting point',
         body:
-          'Ping is the time it takes for a packet to travel from your network to a remote destination and back again. Lower numbers usually mean a more responsive connection. If you play online games, join voice calls, or stream live content, ping can shape how immediate everything feels. A stable 25 ms connection often feels much better than a line that swings between 20 ms and 150 ms.',
+          'Instead of treating each utility as a separate product, Roswag brings related checks together in one place. That makes it easier to move from one debugging step to the next. You can confirm your IP, inspect DNS, test latency, and clean up JSON responses as part of one quick workflow.',
       },
       {
-        title: 'Why different targets matter',
+        title: 'Built for practical everyday checks',
         body:
-          'There is no single universal ping because every service uses its own servers, routing, and edge network. Testing Google or Cloudflare is helpful for a broad baseline, while pinging Discord, YouTube, or AWS can reveal whether a specific kind of traffic is more affected by distance or congestion. That is why this project now exposes multiple landing pages powered by the same backend logic.',
+          'Most people do not need heavy observability dashboards for small issues. They need fast answers. Roswag focuses on practical checks that are easy to open, easy to read, and useful for both casual troubleshooting and developer workflows.',
       },
       {
-        title: 'How to interpret results',
+        title: 'Tool-specific pages still matter for SEO and clarity',
         body:
-          'Treat low and consistent latency as the ideal outcome. Excellent results are usually under 30 ms, while 30 to 60 ms is still comfortable for most real-time apps. Once latency moves above 100 ms, delay becomes easier to notice. If your numbers spike, try a wired connection, pause large downloads, or test again at a different time of day to spot congestion patterns.',
+          'Even though Roswag is the parent brand, each tool still has its own dedicated page, use case, and search intent. That means you can keep a strong homepage brand while still letting pages like ping tests, DNS lookups, IP checks, and JSON formatters stand on their own when people search for them directly.',
       },
     ],
   },
