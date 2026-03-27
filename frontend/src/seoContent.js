@@ -7,7 +7,7 @@ export const pingPages = [
     title: 'Roswag - Fast, Free Online Tools for Developers',
     description:
       'Use Roswag for fast online developer and network tools including ping tests, IP lookup, DNS lookup, and JSON formatting in one place.',
-    eyebrow: 'Developer and network tools',
+    eyebrow: 'Roswag utility hub',
     h1: 'Fast, Free Online Tools for Developers',
     subtitle:
       'Start with ping, IP, DNS, and JSON utilities, then move into focused tool pages built for quick checks and lightweight troubleshooting.',

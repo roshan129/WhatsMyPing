@@ -33,6 +33,9 @@ describe('DnsPage', () => {
 
     render(<DnsPage page={dnsPages[0]} />)
 
+    fireEvent.change(screen.getByLabelText('Domain or subdomain'), {
+      target: { value: 'example.com' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Check DNS Records' }))
 
     expect(await screen.findByText('example.com')).toBeInTheDocument()
@@ -70,6 +73,9 @@ describe('DnsPage', () => {
 
     render(<DnsPage page={dnsPages[0]} />)
 
+    fireEvent.change(screen.getByLabelText('Domain or subdomain'), {
+      target: { value: 'example.com' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Check DNS Records' }))
 
     expect(screen.getByRole('button', { name: 'Checking DNS…' })).toBeDisabled()
@@ -145,6 +151,9 @@ describe('DnsPage', () => {
 
     render(<DnsPage page={dnsPages[0]} />)
 
+    fireEvent.change(screen.getByLabelText('Domain or subdomain'), {
+      target: { value: 'example.com' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Check DNS Records' }))
 
     expect(await screen.findByText('Null MX (this domain does not accept email)')).toBeInTheDocument()

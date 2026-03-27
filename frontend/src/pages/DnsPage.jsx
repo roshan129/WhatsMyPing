@@ -51,7 +51,7 @@ const formatRecordValue = (type, value) => {
 }
 
 function DnsPage({ page }) {
-  const [domain, setDomain] = useState(page.exampleDomain || 'example.com')
+  const [domain, setDomain] = useState('')
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -62,7 +62,7 @@ function DnsPage({ page }) {
   }, [page.description, page.title])
 
   useEffect(() => {
-    setDomain(page.exampleDomain || 'example.com')
+    setDomain('')
     setData(null)
     setError(null)
     setIsLoading(false)
@@ -140,7 +140,7 @@ function DnsPage({ page }) {
               value={domain}
               onChange={(event) => setDomain(event.target.value)}
               className="dns-input"
-              placeholder={page.placeholder || 'example.com'}
+              placeholder={page.placeholder || page.exampleDomain || 'example.com'}
               autoComplete="off"
               spellCheck="false"
             />
