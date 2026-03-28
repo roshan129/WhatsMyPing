@@ -183,6 +183,12 @@ function IpPage({ page }) {
                 Convert text or inspect encoded values while debugging API requests, headers, and environment setup.
               </span>
             </AppLink>
+            <AppLink href="/url-encode" className="tool-card">
+              <span className="tool-card-title">URL Encoder</span>
+              <span className="tool-card-copy">
+                Clean up or inspect encoded links and query values while debugging requests from your current network path.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

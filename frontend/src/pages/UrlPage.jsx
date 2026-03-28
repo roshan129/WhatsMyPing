@@ -39,11 +39,11 @@ const AppLink = ({ href, children, className }) => {
 }
 
 const MODE_ROUTE_MAP = {
-  encode: '/base64-encode',
-  decode: '/base64-decode',
+  encode: '/url-encode',
+  decode: '/url-decode',
 }
 
-function Base64Page({ page }) {
+function UrlPage({ page }) {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState(null)
@@ -51,11 +51,11 @@ function Base64Page({ page }) {
   const [copyLabel, setCopyLabel] = useState('Copy Output')
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
   const isEncodeMode = page.mode === 'encode'
-  const inputLabel = isEncodeMode ? 'Text input' : 'Base64 input'
-  const outputLabel = isEncodeMode ? 'Base64 output' : 'Decoded text'
+  const inputLabel = isEncodeMode ? 'Text or URL input' : 'URL-encoded input'
+  const outputLabel = isEncodeMode ? 'URL-encoded output' : 'Decoded URL output'
   const inputPlaceholder = isEncodeMode
-    ? 'Paste your text here'
-    : 'Paste your Base64 here'
+    ? 'Paste your text or URL here'
+    : 'Paste your URL-encoded text here'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
@@ -81,7 +81,7 @@ function Base64Page({ page }) {
 
   const handleConvert = async () => {
     if (!input.length) {
-      setError(isEncodeMode ? 'Paste text to encode first.' : 'Paste Base64 to decode first.')
+      setError(isEncodeMode ? 'Paste text or a URL to encode first.' : 'Paste URL-encoded text to decode first.')
       setOutput('')
       return
     }
@@ -92,7 +92,7 @@ function Base64Page({ page }) {
     setCopyLabel('Copy Output')
 
     try {
-      const endpoint = isEncodeMode ? '/api/base64/encode' : '/api/base64/decode'
+      const endpoint = isEncodeMode ? '/api/url/encode' : '/api/url/decode'
       const response = await fetch(`${apiBase}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -109,7 +109,7 @@ function Base64Page({ page }) {
       setOutput(data.output || '')
     } catch (err) {
       console.error(err)
-      setError(err.message || 'Could not convert the Base64 input right now.')
+      setError(err.message || 'Could not convert the URL input right now.')
     } finally {
       setIsLoading(false)
     }
@@ -164,12 +164,12 @@ function Base64Page({ page }) {
         </div>
         <div className="hero-card">
           <p className="hero-label">Tool focus</p>
-          <p className="hero-value">{page.toolFocus || 'Base64 encode and decode'}</p>
+          <p className="hero-value">{page.toolFocus || 'URL encode and decode'}</p>
           <p className="hero-meta">{page.heroNote}</p>
         </div>
       </header>
 
-      <section className="card" aria-label="Base64 conversion tool">
+      <section className="card" aria-label="URL conversion tool">
         <div className="controls">
           <button
             onClick={() => handleModeChange('encode')}
@@ -184,7 +184,7 @@ function Base64Page({ page }) {
             Decode
           </button>
           <button onClick={handleConvert} disabled={isLoading} className="primary-button">
-            {isLoading ? 'Converting…' : isEncodeMode ? 'Encode To Base64' : 'Decode Base64'}
+            {isLoading ? 'Converting…' : isEncodeMode ? 'Encode URL Text' : 'Decode URL Text'}
           </button>
           <button onClick={handleClear} className="secondary-button">
             Clear
@@ -226,28 +226,22 @@ function Base64Page({ page }) {
         <div className="related-links">
           <h2>Related checks</h2>
           <div className="tool-grid">
+            <AppLink href="/base64-encode" className="tool-card">
+              <span className="tool-card-title">Base64 Encoder</span>
+              <span className="tool-card-copy">
+                Switch into Base64 encoding when your workflow moves from percent-encoded text into transport-safe string handling.
+              </span>
+            </AppLink>
             <AppLink href="/json-formatter" className="tool-card">
               <span className="tool-card-title">Format JSON</span>
               <span className="tool-card-copy">
-                Clean up structured payloads after decoding Base64 or before encoding content for transport.
+                Clean up decoded query values or API payload fragments once the URL-safe characters are converted back to readable text.
               </span>
             </AppLink>
             <AppLink href="/dns-lookup" className="tool-card">
               <span className="tool-card-title">Run A DNS Lookup</span>
               <span className="tool-card-copy">
-                Check DNS records when encoded configuration values are part of a broader deployment or debugging flow.
-              </span>
-            </AppLink>
-            <AppLink href="/what-is-my-ip" className="tool-card">
-              <span className="tool-card-title">Check Your IP</span>
-              <span className="tool-card-copy">
-                Confirm your network context before debugging APIs, gateways, or services that exchange encoded data.
-              </span>
-            </AppLink>
-            <AppLink href="/url-encode" className="tool-card">
-              <span className="tool-card-title">URL Encoder</span>
-              <span className="tool-card-copy">
-                Move between Base64 and URL encoding quickly when a debugging workflow includes both transport-safe formats.
+                Keep debugging moving when encoded URLs are only one part of a larger routing or domain issue.
               </span>
             </AppLink>
           </div>
@@ -298,4 +292,4 @@ function Base64Page({ page }) {
   )
 }
 
-export default Base64Page
+export default UrlPage

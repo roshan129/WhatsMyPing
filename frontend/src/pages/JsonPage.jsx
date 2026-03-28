@@ -234,6 +234,12 @@ function JsonPage({ page }) {
                 Encode or decode values quickly when the payload you are debugging includes Base64 fields or headers.
               </span>
             </AppLink>
+            <AppLink href="/url-encode" className="tool-card">
+              <span className="tool-card-title">URL Encoder</span>
+              <span className="tool-card-copy">
+                Decode or encode query values and link fragments when your payload debugging crosses into web request formatting.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

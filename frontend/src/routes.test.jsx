@@ -16,6 +16,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/json-formatter').toolType).toBe('json')
     expect(getRouteForPath('/base64-encode').toolType).toBe('base64')
     expect(getRouteForPath('/base64-decode').mode).toBe('decode')
+    expect(getRouteForPath('/url-encode').toolType).toBe('url')
+    expect(getRouteForPath('/url-decode').mode).toBe('decode')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

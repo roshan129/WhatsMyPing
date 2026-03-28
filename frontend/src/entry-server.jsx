@@ -32,6 +32,10 @@ export const prerenderRoutes = [
   '/base64-decode',
   '/text-to-base64',
   '/base64-to-text',
+  '/url-encode',
+  '/url-decode',
+  '/encode-url',
+  '/decode-url',
 ]
 
 export function render(url) {

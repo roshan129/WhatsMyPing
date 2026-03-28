@@ -411,6 +411,12 @@ function PingPage({ page }) {
                 Encode or decode quick values when your debugging flow moves from network checks into payload inspection.
               </span>
             </AppLink>
+            <AppLink href="/url-encode" className="tool-card">
+              <span className="tool-card-title">URL Encoder</span>
+              <span className="tool-card-copy">
+                Encode or decode URL text when links, callback params, or request values need quick inspection.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
