@@ -21,6 +21,10 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/base64-decode')
     expect(prerenderRoutes).toContain('/text-to-base64')
     expect(prerenderRoutes).toContain('/base64-to-text')
+    expect(prerenderRoutes).toContain('/url-encode')
+    expect(prerenderRoutes).toContain('/url-decode')
+    expect(prerenderRoutes).toContain('/encode-url')
+    expect(prerenderRoutes).toContain('/decode-url')
   })
 })
 
@@ -63,5 +67,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Encode text to Base64 online instantly')
     expect(result.appHtml).toContain('Encode Text To Base64')
+  })
+
+  it('returns the expected metadata for a URL page', () => {
+    const result = render('/url-encode')
+
+    expect(result.head).toMatchObject({
+      title: 'URL Encoder - Encode URLs Online',
+    })
+    expect(result.head.description).toContain('Encode URLs online')
+    expect(result.appHtml).toContain('Encode URL Text Safely')
   })
 })
