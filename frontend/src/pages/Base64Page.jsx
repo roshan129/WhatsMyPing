@@ -44,7 +44,7 @@ const MODE_ROUTE_MAP = {
 }
 
 function Base64Page({ page }) {
-  const [input, setInput] = useState(page.exampleInput || '')
+  const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -53,18 +53,21 @@ function Base64Page({ page }) {
   const isEncodeMode = page.mode === 'encode'
   const inputLabel = isEncodeMode ? 'Text input' : 'Base64 input'
   const outputLabel = isEncodeMode ? 'Base64 output' : 'Decoded text'
+  const inputPlaceholder = isEncodeMode
+    ? 'Paste your text here'
+    : 'Paste your Base64 here'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
   }, [page.description, page.title])
 
   useEffect(() => {
-    setInput(page.exampleInput || '')
+    setInput('')
     setOutput('')
     setError(null)
     setIsLoading(false)
     setCopyLabel('Copy Output')
-  }, [page.exampleInput, page.path])
+  }, [page.path])
 
   const handleModeChange = (mode) => {
     const nextPath = MODE_ROUTE_MAP[mode]
@@ -205,6 +208,7 @@ function Base64Page({ page }) {
               className="json-textarea"
               spellCheck="false"
               aria-label={inputLabel}
+              placeholder={inputPlaceholder}
             />
           </div>
 
