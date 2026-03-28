@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import Base64Page from './pages/Base64Page'
 import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
@@ -48,6 +49,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'json') {
     return <JsonPage page={page} />
+  }
+
+  if (page.toolType === 'base64') {
+    return <Base64Page page={page} />
   }
 
   return <PingPage page={page} />

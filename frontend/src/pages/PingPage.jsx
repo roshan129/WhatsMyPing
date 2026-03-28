@@ -405,6 +405,12 @@ function PingPage({ page }) {
                 Clean up raw API responses and payloads when the network looks fine but the data still needs debugging.
               </span>
             </AppLink>
+            <AppLink href="/base64-encode" className="tool-card">
+              <span className="tool-card-title">Base64 Encoder</span>
+              <span className="tool-card-copy">
+                Encode or decode quick values when your debugging flow moves from network checks into payload inspection.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

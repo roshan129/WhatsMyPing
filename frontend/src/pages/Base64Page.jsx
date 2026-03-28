@@ -38,44 +38,59 @@ const AppLink = ({ href, children, className }) => {
   )
 }
 
-function JsonPage({ page }) {
-  const [input, setInput] = useState(page.exampleInput || '{\n  "hello": "world"\n}')
-  const [formatted, setFormatted] = useState('')
+const MODE_ROUTE_MAP = {
+  encode: '/base64-encode',
+  decode: '/base64-decode',
+}
+
+function Base64Page({ page }) {
+  const [input, setInput] = useState(page.exampleInput || '')
+  const [output, setOutput] = useState('')
   const [error, setError] = useState(null)
-  const [errorDetails, setErrorDetails] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [copyLabel, setCopyLabel] = useState('Copy Output')
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+  const isEncodeMode = page.mode === 'encode'
+  const inputLabel = isEncodeMode ? 'Text input' : 'Base64 input'
+  const outputLabel = isEncodeMode ? 'Base64 output' : 'Decoded text'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
   }, [page.description, page.title])
 
   useEffect(() => {
-    setInput(page.exampleInput || '{\n  "hello": "world"\n}')
-    setFormatted('')
+    setInput(page.exampleInput || '')
+    setOutput('')
     setError(null)
-    setErrorDetails(null)
     setIsLoading(false)
     setCopyLabel('Copy Output')
   }, [page.exampleInput, page.path])
 
-  const handleFormat = async () => {
-    if (!input.trim()) {
-      setError('Paste JSON to format it first.')
-      setErrorDetails(null)
-      setFormatted('')
+  const handleModeChange = (mode) => {
+    const nextPath = MODE_ROUTE_MAP[mode]
+    if (!nextPath || nextPath === page.path) {
+      return
+    }
+
+    window.history.pushState({}, '', nextPath)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
+
+  const handleConvert = async () => {
+    if (!input.length) {
+      setError(isEncodeMode ? 'Paste text to encode first.' : 'Paste Base64 to decode first.')
+      setOutput('')
       return
     }
 
     setIsLoading(true)
     setError(null)
-    setErrorDetails(null)
-    setFormatted('')
+    setOutput('')
     setCopyLabel('Copy Output')
 
     try {
-      const response = await fetch(`${apiBase}/api/json/format`, {
+      const endpoint = isEncodeMode ? '/api/base64/encode' : '/api/base64/decode'
+      const response = await fetch(`${apiBase}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,16 +100,13 @@ function JsonPage({ page }) {
       const data = await response.json()
 
       if (!response.ok) {
-        const requestError = new Error(data.error || `Server responded with ${response.status}`)
-        requestError.details = data.details || null
-        throw requestError
+        throw new Error(data.error || `Server responded with ${response.status}`)
       }
 
-      setFormatted(data.formatted || '')
+      setOutput(data.output || '')
     } catch (err) {
       console.error(err)
-      setError(err.message || 'Could not format the JSON right now.')
-      setErrorDetails(err.details || null)
+      setError(err.message || 'Could not convert the Base64 input right now.')
     } finally {
       setIsLoading(false)
     }
@@ -102,19 +114,18 @@ function JsonPage({ page }) {
 
   const handleClear = () => {
     setInput('')
-    setFormatted('')
+    setOutput('')
     setError(null)
-    setErrorDetails(null)
     setCopyLabel('Copy Output')
   }
 
   const handleCopy = async () => {
-    if (!formatted) {
+    if (!output) {
       return
     }
 
     try {
-      await navigator.clipboard.writeText(formatted)
+      await navigator.clipboard.writeText(output)
       setCopyLabel('Copied')
     } catch (err) {
       console.error(err)
@@ -150,35 +161,42 @@ function JsonPage({ page }) {
         </div>
         <div className="hero-card">
           <p className="hero-label">Tool focus</p>
-          <p className="hero-value">{page.toolFocus || 'Format and validate JSON'}</p>
+          <p className="hero-value">{page.toolFocus || 'Base64 encode and decode'}</p>
           <p className="hero-meta">{page.heroNote}</p>
         </div>
       </header>
 
-      <section className="card" aria-label="JSON formatter tool">
+      <section className="card" aria-label="Base64 conversion tool">
         <div className="controls">
-          <button onClick={handleFormat} disabled={isLoading} className="primary-button">
-            {isLoading ? 'Formatting…' : 'Format JSON'}
+          <button
+            onClick={() => handleModeChange('encode')}
+            className={`secondary-button ${isEncodeMode ? 'active' : ''}`}
+          >
+            Encode
+          </button>
+          <button
+            onClick={() => handleModeChange('decode')}
+            className={`secondary-button ${!isEncodeMode ? 'active' : ''}`}
+          >
+            Decode
+          </button>
+          <button onClick={handleConvert} disabled={isLoading} className="primary-button">
+            {isLoading ? 'Converting…' : isEncodeMode ? 'Encode To Base64' : 'Decode Base64'}
           </button>
           <button onClick={handleClear} className="secondary-button">
             Clear
           </button>
-          <button onClick={handleCopy} className="secondary-button" disabled={!formatted}>
+          <button onClick={handleCopy} className="secondary-button" disabled={!output}>
             {copyLabel}
           </button>
         </div>
 
-        {error && (
-          <div className="error-block">
-            <p className="error">{error}</p>
-            {errorDetails && <p className="error-detail">Details: {errorDetails}</p>}
-          </div>
-        )}
+        {error && <p className="error">{error}</p>}
 
         <div className="json-layout">
           <div className="json-panel">
             <div className="json-panel-header">
-              <h2>Input JSON</h2>
+              <h2>{inputLabel}</h2>
               <p>{page.formHint}</p>
             </div>
             <textarea
@@ -186,17 +204,17 @@ function JsonPage({ page }) {
               onChange={(event) => setInput(event.target.value)}
               className="json-textarea"
               spellCheck="false"
-              aria-label="JSON input"
+              aria-label={inputLabel}
             />
           </div>
 
           <div className="json-panel">
             <div className="json-panel-header">
-              <h2>Formatted output</h2>
-              <p>{formatted ? 'Ready to copy or review.' : 'Run the formatter to see output here.'}</p>
+              <h2>{outputLabel}</h2>
+              <p>{output ? 'Ready to copy or review.' : 'Run the converter to see output here.'}</p>
             </div>
-            <pre className="json-output" aria-label="JSON output">
-              {formatted || 'Formatted JSON will appear here.'}
+            <pre className="json-output" aria-label={outputLabel}>
+              {output || 'Converted output will appear here.'}
             </pre>
           </div>
         </div>
@@ -204,34 +222,22 @@ function JsonPage({ page }) {
         <div className="related-links">
           <h2>Related checks</h2>
           <div className="tool-grid">
-            <AppLink href="/ping-test" className="tool-card">
-              <span className="tool-card-title">Run A Ping Test</span>
+            <AppLink href="/json-formatter" className="tool-card">
+              <span className="tool-card-title">Format JSON</span>
               <span className="tool-card-copy">
-                Switch back to network testing when you want to compare application issues with connection latency.
-              </span>
-            </AppLink>
-            <AppLink href="/what-is-my-ip" className="tool-card">
-              <span className="tool-card-title">Check Your IP</span>
-              <span className="tool-card-copy">
-                Confirm your current public IP before debugging remote APIs, allowlists, or environment access.
+                Clean up structured payloads after decoding Base64 or before encoding content for transport.
               </span>
             </AppLink>
             <AppLink href="/dns-lookup" className="tool-card">
               <span className="tool-card-title">Run A DNS Lookup</span>
               <span className="tool-card-copy">
-                Inspect DNS records when the JSON is fine but the hostname or service route still looks wrong.
+                Check DNS records when encoded configuration values are part of a broader deployment or debugging flow.
               </span>
             </AppLink>
-            <AppLink href="/json-validator" className="tool-card">
-              <span className="tool-card-title">Validate JSON</span>
+            <AppLink href="/what-is-my-ip" className="tool-card">
+              <span className="tool-card-title">Check Your IP</span>
               <span className="tool-card-copy">
-                Use the validator-focused page when your main goal is checking whether a payload is structurally valid.
-              </span>
-            </AppLink>
-            <AppLink href="/base64-encode" className="tool-card">
-              <span className="tool-card-title">Base64 Encoder</span>
-              <span className="tool-card-copy">
-                Encode or decode values quickly when the payload you are debugging includes Base64 fields or headers.
+                Confirm your network context before debugging APIs, gateways, or services that exchange encoded data.
               </span>
             </AppLink>
           </div>
@@ -282,4 +288,4 @@ function JsonPage({ page }) {
   )
 }
 
-export default JsonPage
+export default Base64Page

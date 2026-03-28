@@ -5,6 +5,7 @@ const path = require('path')
 const pingService = require('./pingService')
 const dnsService = require('./dnsService')
 const jsonService = require('./jsonService')
+const base64Service = require('./base64Service')
 const { detectIpVersion, getRequestIp } = require('./ipService')
 
 const createApp = (services = {}) => {
@@ -23,6 +24,10 @@ const createApp = (services = {}) => {
   }
   const { formatJson } = {
     ...jsonService,
+    ...services,
+  }
+  const { encodeBase64, decodeBase64 } = {
+    ...base64Service,
     ...services,
   }
   const app = express()
@@ -63,6 +68,10 @@ const createApp = (services = {}) => {
       '/json-pretty-print',
       '/json-validator',
       '/json-viewer',
+      '/base64-encode',
+      '/base64-decode',
+      '/text-to-base64',
+      '/base64-to-text',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -145,6 +154,34 @@ ${paths
         error: error.message,
         details: error.details || null,
       })
+    }
+  })
+
+  app.post('/api/base64/encode', (req, res) => {
+    const input = typeof req.body?.input === 'string' ? req.body.input : ''
+
+    if (!input.length) {
+      return res.status(400).json({ error: 'Input required' })
+    }
+
+    return res.status(200).json({
+      output: encodeBase64(input),
+    })
+  })
+
+  app.post('/api/base64/decode', (req, res) => {
+    const input = typeof req.body?.input === 'string' ? req.body.input : ''
+
+    if (!input.length) {
+      return res.status(400).json({ error: 'Input required' })
+    }
+
+    try {
+      return res.status(200).json({
+        output: decodeBase64(input),
+      })
+    } catch (error) {
+      return res.status(400).json({ error: error.message })
     }
   })
 
