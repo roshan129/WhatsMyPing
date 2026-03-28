@@ -28,6 +28,9 @@ describe('Base64Page', () => {
 
     render(<Base64Page page={base64Pages[0]} />)
 
+    fireEvent.change(screen.getByLabelText('Text input'), {
+      target: { value: 'Hello' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Encode To Base64' }))
 
     expect(await screen.findByLabelText('Base64 output')).toHaveTextContent('SGVsbG8=')
@@ -50,6 +53,9 @@ describe('Base64Page', () => {
 
     render(<Base64Page page={base64Pages[1]} />)
 
+    fireEvent.change(screen.getByLabelText('Base64 input'), {
+      target: { value: 'SGVsbG8gZnJvbSBSb3N3YWc=' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Decode Base64' }))
 
     expect(await screen.findByLabelText('Decoded text')).toHaveTextContent('Hello from Roswag')
@@ -89,6 +95,9 @@ describe('Base64Page', () => {
 
     render(<Base64Page page={base64Pages[0]} />)
 
+    fireEvent.change(screen.getByLabelText('Text input'), {
+      target: { value: 'Hello' },
+    })
     fireEvent.click(screen.getByRole('button', { name: 'Encode To Base64' }))
 
     expect(await screen.findByLabelText('Base64 output')).toHaveTextContent('SGVsbG8=')
@@ -100,5 +109,12 @@ describe('Base64Page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Clear' }))
     expect(screen.getByLabelText('Text input')).toHaveValue('')
     expect(screen.getByLabelText('Base64 output')).toHaveTextContent('Converted output will appear here.')
+  })
+
+  it('shows a placeholder instead of prefilled input text', () => {
+    render(<Base64Page page={base64Pages[0]} />)
+
+    expect(screen.getByLabelText('Text input')).toHaveValue('')
+    expect(screen.getByPlaceholderText('Paste your text here')).toBeInTheDocument()
   })
 })
