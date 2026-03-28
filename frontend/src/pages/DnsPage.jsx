@@ -230,6 +230,12 @@ function DnsPage({ page }) {
                 Compare DNS results with a quick latency check to a widely reachable network.
               </span>
             </AppLink>
+            <AppLink href="/base64-encode" className="tool-card">
+              <span className="tool-card-title">Base64 Encoder</span>
+              <span className="tool-card-copy">
+                Decode or encode small values when DNS troubleshooting overlaps with config, tokens, or service setup.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

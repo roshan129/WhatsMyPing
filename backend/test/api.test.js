@@ -2,6 +2,7 @@ const request = require('supertest')
 const { createApp } = require('../app')
 const dnsService = require('../dnsService')
 const jsonService = require('../jsonService')
+const base64Service = require('../base64Service')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
@@ -9,6 +10,8 @@ describe('backend API', () => {
   let measureTargetMock
   let lookupDnsRecordsMock
   let formatJsonMock
+  let encodeBase64Mock
+  let decodeBase64Mock
   let app
 
   beforeEach(() => {
@@ -16,14 +19,19 @@ describe('backend API', () => {
     measureTargetMock = vi.fn()
     lookupDnsRecordsMock = vi.fn()
     formatJsonMock = vi.fn()
+    encodeBase64Mock = vi.fn()
+    decodeBase64Mock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
       ...jsonService,
+      ...base64Service,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
       formatJson: formatJsonMock,
+      encodeBase64: encodeBase64Mock,
+      decodeBase64: decodeBase64Mock,
     })
   })
 
@@ -288,6 +296,61 @@ describe('backend API', () => {
     })
   })
 
+  it('encodes valid Base64 input through the API', async () => {
+    encodeBase64Mock.mockReturnValue('SGVsbG8=')
+
+    const response = await request(app)
+      .post('/api/base64/encode')
+      .send({ input: 'Hello' })
+
+    expect(response.status).toBe(200)
+    expect(encodeBase64Mock).toHaveBeenCalledWith('Hello')
+    expect(response.body).toEqual({
+      output: 'SGVsbG8=',
+    })
+  })
+
+  it('decodes valid Base64 input through the API', async () => {
+    decodeBase64Mock.mockReturnValue('Hello')
+
+    const response = await request(app)
+      .post('/api/base64/decode')
+      .send({ input: 'SGVsbG8=' })
+
+    expect(response.status).toBe(200)
+    expect(decodeBase64Mock).toHaveBeenCalledWith('SGVsbG8=')
+    expect(response.body).toEqual({
+      output: 'Hello',
+    })
+  })
+
+  it('rejects empty Base64 input before encoding', async () => {
+    const response = await request(app)
+      .post('/api/base64/encode')
+      .send({ input: '' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Input required',
+    })
+    expect(encodeBase64Mock).not.toHaveBeenCalled()
+  })
+
+  it('returns a stable error for invalid Base64 decode input', async () => {
+    decodeBase64Mock.mockImplementation(() => {
+      throw new Error('Invalid Base64 string')
+    })
+
+    const response = await request(app)
+      .post('/api/base64/decode')
+      .send({ input: '***bad***' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Invalid Base64 string',
+    })
+  })
+
   it('includes the IP, DNS, and JSON pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
@@ -306,5 +369,9 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/json-pretty-print</loc>')
     expect(response.text).toContain('<loc>http://example.com/json-validator</loc>')
     expect(response.text).toContain('<loc>http://example.com/json-viewer</loc>')
+    expect(response.text).toContain('<loc>http://example.com/base64-encode</loc>')
+    expect(response.text).toContain('<loc>http://example.com/base64-decode</loc>')
+    expect(response.text).toContain('<loc>http://example.com/text-to-base64</loc>')
+    expect(response.text).toContain('<loc>http://example.com/base64-to-text</loc>')
   })
 })

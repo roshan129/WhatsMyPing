@@ -177,6 +177,12 @@ function IpPage({ page }) {
                 Validate and pretty print API payloads after confirming your connection and public IP details.
               </span>
             </AppLink>
+            <AppLink href="/base64-encode" className="tool-card">
+              <span className="tool-card-title">Base64 Encoder</span>
+              <span className="tool-card-copy">
+                Convert text or inspect encoded values while debugging API requests, headers, and environment setup.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
