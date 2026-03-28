@@ -5,6 +5,7 @@ import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
 import PingPage from './pages/PingPage'
+import UrlPage from './pages/UrlPage'
 import { getRouteForPath } from './routes'
 
 const getInitialPathname = (initialPath) => {
@@ -53,6 +54,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'base64') {
     return <Base64Page page={page} />
+  }
+
+  if (page.toolType === 'url') {
+    return <UrlPage page={page} />
   }
 
   return <PingPage page={page} />

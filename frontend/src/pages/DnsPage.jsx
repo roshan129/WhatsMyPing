@@ -236,6 +236,12 @@ function DnsPage({ page }) {
                 Decode or encode small values when DNS troubleshooting overlaps with config, tokens, or service setup.
               </span>
             </AppLink>
+            <AppLink href="/url-encode" className="tool-card">
+              <span className="tool-card-title">URL Encoder</span>
+              <span className="tool-card-copy">
+                Inspect encoded callback URLs, redirect values, or service parameters during broader DNS debugging.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

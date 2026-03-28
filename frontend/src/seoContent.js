@@ -1038,16 +1038,195 @@ export const base64Pages = [
   },
 ]
 
+export const urlPages = [
+  {
+    path: '/url-encode',
+    toolType: 'url',
+    mode: 'encode',
+    navLabel: 'URL Encoder',
+    shortLabel: 'URL Encode',
+    showInNav: true,
+    title: 'URL Encoder - Encode URLs Online',
+    description:
+      'Encode URLs online with percent encoding so spaces, symbols, and unsafe characters are converted safely.',
+    eyebrow: 'Percent encoding',
+    h1: 'Encode URL Text Safely',
+    subtitle:
+      'Paste plain text or a URL, encode it for safe transport, and copy the result for your next request or config step.',
+    heroNote: 'Useful for query strings, links, API parameters, and text that needs URL-safe encoding.',
+    toolFocus: 'URL-safe percent encoding',
+    introHeading: 'Why use a URL encoder?',
+    introBody:
+      'URL encoding converts characters like spaces, ampersands, and punctuation into a format that works safely inside URLs and query strings. It is one of those small utilities that becomes very useful whenever you work with APIs, redirects, search links, or dynamic parameters.',
+    formHint: 'Paste text or a URL to convert it into encoded URL-safe output.',
+    quickFactsHeading: 'Encoding is useful when you need to:',
+    quickFacts: [
+      'Make spaces and special characters safe inside a URL.',
+      'Prepare query parameters for API calls or links.',
+      'Quickly inspect how raw text changes when percent-encoded.',
+    ],
+    sections: [
+      {
+        title: 'What URL encoding changes',
+        body:
+          'URL encoding replaces characters that are unsafe or ambiguous inside a URL with percent-encoded equivalents. That helps browsers, servers, and applications interpret the value consistently instead of misreading spaces, delimiters, or reserved characters.',
+      },
+      {
+        title: 'Common developer use cases',
+        body:
+          'Developers use URL encoding when building query strings, passing callback URLs, generating search links, or preparing user input for transport in web requests. It is especially helpful when a small formatting mistake can break a redirect, request, or link parameter.',
+      },
+      {
+        title: 'When this page is the right tool',
+        body:
+          'Use this page when you already have raw text or a partial URL and need a safe encoded representation without jumping into another tool or script. If you need to inspect an already encoded value instead, switch to the decoder page and reverse it there.',
+      },
+    ],
+  },
+  {
+    path: '/url-decode',
+    toolType: 'url',
+    mode: 'decode',
+    navLabel: 'URL Decoder',
+    shortLabel: 'URL Decode',
+    showInNav: false,
+    title: 'URL Decoder - Decode Encoded URLs Online',
+    description:
+      'Decode encoded URLs online quickly so you can inspect readable text, query parameters, and percent-encoded values.',
+    eyebrow: 'Readable decode',
+    h1: 'Decode URL Text',
+    subtitle:
+      'Paste encoded URL text, convert it back into readable form, and inspect what the original value actually says.',
+    heroNote: 'Best for debugging query strings, encoded links, callback URLs, and app output.',
+    toolFocus: 'Readable URL decoding',
+    introHeading: 'Why use a URL decoder?',
+    introBody:
+      'A URL decoder is useful when a value is full of `%20`, `%2F`, and other encoded characters that make it hard to read. Decoding it back to plain text makes debugging faster and helps you understand exactly what a request or link contains.',
+    formHint: 'Paste encoded URL text to decode it back into readable output.',
+    quickFactsHeading: 'Decoding helps you:',
+    quickFacts: [
+      'Inspect encoded query strings more easily.',
+      'Debug links or parameters copied from logs and requests.',
+      'Catch malformed encoded input with a clear error message.',
+    ],
+    sections: [
+      {
+        title: 'What decoding reveals',
+        body:
+          'URL decoding converts percent-encoded sequences back into the original readable characters. That is useful when you want to inspect what a request parameter, redirect target, or copied link actually contains without mentally translating the encoded symbols yourself.',
+      },
+      {
+        title: 'Why invalid decode errors matter',
+        body:
+          'Malformed percent-encoded strings can break parsing and create confusing downstream errors. A clear decoder should tell you when the encoded text itself is invalid so you know whether the problem is the source value or the application consuming it.',
+      },
+      {
+        title: 'When to use this page',
+        body:
+          'Use this page when you receive an encoded URL fragment or query string and want to inspect the readable version quickly. If you instead need to generate a safe encoded value from raw text, switch to the encoder page and work in the other direction.',
+      },
+    ],
+  },
+  {
+    path: '/encode-url',
+    toolType: 'url',
+    mode: 'encode',
+    navLabel: 'Encode URL',
+    shortLabel: 'Encode URL',
+    showInNav: false,
+    title: 'Encode URL Online - Percent Encode Text Fast',
+    description:
+      'Encode URL text online fast so parameters, links, and user input stay safe inside web requests.',
+    eyebrow: 'Link-safe formatting',
+    h1: 'Encode URL Values Quickly',
+    subtitle:
+      'Convert raw text into a URL-safe encoded value when links, requests, or redirects need percent encoding.',
+    heroNote: 'Focused on fast encoding for links, query params, and URL-driven workflows.',
+    toolFocus: 'Quick URL-safe formatting',
+    introHeading: 'Why encode a URL value?',
+    introBody:
+      'Sometimes you do not need a full URL parser. You just need to take a value and make sure it is safe inside a URL. This page focuses on that practical workflow so you can encode quickly and move on.',
+    formHint: 'Paste a path fragment, query value, redirect target, or plain text to encode it.',
+    quickFactsHeading: 'This page is useful when you want to:',
+    quickFacts: [
+      'Encode one small value without opening a terminal.',
+      'Prepare redirect or callback parameters quickly.',
+      'Check how text changes before inserting it into a URL.',
+    ],
+    sections: [
+      {
+        title: 'A focused encoding workflow',
+        body:
+          'This route is aimed at people searching specifically for “encode URL” rather than a broader explanation of percent encoding. The underlying tool is the same, but the surrounding content is focused on the common workflow of taking a raw value and making it safe for URL usage.',
+      },
+      {
+        title: 'Helpful for links and parameters',
+        body:
+          'Many small bugs in web apps come from unencoded spaces, ampersands, question marks, or fragments being inserted into a URL. A quick encoder helps prevent that by showing the exact value that should be passed through links, query strings, or API requests.',
+      },
+      {
+        title: 'What encoding does not do',
+        body:
+          'Encoding makes a value URL-safe, but it does not validate the destination or confirm whether the broader URL is correct. It is a formatting step, not a full link-checking or routing tool.',
+      },
+    ],
+  },
+  {
+    path: '/decode-url',
+    toolType: 'url',
+    mode: 'decode',
+    navLabel: 'Decode URL',
+    shortLabel: 'Decode URL',
+    showInNav: false,
+    title: 'Decode URL Online - Read Encoded URL Text',
+    description:
+      'Decode URL-encoded text online so links, query strings, and parameters become easier to read and debug.',
+    eyebrow: 'Inspect encoded values',
+    h1: 'Decode URL Values',
+    subtitle:
+      'Turn encoded URL text back into readable form so you can inspect links, parameters, and redirect targets more clearly.',
+    heroNote: 'Helpful when query strings or copied links are too encoded to understand at a glance.',
+    toolFocus: 'Readable decoded parameters',
+    introHeading: 'Why decode a URL value?',
+    introBody:
+      'URL decoding is often part of everyday debugging. You may want to inspect what a query parameter contains, confirm whether a redirect target is correct, or understand the readable version of a value copied from a request log.',
+    formHint: 'Paste encoded URL text here to inspect the decoded result.',
+    quickFactsHeading: 'This decoder helps you:',
+    quickFacts: [
+      'Read copied query parameters more easily.',
+      'Inspect redirect targets and encoded links quickly.',
+      'Catch malformed percent-encoded strings before deeper debugging.',
+    ],
+    sections: [
+      {
+        title: 'Useful during link and request debugging',
+        body:
+          'Encoded URL text can hide the actual structure of a value, especially when spaces, punctuation, and path fragments are all represented through percent sequences. Decoding helps you inspect what the application is really sending or receiving.',
+      },
+      {
+        title: 'Why a dedicated decoder page still helps',
+        body:
+          'Even though the encoder and decoder share the same underlying tool, separate SEO pages help each route target a clearer intent. Someone searching for “decode URL” usually wants a fast readable result, not a broader percent-encoding overview.',
+      },
+      {
+        title: 'What to do after decoding',
+        body:
+          'Once the readable value appears, your next step depends on the content itself. You may move into the JSON formatter, Base64 tool, or DNS and network utilities if the decoded value is part of a larger debugging chain.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].map((page) => [page.path, page])
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].map((page) => [page.path, page])
 )
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].filter(
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].filter(
   (page) => page.path !== '/' && page.showInNav !== false
 )
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].filter(
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].filter(
   (page) => page.path !== '/'
 )

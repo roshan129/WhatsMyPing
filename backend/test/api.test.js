@@ -3,6 +3,7 @@ const { createApp } = require('../app')
 const dnsService = require('../dnsService')
 const jsonService = require('../jsonService')
 const base64Service = require('../base64Service')
+const urlService = require('../urlService')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
@@ -12,6 +13,8 @@ describe('backend API', () => {
   let formatJsonMock
   let encodeBase64Mock
   let decodeBase64Mock
+  let encodeUrlMock
+  let decodeUrlMock
   let app
 
   beforeEach(() => {
@@ -21,17 +24,22 @@ describe('backend API', () => {
     formatJsonMock = vi.fn()
     encodeBase64Mock = vi.fn()
     decodeBase64Mock = vi.fn()
+    encodeUrlMock = vi.fn()
+    decodeUrlMock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
       ...jsonService,
       ...base64Service,
+      ...urlService,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
       formatJson: formatJsonMock,
       encodeBase64: encodeBase64Mock,
       decodeBase64: decodeBase64Mock,
+      encodeUrl: encodeUrlMock,
+      decodeUrl: decodeUrlMock,
     })
   })
 
@@ -351,6 +359,61 @@ describe('backend API', () => {
     })
   })
 
+  it('encodes valid URL input through the API', async () => {
+    encodeUrlMock.mockReturnValue('hello%20world')
+
+    const response = await request(app)
+      .post('/api/url/encode')
+      .send({ input: 'hello world' })
+
+    expect(response.status).toBe(200)
+    expect(encodeUrlMock).toHaveBeenCalledWith('hello world')
+    expect(response.body).toEqual({
+      output: 'hello%20world',
+    })
+  })
+
+  it('decodes valid URL input through the API', async () => {
+    decodeUrlMock.mockReturnValue('hello world')
+
+    const response = await request(app)
+      .post('/api/url/decode')
+      .send({ input: 'hello%20world' })
+
+    expect(response.status).toBe(200)
+    expect(decodeUrlMock).toHaveBeenCalledWith('hello%20world')
+    expect(response.body).toEqual({
+      output: 'hello world',
+    })
+  })
+
+  it('rejects empty URL input before encoding', async () => {
+    const response = await request(app)
+      .post('/api/url/encode')
+      .send({ input: '' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Input required',
+    })
+    expect(encodeUrlMock).not.toHaveBeenCalled()
+  })
+
+  it('returns a stable error for invalid URL decode input', async () => {
+    decodeUrlMock.mockImplementation(() => {
+      throw new Error('Invalid URL encoded string')
+    })
+
+    const response = await request(app)
+      .post('/api/url/decode')
+      .send({ input: '%E0%A4%A' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Invalid URL encoded string',
+    })
+  })
+
   it('includes the IP, DNS, and JSON pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
@@ -373,5 +436,9 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/base64-decode</loc>')
     expect(response.text).toContain('<loc>http://example.com/text-to-base64</loc>')
     expect(response.text).toContain('<loc>http://example.com/base64-to-text</loc>')
+    expect(response.text).toContain('<loc>http://example.com/url-encode</loc>')
+    expect(response.text).toContain('<loc>http://example.com/url-decode</loc>')
+    expect(response.text).toContain('<loc>http://example.com/encode-url</loc>')
+    expect(response.text).toContain('<loc>http://example.com/decode-url</loc>')
   })
 })
