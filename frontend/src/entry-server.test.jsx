@@ -17,6 +17,10 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/json-pretty-print')
     expect(prerenderRoutes).toContain('/json-validator')
     expect(prerenderRoutes).toContain('/json-viewer')
+    expect(prerenderRoutes).toContain('/base64-encode')
+    expect(prerenderRoutes).toContain('/base64-decode')
+    expect(prerenderRoutes).toContain('/text-to-base64')
+    expect(prerenderRoutes).toContain('/base64-to-text')
   })
 })
 
@@ -49,5 +53,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Format JSON online')
     expect(result.appHtml).toContain('Format JSON Instantly')
+  })
+
+  it('returns the expected metadata for a Base64 page', () => {
+    const result = render('/base64-encode')
+
+    expect(result.head).toMatchObject({
+      title: 'Base64 Encode - Encode Text to Base64 Online',
+    })
+    expect(result.head.description).toContain('Encode text to Base64 online instantly')
+    expect(result.appHtml).toContain('Encode Text To Base64')
   })
 })

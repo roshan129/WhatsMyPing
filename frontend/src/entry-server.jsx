@@ -28,6 +28,10 @@ export const prerenderRoutes = [
   '/json-pretty-print',
   '/json-validator',
   '/json-viewer',
+  '/base64-encode',
+  '/base64-decode',
+  '/text-to-base64',
+  '/base64-to-text',
 ]
 
 export function render(url) {

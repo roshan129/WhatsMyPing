@@ -14,6 +14,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/what-is-my-ip').toolType).toBe('ip')
     expect(getRouteForPath('/dns-lookup').toolType).toBe('dns')
     expect(getRouteForPath('/json-formatter').toolType).toBe('json')
+    expect(getRouteForPath('/base64-encode').toolType).toBe('base64')
+    expect(getRouteForPath('/base64-decode').mode).toBe('decode')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

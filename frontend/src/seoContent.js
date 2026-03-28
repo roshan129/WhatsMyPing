@@ -855,16 +855,199 @@ export const jsonPages = [
   },
 ]
 
+export const base64Pages = [
+  {
+    path: '/base64-encode',
+    toolType: 'base64',
+    mode: 'encode',
+    navLabel: 'Base64 Encoder',
+    shortLabel: 'Base64 Encode',
+    showInNav: true,
+    title: 'Base64 Encode - Encode Text to Base64 Online',
+    description:
+      'Encode text to Base64 online instantly for debugging, APIs, config values, and developer workflows.',
+    eyebrow: 'Encoding utility',
+    h1: 'Encode Text To Base64',
+    subtitle:
+      'Paste plain text, convert it to Base64 in seconds, and copy the encoded output for your next step.',
+    heroNote: 'Best for quick Base64 encoding during API work, config setup, and debugging.',
+    toolFocus: 'Text to Base64 encoding',
+    introHeading: 'Why use a Base64 encoder?',
+    introBody:
+      'Base64 encoding is a simple way to turn plain text into an ASCII-safe representation that is easier to move through systems that expect text-friendly payloads. It is common in APIs, tokens, config values, and debugging workflows.',
+    formHint: 'Paste plain text to encode it into Base64.',
+    exampleInput: 'Hello from Roswag',
+    quickFactsHeading: 'Base64 encoding is useful when you need to:',
+    quickFacts: [
+      'Convert plain text into a text-safe encoded string.',
+      'Prepare small values for APIs, headers, or configuration fields.',
+      'Quickly test how application data changes when encoded.',
+    ],
+    sections: [
+      {
+        title: 'What Base64 encoding does',
+        body:
+          'Base64 encoding does not encrypt or secure your data. It simply converts binary or plain text content into a limited text character set that is easier to transmit in systems that expect text-safe values. That makes it practical for transport, formatting, and compatibility, not secrecy.',
+      },
+      {
+        title: 'Common reasons developers encode text',
+        body:
+          'Developers often use Base64 when moving data through APIs, embedding values in configuration, testing authorization headers, or converting content into a format that works cleanly inside JSON, HTML, or command-line workflows. It is a utility step that shows up in many small debugging tasks.',
+      },
+      {
+        title: 'When this page is the right tool',
+        body:
+          'Use this page when you already have plain text and want a quick encoded result without opening another app or script. If you need to go in the opposite direction, switch to the decoder page and inspect the original text output there.',
+      },
+    ],
+  },
+  {
+    path: '/base64-decode',
+    toolType: 'base64',
+    mode: 'decode',
+    navLabel: 'Base64 Decoder',
+    shortLabel: 'Base64 Decode',
+    showInNav: false,
+    title: 'Base64 Decode - Decode Base64 to Text Online',
+    description:
+      'Decode Base64 to text online quickly so you can inspect encoded values, debug payloads, and verify content.',
+    eyebrow: 'Decoding utility',
+    h1: 'Decode Base64 To Text',
+    subtitle:
+      'Paste Base64 input, convert it back to readable text, and inspect the decoded value in seconds.',
+    heroNote: 'Useful when an API, token, or config field contains encoded content you need to read.',
+    toolFocus: 'Base64 to text decoding',
+    introHeading: 'Why use a Base64 decoder?',
+    introBody:
+      'A Base64 decoder helps you turn encoded strings back into readable text so you can verify what is really being sent or stored. That is useful when you are debugging APIs, checking headers, or inspecting application values that have been encoded upstream.',
+    formHint: 'Paste a valid Base64 string to decode it back to text.',
+    exampleInput: 'SGVsbG8gZnJvbSBSb3N3YWc=',
+    quickFactsHeading: 'Decoding helps when you want to:',
+    quickFacts: [
+      'Inspect what an encoded string actually contains.',
+      'Debug API payloads or config values that arrive in Base64 form.',
+      'Confirm whether copied Base64 data is valid before moving on.',
+    ],
+    sections: [
+      {
+        title: 'What decoding reveals',
+        body:
+          'Decoding Base64 lets you see the original text representation behind an encoded value. That can make debugging much faster because you stop guessing what a string might mean and instead inspect the exact value that another system produced.',
+      },
+      {
+        title: 'Why invalid Base64 needs clear errors',
+        body:
+          'Not every copied value is clean. Missing padding, invalid characters, or malformed strings can all cause confusion. A good decoder should fail clearly so you know whether the problem is the encoded data itself or the downstream system using it.',
+      },
+      {
+        title: 'When to use this page',
+        body:
+          'Use this page when you receive a Base64 string from logs, APIs, tokens, or application settings and want to understand what it contains. If you instead need to generate a fresh encoded value, switch to the encoder page and start from plain text.',
+      },
+    ],
+  },
+  {
+    path: '/text-to-base64',
+    toolType: 'base64',
+    mode: 'encode',
+    navLabel: 'Text to Base64',
+    shortLabel: 'Text to Base64',
+    showInNav: false,
+    title: 'Text to Base64 Converter - Encode Text Online',
+    description:
+      'Convert text to Base64 online for fast developer workflows, API testing, and config preparation.',
+    eyebrow: 'Text conversion',
+    h1: 'Convert Text To Base64',
+    subtitle:
+      'Turn plain text into Base64 quickly when you need a text-safe encoded value for transport or testing.',
+    heroNote: 'Focused on the plain-text-to-encoded workflow rather than general Base64 theory.',
+    toolFocus: 'Plain text conversion',
+    introHeading: 'Why convert text to Base64?',
+    introBody:
+      'Sometimes the job is simple: you have text, and another system expects Base64. This page is optimized for that straightforward workflow so you can paste content, convert it, and move on without extra friction.',
+    formHint: 'Paste plain text such as a small payload, token fragment, or config value.',
+    exampleInput: 'api-key:live-demo',
+    quickFactsHeading: 'This converter is helpful when you need to:',
+    quickFacts: [
+      'Encode a short string without opening a terminal.',
+      'Prepare values for quick API or config testing.',
+      'Convert copied text into an encoded transport-safe form.',
+    ],
+    sections: [
+      {
+        title: 'A focused conversion workflow',
+        body:
+          'This route is useful for people searching specifically for text-to-Base64 conversion rather than a more general encoder. The tool behavior is the same, but the surrounding guidance is tuned to the plain text conversion use case that often comes up in day-to-day development.',
+      },
+      {
+        title: 'Good for small repeat tasks',
+        body:
+          'If you encode strings frequently during testing, a browser-based converter can be faster than context-switching into scripts or shell commands. It is especially convenient for quick debugging, manual verification, and copy-paste heavy workflows.',
+      },
+      {
+        title: 'What this page does not imply',
+        body:
+          'Converting text to Base64 is about representation, not protection. The output may look less readable at a glance, but it is still reversible. Treat it as a compatibility and transport step, not a security feature.',
+      },
+    ],
+  },
+  {
+    path: '/base64-to-text',
+    toolType: 'base64',
+    mode: 'decode',
+    navLabel: 'Base64 to Text',
+    shortLabel: 'Base64 to Text',
+    showInNav: false,
+    title: 'Base64 to Text Converter - Decode Base64 Online',
+    description:
+      'Convert Base64 to text online and inspect encoded values quickly while debugging APIs, configs, or app output.',
+    eyebrow: 'Readable decode',
+    h1: 'Convert Base64 To Text',
+    subtitle:
+      'Decode an encoded string back into readable text so you can inspect what another system actually produced.',
+    heroNote: 'Helpful when copied Base64 values need quick inspection instead of deeper tooling.',
+    toolFocus: 'Readable decoded output',
+    introHeading: 'Why convert Base64 to text?',
+    introBody:
+      'When you are debugging, encoded values are only useful once you can inspect them. This page is aimed at that direct conversion workflow: paste the Base64 string, decode it, and review the text output immediately.',
+    formHint: 'Paste Base64 here to convert it into readable text output.',
+    exampleInput: 'YXBpLWtleTpsaXZlLWRlbW8=',
+    quickFactsHeading: 'This page helps you:',
+    quickFacts: [
+      'Inspect what a Base64 value actually contains.',
+      'Check copied strings from logs, headers, or payloads.',
+      'Catch malformed input early with a clear decode error.',
+    ],
+    sections: [
+      {
+        title: 'Useful during inspection and debugging',
+        body:
+          'Base64-to-text conversion is often part of a broader debugging workflow. You may be checking how an upstream system encoded a value, verifying what a header contains, or confirming whether a copied string is even valid Base64 in the first place.',
+      },
+      {
+        title: 'Why a dedicated decoder page still helps',
+        body:
+          'Even though the encoder and decoder share the same underlying tool, separate SEO pages let each route target a clearer user intent. Someone searching for “Base64 to text” usually wants fast decoding help, not a broader explanation of the whole encoding workflow.',
+      },
+      {
+        title: 'What to do after decoding',
+        body:
+          'Once the value is decoded, your next step often depends on the content itself. If it looks like JSON, move into the JSON formatter. If it is part of a larger config or network workflow, you can continue into the related Roswag tools from there.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].map((page) => [page.path, page])
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].map((page) => [page.path, page])
 )
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].filter(
   (page) => page.path !== '/' && page.showInNav !== false
 )
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages].filter(
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages].filter(
   (page) => page.path !== '/'
 )
