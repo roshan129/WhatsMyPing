@@ -18,6 +18,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/base64-decode').mode).toBe('decode')
     expect(getRouteForPath('/url-encode').toolType).toBe('url')
     expect(getRouteForPath('/url-decode').mode).toBe('decode')
+    expect(getRouteForPath('/uuid-generator').toolType).toBe('uuid')
+    expect(getRouteForPath('/uuid-v4-generator').shortLabel).toBe('UUID v4')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

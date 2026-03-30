@@ -4,6 +4,7 @@ const dnsService = require('../dnsService')
 const jsonService = require('../jsonService')
 const base64Service = require('../base64Service')
 const urlService = require('../urlService')
+const uuidService = require('../uuidService')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
@@ -15,6 +16,7 @@ describe('backend API', () => {
   let decodeBase64Mock
   let encodeUrlMock
   let decodeUrlMock
+  let generateMultipleUUIDsMock
   let app
 
   beforeEach(() => {
@@ -26,12 +28,14 @@ describe('backend API', () => {
     decodeBase64Mock = vi.fn()
     encodeUrlMock = vi.fn()
     decodeUrlMock = vi.fn()
+    generateMultipleUUIDsMock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
       ...jsonService,
       ...base64Service,
       ...urlService,
+      ...uuidService,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
@@ -40,6 +44,7 @@ describe('backend API', () => {
       decodeBase64: decodeBase64Mock,
       encodeUrl: encodeUrlMock,
       decodeUrl: decodeUrlMock,
+      generateMultipleUUIDs: generateMultipleUUIDsMock,
     })
   })
 
@@ -414,7 +419,43 @@ describe('backend API', () => {
     })
   })
 
-  it('includes the IP, DNS, and JSON pages in the sitemap output', async () => {
+  it('returns one UUID by default', async () => {
+    generateMultipleUUIDsMock.mockReturnValue(['550e8400-e29b-41d4-a716-446655440000'])
+
+    const response = await request(app).get('/api/uuid')
+
+    expect(response.status).toBe(200)
+    expect(generateMultipleUUIDsMock).toHaveBeenCalledWith(1)
+    expect(response.body).toEqual({
+      uuids: ['550e8400-e29b-41d4-a716-446655440000'],
+    })
+  })
+
+  it('supports generating multiple UUIDs', async () => {
+    generateMultipleUUIDsMock.mockReturnValue([
+      '550e8400-e29b-41d4-a716-446655440000',
+      '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+      '16fd2706-8baf-433b-82eb-8c7fada847da',
+    ])
+
+    const response = await request(app).get('/api/uuid?count=3')
+
+    expect(response.status).toBe(200)
+    expect(generateMultipleUUIDsMock).toHaveBeenCalledWith(3)
+    expect(response.body.uuids).toHaveLength(3)
+  })
+
+  it('caps UUID generation requests at 20', async () => {
+    generateMultipleUUIDsMock.mockReturnValue(Array.from({ length: 20 }, (_, index) => `uuid-${index + 1}`))
+
+    const response = await request(app).get('/api/uuid?count=50')
+
+    expect(response.status).toBe(200)
+    expect(generateMultipleUUIDsMock).toHaveBeenCalledWith(20)
+    expect(response.body.uuids).toHaveLength(20)
+  })
+
+  it('includes the IP, DNS, JSON, URL, and UUID pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
     expect(response.status).toBe(200)
@@ -440,5 +481,10 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/url-decode</loc>')
     expect(response.text).toContain('<loc>http://example.com/encode-url</loc>')
     expect(response.text).toContain('<loc>http://example.com/decode-url</loc>')
+    expect(response.text).toContain('<loc>http://example.com/uuid-generator</loc>')
+    expect(response.text).toContain('<loc>http://example.com/generate-uuid</loc>')
+    expect(response.text).toContain('<loc>http://example.com/uuid-v4-generator</loc>')
+    expect(response.text).toContain('<loc>http://example.com/random-uuid-generator</loc>')
+    expect(response.text).toContain('<loc>http://example.com/uuid-generator-online</loc>')
   })
 })

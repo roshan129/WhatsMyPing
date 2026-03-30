@@ -36,6 +36,11 @@ export const prerenderRoutes = [
   '/url-decode',
   '/encode-url',
   '/decode-url',
+  '/uuid-generator',
+  '/generate-uuid',
+  '/uuid-v4-generator',
+  '/random-uuid-generator',
+  '/uuid-generator-online',
 ]
 
 export function render(url) {

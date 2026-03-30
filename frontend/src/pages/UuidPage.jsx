@@ -38,101 +38,81 @@ const AppLink = ({ href, children, className }) => {
   )
 }
 
-const MODE_ROUTE_MAP = {
-  encode: '/base64-encode',
-  decode: '/base64-decode',
-}
-
-function Base64Page({ page }) {
-  const [input, setInput] = useState('')
-  const [output, setOutput] = useState('')
+function UuidPage({ page }) {
+  const [count, setCount] = useState('1')
+  const [uuids, setUuids] = useState([])
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [copyLabel, setCopyLabel] = useState('Copy Output')
+  const [copyAllLabel, setCopyAllLabel] = useState('Copy All')
+  const [copiedUuidIndex, setCopiedUuidIndex] = useState(null)
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
-  const isEncodeMode = page.mode === 'encode'
-  const inputLabel = isEncodeMode ? 'Text input' : 'Base64 input'
-  const outputLabel = isEncodeMode ? 'Base64 output' : 'Decoded text'
-  const inputPlaceholder = isEncodeMode
-    ? 'Paste your text here'
-    : 'Paste your Base64 here'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
   }, [page.description, page.title])
 
   useEffect(() => {
-    setInput('')
-    setOutput('')
+    setCount('1')
+    setUuids([])
     setError(null)
     setIsLoading(false)
-    setCopyLabel('Copy Output')
+    setCopyAllLabel('Copy All')
+    setCopiedUuidIndex(null)
   }, [page.path])
 
-  const handleModeChange = (mode) => {
-    const nextPath = MODE_ROUTE_MAP[mode]
-    if (!nextPath || nextPath === page.path) {
-      return
-    }
-
-    window.history.pushState({}, '', nextPath)
-    window.dispatchEvent(new PopStateEvent('popstate'))
-  }
-
-  const handleConvert = async () => {
-    if (!input.length) {
-      setError(isEncodeMode ? 'Paste text to encode first.' : 'Paste Base64 to decode first.')
-      setOutput('')
-      return
-    }
-
+  const generateUuids = async () => {
     setIsLoading(true)
     setError(null)
-    setOutput('')
-    setCopyLabel('Copy Output')
+    setCopyAllLabel('Copy All')
+    setCopiedUuidIndex(null)
 
     try {
-      const endpoint = isEncodeMode ? '/api/base64/encode' : '/api/base64/decode'
-      const response = await fetch(`${apiBase}${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ input }),
-      })
+      const response = await fetch(`${apiBase}/api/uuid?count=${count}`)
       const data = await response.json()
 
       if (!response.ok) {
         throw new Error(data.error || `Server responded with ${response.status}`)
       }
 
-      setOutput(data.output || '')
+      setUuids(Array.isArray(data.uuids) ? data.uuids : [])
     } catch (err) {
       console.error(err)
-      setError(err.message || 'Could not convert the Base64 input right now.')
+      setUuids([])
+      setError(err.message || 'Could not generate UUIDs right now.')
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleClear = () => {
-    setInput('')
-    setOutput('')
+    setUuids([])
     setError(null)
-    setCopyLabel('Copy Output')
+    setCopyAllLabel('Copy All')
+    setCopiedUuidIndex(null)
   }
 
-  const handleCopy = async () => {
-    if (!output) {
+  const handleCopyAll = async () => {
+    if (!uuids.length) {
       return
     }
 
     try {
-      await navigator.clipboard.writeText(output)
-      setCopyLabel('Copied')
+      await navigator.clipboard.writeText(uuids.join('\n'))
+      setCopyAllLabel('Copied All')
     } catch (err) {
       console.error(err)
-      setCopyLabel('Copy Failed')
+      setCopyAllLabel('Copy Failed')
+    }
+  }
+
+  const handleCopyOne = async (uuid, index) => {
+    try {
+      await navigator.clipboard.writeText(uuid)
+      setCopiedUuidIndex(index)
+      setCopyAllLabel('Copy All')
+    } catch (err) {
+      console.error(err)
+      setCopiedUuidIndex(null)
     }
   }
 
@@ -164,64 +144,102 @@ function Base64Page({ page }) {
         </div>
         <div className="hero-card">
           <p className="hero-label">Tool focus</p>
-          <p className="hero-value">{page.toolFocus || 'Base64 encode and decode'}</p>
+          <p className="hero-value">{page.toolFocus || 'UUID v4 generation'}</p>
           <p className="hero-meta">{page.heroNote}</p>
         </div>
       </header>
 
-      <section className="card" aria-label="Base64 conversion tool">
+      <section className="card" aria-label="UUID generator tool">
         <div className="controls">
-          <button
-            onClick={() => handleModeChange('encode')}
-            className={`secondary-button ${isEncodeMode ? 'active' : ''}`}
-          >
-            Encode
+          <label className="control-field" htmlFor="uuid-count">
+            <span className="dns-label">Number of UUIDs</span>
+            <select
+              id="uuid-count"
+              value={count}
+              onChange={(event) => setCount(event.target.value)}
+              className="dns-input"
+              aria-label="Number of UUIDs"
+            >
+              {Array.from({ length: 20 }, (_, index) => String(index + 1)).map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button onClick={generateUuids} disabled={isLoading} className="primary-button">
+            {isLoading ? 'Generating…' : 'Generate UUIDs'}
           </button>
           <button
-            onClick={() => handleModeChange('decode')}
-            className={`secondary-button ${!isEncodeMode ? 'active' : ''}`}
+            onClick={generateUuids}
+            disabled={isLoading || !uuids.length}
+            className="secondary-button"
           >
-            Decode
-          </button>
-          <button onClick={handleConvert} disabled={isLoading} className="primary-button">
-            {isLoading ? 'Converting…' : isEncodeMode ? 'Encode To Base64' : 'Decode Base64'}
+            Regenerate
           </button>
           <button onClick={handleClear} className="secondary-button">
             Clear
           </button>
-          <button onClick={handleCopy} className="secondary-button" disabled={!output}>
-            {copyLabel}
+          <button onClick={handleCopyAll} disabled={!uuids.length} className="secondary-button">
+            {copyAllLabel}
           </button>
         </div>
 
         {error && <p className="error">{error}</p>}
 
-        <div className="json-layout">
-          <div className="json-panel">
-            <div className="json-panel-header">
-              <h2>{inputLabel}</h2>
-              <p>{page.formHint}</p>
-            </div>
-            <textarea
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              className="json-textarea"
-              spellCheck="false"
-              aria-label={inputLabel}
-              placeholder={inputPlaceholder}
-            />
-          </div>
+        {!uuids.length && !error && !isLoading && (
+          <p className="loading-copy">
+            Choose how many UUID v4 values you want, then generate a fresh batch instantly.
+          </p>
+        )}
 
-          <div className="json-panel">
-            <div className="json-panel-header">
-              <h2>{outputLabel}</h2>
-              <p>{output ? 'Ready to copy or review.' : 'Run the converter to see output here.'}</p>
+        {uuids.length > 0 && (
+          <>
+            <div className="results-grid">
+              <div className="results" data-reveal="1">
+                <p className="ping-label">Generated</p>
+                <p className="ip-value">{uuids.length}</p>
+              </div>
+              <div className="stats" data-reveal="2">
+                <h2>Batch details</h2>
+                <ul>
+                  <li>
+                    <strong>Version:</strong> UUID v4
+                  </li>
+                  <li>
+                    <strong>Copy mode:</strong> Single or full batch
+                  </li>
+                  <li>
+                    <strong>Current route:</strong> {page.shortLabel}
+                  </li>
+                </ul>
+              </div>
             </div>
-            <pre className="json-output" aria-label={outputLabel}>
-              {output || 'Converted output will appear here.'}
-            </pre>
-          </div>
-        </div>
+
+            <div className="target-breakdown" data-reveal="3">
+              <h2>Generated UUIDs</h2>
+              <div className="uuid-list">
+                {uuids.map((uuid, index) => (
+                  <article key={`${uuid}-${index}`} className="uuid-card">
+                    <div className="uuid-card-header">
+                      <p className="ping-label">UUID {index + 1}</p>
+                      <button
+                        onClick={() => handleCopyOne(uuid, index)}
+                        className="secondary-button"
+                        aria-label={`Copy UUID ${index + 1}`}
+                      >
+                        {copiedUuidIndex === index ? 'Copied' : `Copy UUID ${index + 1}`}
+                      </button>
+                    </div>
+                    <pre className="json-output uuid-value" aria-label={`UUID ${index + 1} value`}>
+                      {uuid}
+                    </pre>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="related-links">
           <h2>Related checks</h2>
@@ -229,31 +247,25 @@ function Base64Page({ page }) {
             <AppLink href="/json-formatter" className="tool-card">
               <span className="tool-card-title">Format JSON</span>
               <span className="tool-card-copy">
-                Clean up structured payloads after decoding Base64 or before encoding content for transport.
+                Drop generated UUIDs into payloads or API fixtures, then pretty print the full JSON before using it.
               </span>
             </AppLink>
-            <AppLink href="/dns-lookup" className="tool-card">
-              <span className="tool-card-title">Run A DNS Lookup</span>
+            <AppLink href="/base64-encode" className="tool-card">
+              <span className="tool-card-title">Base64 Encoder</span>
               <span className="tool-card-copy">
-                Check DNS records when encoded configuration values are part of a broader deployment or debugging flow.
-              </span>
-            </AppLink>
-            <AppLink href="/what-is-my-ip" className="tool-card">
-              <span className="tool-card-title">Check Your IP</span>
-              <span className="tool-card-copy">
-                Confirm your network context before debugging APIs, gateways, or services that exchange encoded data.
+                Move into Base64 encoding when a generated UUID needs to travel inside a token, config blob, or test fixture.
               </span>
             </AppLink>
             <AppLink href="/url-encode" className="tool-card">
               <span className="tool-card-title">URL Encoder</span>
               <span className="tool-card-copy">
-                Move between Base64 and URL encoding quickly when a debugging workflow includes both transport-safe formats.
+                Encode generated UUIDs for query strings, callback values, or link parameters without leaving Roswag.
               </span>
             </AppLink>
-            <AppLink href="/uuid-generator" className="tool-card">
-              <span className="tool-card-title">UUID Generator</span>
+            <AppLink href="/ping-test" className="tool-card">
+              <span className="tool-card-title">Run A Ping Test</span>
               <span className="tool-card-copy">
-                Generate fresh UUID v4 values when encoded payloads, fixtures, or tokens need stable-looking unique IDs.
+                Jump back into network checks after creating IDs for requests, payloads, or debugging sessions.
               </span>
             </AppLink>
           </div>
@@ -304,4 +316,4 @@ function Base64Page({ page }) {
   )
 }
 
-export default Base64Page
+export default UuidPage

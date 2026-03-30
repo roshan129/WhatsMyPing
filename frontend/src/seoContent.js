@@ -1217,16 +1217,230 @@ export const urlPages = [
   },
 ]
 
+export const uuidPages = [
+  {
+    path: '/uuid-generator',
+    toolType: 'uuid',
+    navLabel: 'UUID Generator',
+    shortLabel: 'UUID Generator',
+    showInNav: true,
+    title: 'UUID Generator - Generate UUID v4 Online',
+    description:
+      'Generate UUID v4 values online instantly, copy single IDs or full batches, and create random UUIDs for apps, APIs, and databases.',
+    eyebrow: 'Random identifiers',
+    h1: 'Generate UUID v4 Values Instantly',
+    subtitle:
+      'Create one or many UUID v4 identifiers in seconds, copy them individually or together, and keep your workflow moving.',
+    heroNote: 'Built for quick ID generation during app development, testing, data seeding, and request tracing.',
+    toolFocus: 'UUID v4 generation',
+    introHeading: 'Why use a UUID generator?',
+    introBody:
+      'UUIDs are one of the most common ways to create unique identifiers without coordinating with a central ID service first. A fast browser-based generator is useful when you need IDs right away for payloads, database rows, test fixtures, queue messages, or tracing values.',
+    quickFactsHeading: 'This generator helps when you need to:',
+    quickFacts: [
+      'Create unique identifiers quickly without writing a script.',
+      'Generate batches of UUIDs for test data or import prep.',
+      'Copy one UUID or a full list depending on the workflow.',
+    ],
+    sections: [
+      {
+        title: 'What a UUID is',
+        body:
+          'A UUID is a long identifier format designed to be globally unique enough for practical software use. It is commonly used for rows, objects, sessions, events, and request IDs because it works well across distributed systems where IDs may be created in many places at once.',
+      },
+      {
+        title: 'Why UUID v4 is popular',
+        body:
+          'UUID v4 relies on randomness rather than timestamps or machine-specific sequences. That makes it a simple and widely supported choice when you want unique IDs without exposing ordering or infrastructure details.',
+      },
+      {
+        title: 'When this page is useful',
+        body:
+          'Use this page when you need a fresh UUID right now and do not want to stop to open a REPL, script, or local utility. It is especially handy during API testing, data modeling, and quick debugging sessions.',
+      },
+    ],
+  },
+  {
+    path: '/generate-uuid',
+    toolType: 'uuid',
+    navLabel: 'Generate UUID',
+    shortLabel: 'Generate UUID',
+    showInNav: false,
+    title: 'Generate UUID Online - Fast Random UUID Tool',
+    description:
+      'Generate UUIDs online fast for test payloads, records, and app workflows with a quick random UUID generation tool.',
+    eyebrow: 'Fast ID creation',
+    h1: 'Generate UUIDs Fast',
+    subtitle:
+      'Pick a count, generate a fresh set of random UUIDs, and copy the IDs you need for your next request or fixture.',
+    heroNote: 'Focused on the practical workflow of generating UUIDs quickly during development and troubleshooting.',
+    toolFocus: 'Fast random UUID batches',
+    introHeading: 'Why generate a UUID online?',
+    introBody:
+      'Sometimes the need is simple: you just need a valid UUID now. This page is built around that search intent, giving you a quick route to fresh identifiers without extra setup or context switching.',
+    quickFactsHeading: 'Use this route when you want to:',
+    quickFacts: [
+      'Generate IDs quickly during API testing.',
+      'Create placeholder record IDs in seconds.',
+      'Avoid opening a terminal for small one-off tasks.',
+    ],
+    sections: [
+      {
+        title: 'A practical tool for one-off IDs',
+        body:
+          'Many workflows only need a handful of valid IDs for a request body, seed file, or manual test. This page is optimized for that fast generate-and-copy flow rather than broader UUID theory.',
+      },
+      {
+        title: 'Useful for product and engineering teams',
+        body:
+          'Developers, QA engineers, product managers, and support teams all run into moments where a unique-looking ID is useful. A browser-based generator keeps that lightweight and accessible.',
+      },
+      {
+        title: 'Why batch generation matters',
+        body:
+          'Generating several UUIDs at once is helpful when you are preparing fixture data, mock entities, or repeated API calls. It saves time compared with creating one ID at a time in a script or terminal.',
+      },
+    ],
+  },
+  {
+    path: '/uuid-v4-generator',
+    toolType: 'uuid',
+    navLabel: 'UUID v4 Generator',
+    shortLabel: 'UUID v4',
+    showInNav: false,
+    title: 'UUID v4 Generator - Create Random Version 4 UUIDs',
+    description:
+      'Create random UUID v4 values online and copy one or many identifiers for modern apps, APIs, and data workflows.',
+    eyebrow: 'Version 4 UUIDs',
+    h1: 'Create UUID v4 Values',
+    subtitle:
+      'Generate version 4 UUIDs for distributed systems, test environments, and database records without leaving the browser.',
+    heroNote: 'Focused specifically on UUID version 4, the most common random UUID format used in application development.',
+    toolFocus: 'Version 4 UUIDs',
+    introHeading: 'What makes UUID v4 different?',
+    introBody:
+      'UUID v4 is the random-based UUID format that many modern platforms support directly. It is a popular default because it is simple to generate, easy to validate, and well understood across APIs, databases, and libraries.',
+    quickFactsHeading: 'UUID v4 is useful because it is:',
+    quickFacts: [
+      'Widely supported across platforms and languages.',
+      'Random-based instead of timestamp-based.',
+      'Easy to use for records, events, and request identifiers.',
+    ],
+    sections: [
+      {
+        title: 'Why version 4 is widely adopted',
+        body:
+          'Version 4 UUIDs are straightforward to generate because they do not depend on centralized sequencing or precise time coordination. That makes them a natural fit for services and applications that create IDs in many different places.',
+      },
+      {
+        title: 'Where UUID v4 shows up',
+        body:
+          'You will often see UUID v4 in REST APIs, message queues, event payloads, auth-related flows, and database schemas. It is especially common where readability is less important than easy uniqueness and strong interoperability.',
+      },
+      {
+        title: 'When to choose another ID strategy',
+        body:
+          'UUID v4 is a strong default, but it is not always the perfect fit. If strict ordering, shorter IDs, or human-friendliness matter more, another strategy may be better. For many general backend workflows though, v4 remains a practical choice.',
+      },
+    ],
+  },
+  {
+    path: '/random-uuid-generator',
+    toolType: 'uuid',
+    navLabel: 'Random UUID Generator',
+    shortLabel: 'Random UUID',
+    showInNav: false,
+    title: 'Random UUID Generator - Create Unique IDs Online',
+    description:
+      'Use a random UUID generator online to create unique IDs for development, QA, payloads, and distributed application workflows.',
+    eyebrow: 'Random ID utility',
+    h1: 'Create Random UUIDs',
+    subtitle:
+      'Generate random UUIDs online when you need quick unique identifiers for debugging, fixtures, and app data.',
+    heroNote: 'Geared toward people searching specifically for random UUID generation instead of broader identifier theory.',
+    toolFocus: 'Random unique identifiers',
+    introHeading: 'Why random UUIDs are useful',
+    introBody:
+      'Random UUID generation is appealing because it removes the need to coordinate IDs manually. You can produce unique-looking values quickly and use them across systems, forms, payloads, and data imports with very little friction.',
+    quickFactsHeading: 'Random UUIDs help you:',
+    quickFacts: [
+      'Create IDs without central coordination.',
+      'Prepare quick sample data for testing.',
+      'Avoid collisions in everyday development workflows.',
+    ],
+    sections: [
+      {
+        title: 'Good for distributed workflows',
+        body:
+          'When multiple services, scripts, or people may create identifiers independently, random UUIDs reduce the chance of overlap while keeping the generation step simple. That is one reason they are common in distributed systems and event-driven designs.',
+      },
+      {
+        title: 'Helpful beyond backend engineering',
+        body:
+          'Random UUIDs are also useful for QA, demos, support reproduction steps, and internal docs where examples need realistic IDs. A web tool makes that accessible even for teammates who are not working from a local code environment.',
+      },
+      {
+        title: 'What this page emphasizes',
+        body:
+          'This route leans into the random-ID search intent, while still using the same underlying generator as the rest of the UUID pages. It is the same tool with slightly different surrounding context for discoverability.',
+      },
+    ],
+  },
+  {
+    path: '/uuid-generator-online',
+    toolType: 'uuid',
+    navLabel: 'UUID Generator Online',
+    shortLabel: 'UUID Online',
+    showInNav: false,
+    title: 'UUID Generator Online - Bulk UUID v4 Tool',
+    description:
+      'Use an online UUID generator to create one or many UUID v4 values instantly and copy them for APIs, databases, and test data.',
+    eyebrow: 'Online bulk UUIDs',
+    h1: 'Use an Online UUID Generator',
+    subtitle:
+      'Generate bulk UUID v4 values directly in the browser and copy them into payloads, schemas, fixtures, or import lists.',
+    heroNote: 'Designed for online batch generation when you need multiple UUIDs without a local helper script.',
+    toolFocus: 'Bulk UUID generation online',
+    introHeading: 'Why use an online UUID generator?',
+    introBody:
+      'An online UUID generator is useful when speed matters more than setup. You can open the page, create the IDs you need, and move on without writing code, opening a terminal, or switching tools.',
+    quickFactsHeading: 'This page is especially useful when you need to:',
+    quickFacts: [
+      'Generate several UUIDs at once for imports or fixtures.',
+      'Copy all generated IDs in one action.',
+      'Stay in the browser during debugging or planning work.',
+    ],
+    sections: [
+      {
+        title: 'Batch generation speeds up setup work',
+        body:
+          'Bulk UUID generation is practical when you are preparing sample entities, import rows, mock requests, or repeated event payloads. Copying a whole batch at once keeps that work fast and reduces repetitive steps.',
+      },
+      {
+        title: 'Useful for browser-first workflows',
+        body:
+          'Not every UUID need starts inside an IDE. Sometimes you are reviewing a payload, planning a schema, or coordinating with a teammate in a browser-first workflow. An online tool fits those moments nicely.',
+      },
+      {
+        title: 'How this route differs',
+        body:
+          'The generator is the same underneath, but this page is tuned for people explicitly searching for an online UUID tool or a lightweight batch generator. That gives it a clearer SEO fit while keeping the user experience consistent.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].map((page) => [page.path, page])
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages].map((page) => [
+    page.path,
+    page,
+  ])
 )
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].filter(
-  (page) => page.path !== '/' && page.showInNav !== false
-)
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages]
+  .filter((page) => page.path !== '/' && page.showInNav !== false)
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages].filter(
-  (page) => page.path !== '/'
-)
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages]
+  .filter((page) => page.path !== '/')

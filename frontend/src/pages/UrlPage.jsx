@@ -244,6 +244,12 @@ function UrlPage({ page }) {
                 Keep debugging moving when encoded URLs are only one part of a larger routing or domain issue.
               </span>
             </AppLink>
+            <AppLink href="/uuid-generator" className="tool-card">
+              <span className="tool-card-title">UUID Generator</span>
+              <span className="tool-card-copy">
+                Generate UUID v4 values before encoding them into query strings, redirect parameters, or request payloads.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
