@@ -240,6 +240,12 @@ function JsonPage({ page }) {
                 Decode or encode query values and link fragments when your payload debugging crosses into web request formatting.
               </span>
             </AppLink>
+            <AppLink href="/uuid-generator" className="tool-card">
+              <span className="tool-card-title">UUID Generator</span>
+              <span className="tool-card-copy">
+                Create UUID v4 values for JSON payloads, test data, or API request bodies without leaving the same workflow.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

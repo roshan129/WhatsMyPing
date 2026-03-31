@@ -5,6 +5,7 @@ import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
 import PingPage from './pages/PingPage'
+import UuidPage from './pages/UuidPage'
 import UrlPage from './pages/UrlPage'
 import { getRouteForPath } from './routes'
 
@@ -58,6 +59,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'url') {
     return <UrlPage page={page} />
+  }
+
+  if (page.toolType === 'uuid') {
+    return <UuidPage page={page} />
   }
 
   return <PingPage page={page} />

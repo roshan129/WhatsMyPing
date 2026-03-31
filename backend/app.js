@@ -7,6 +7,7 @@ const dnsService = require('./dnsService')
 const jsonService = require('./jsonService')
 const base64Service = require('./base64Service')
 const urlService = require('./urlService')
+const uuidService = require('./uuidService')
 const { detectIpVersion, getRequestIp } = require('./ipService')
 
 const createApp = (services = {}) => {
@@ -33,6 +34,10 @@ const createApp = (services = {}) => {
   }
   const { encodeUrl, decodeUrl } = {
     ...urlService,
+    ...services,
+  }
+  const { generateMultipleUUIDs } = {
+    ...uuidService,
     ...services,
   }
   const app = express()
@@ -81,6 +86,11 @@ const createApp = (services = {}) => {
       '/url-decode',
       '/encode-url',
       '/decode-url',
+      '/uuid-generator',
+      '/generate-uuid',
+      '/uuid-v4-generator',
+      '/random-uuid-generator',
+      '/uuid-generator-online',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -219,6 +229,19 @@ ${paths
       })
     } catch (error) {
       return res.status(400).json({ error: error.message })
+    }
+  })
+
+  app.get('/api/uuid', (req, res) => {
+    const requestedCount = Number.parseInt(req.query.count, 10)
+    const count = Number.isNaN(requestedCount) || requestedCount < 1 ? 1 : Math.min(requestedCount, 20)
+
+    try {
+      const uuids = generateMultipleUUIDs(count)
+      return res.status(200).json({ uuids })
+    } catch (error) {
+      console.error('UUID generation error:', error.message)
+      return res.status(500).json({ error: 'Failed to generate UUID' })
     }
   })
 
