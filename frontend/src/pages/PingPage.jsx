@@ -417,6 +417,12 @@ function PingPage({ page }) {
                 Encode or decode URL text when links, callback params, or request values need quick inspection.
               </span>
             </AppLink>
+            <AppLink href="/uuid-generator" className="tool-card">
+              <span className="tool-card-title">UUID Generator</span>
+              <span className="tool-card-copy">
+                Generate fresh UUIDs for request tracing, fixture setup, or debugging flows after checking network latency.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

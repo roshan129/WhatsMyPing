@@ -291,7 +291,8 @@
 }
 
 .dns-form,
-.json-panel {
+.json-panel,
+.control-field {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -415,6 +416,33 @@
   border: 1px solid rgba(148, 163, 184, 0.18);
   box-shadow: 0 14px 26px rgba(2, 6, 23, 0.25);
   min-width: 0;
+}
+
+.uuid-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.uuid-card {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 14px 26px rgba(2, 6, 23, 0.25);
+}
+
+.uuid-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.uuid-value {
+  min-height: auto;
+  margin: 0;
 }
 
 .record-header {

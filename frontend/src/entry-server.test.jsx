@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prerenderRoutes, render } from './entry-server'
 
 describe('prerenderRoutes', () => {
-  it('includes the SEO IP, DNS, and JSON routes', () => {
+  it('includes the SEO IP, DNS, JSON, URL, and UUID routes', () => {
     expect(prerenderRoutes).toContain('/what-is-my-ip')
     expect(prerenderRoutes).toContain('/ip-check')
     expect(prerenderRoutes).toContain('/check-my-ip')
@@ -25,6 +25,11 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/url-decode')
     expect(prerenderRoutes).toContain('/encode-url')
     expect(prerenderRoutes).toContain('/decode-url')
+    expect(prerenderRoutes).toContain('/uuid-generator')
+    expect(prerenderRoutes).toContain('/generate-uuid')
+    expect(prerenderRoutes).toContain('/uuid-v4-generator')
+    expect(prerenderRoutes).toContain('/random-uuid-generator')
+    expect(prerenderRoutes).toContain('/uuid-generator-online')
   })
 })
 
@@ -77,5 +82,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Encode URLs online')
     expect(result.appHtml).toContain('Encode URL Text Safely')
+  })
+
+  it('returns the expected metadata for a UUID page', () => {
+    const result = render('/uuid-generator')
+
+    expect(result.head).toMatchObject({
+      title: 'UUID Generator - Generate UUID v4 Online',
+    })
+    expect(result.head.description).toContain('Generate UUID v4 values online instantly')
+    expect(result.appHtml).toContain('Generate UUID v4 Values Instantly')
   })
 })
