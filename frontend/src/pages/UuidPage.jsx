@@ -268,6 +268,12 @@ function UuidPage({ page }) {
                 Jump back into network checks after creating IDs for requests, payloads, or debugging sessions.
               </span>
             </AppLink>
+            <AppLink href="/jwt-decoder" className="tool-card">
+              <span className="tool-card-title">JWT Decoder</span>
+              <span className="tool-card-copy">
+                Inspect JWT claims when generated UUIDs end up inside auth subjects, request IDs, or fixture tokens.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

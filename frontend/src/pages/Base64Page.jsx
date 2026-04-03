@@ -256,6 +256,12 @@ function Base64Page({ page }) {
                 Generate fresh UUID v4 values when encoded payloads, fixtures, or tokens need stable-looking unique IDs.
               </span>
             </AppLink>
+            <AppLink href="/jwt-decoder" className="tool-card">
+              <span className="tool-card-title">JWT Decoder</span>
+              <span className="tool-card-copy">
+                Inspect token headers and payloads when Base64-style encoded auth values need a clearer, JSON-first view.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
