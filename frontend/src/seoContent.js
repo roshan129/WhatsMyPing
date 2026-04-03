@@ -1648,8 +1648,231 @@ export const jwtPages = [
   },
 ]
 
+export const timestampPages = [
+  {
+    path: '/timestamp-converter',
+    toolType: 'timestamp',
+    mode: 'format',
+    navLabel: 'Timestamp Converter',
+    shortLabel: 'Timestamp Converter',
+    showInNav: true,
+    title: 'Timestamp Converter - Convert Unix Timestamp Online',
+    description:
+      'Convert Unix timestamps online instantly, read UTC and local date output, and turn epoch values into readable time.',
+    eyebrow: 'Unix time tools',
+    h1: 'Convert Unix Timestamps Instantly',
+    subtitle:
+      'Paste a Unix timestamp in seconds or milliseconds and convert it into readable UTC, local, and ISO time values.',
+    heroNote: 'Built for quick conversion between epoch values and readable date output during debugging and data work.',
+    toolFocus: 'Unix timestamp to date conversion',
+    introHeading: 'Why use a timestamp converter?',
+    introBody:
+      'Unix timestamps show up everywhere: logs, APIs, databases, JWT claims, analytics events, and imports. A timestamp converter helps you turn those numeric values into readable dates quickly so you can understand what happened and when.',
+    formHint: 'Paste a Unix timestamp in seconds or milliseconds to convert it into readable time values.',
+    quickFactsHeading: 'This converter helps you:',
+    quickFacts: [
+      'Read Unix timestamps without opening a script.',
+      'Compare UTC and local output side by side.',
+      'Handle both seconds and milliseconds input quickly.',
+    ],
+    sections: [
+      {
+        title: 'Why Unix timestamps are common',
+        body:
+          'Unix timestamps are compact, sortable, and easy for systems to exchange. That makes them common in APIs, event streams, logs, analytics pipelines, and many database fields. The tradeoff is that they are not immediately readable to humans.',
+      },
+      {
+        title: 'Why UTC and local output both matter',
+        body:
+          'A raw timestamp often needs two kinds of interpretation. UTC helps you compare system events consistently across environments, while local time helps you understand what those events looked like in your own region or workflow.',
+      },
+      {
+        title: 'When this page is useful',
+        body:
+          'Use this page when you need a quick answer about when a timestamp happened, whether it came from a log line, token claim, payload, or export file. It is especially helpful during debugging and incident review when speed matters.',
+      },
+    ],
+  },
+  {
+    path: '/unix-timestamp-converter',
+    toolType: 'timestamp',
+    mode: 'format',
+    navLabel: 'Unix Timestamp Converter',
+    shortLabel: 'Unix Timestamp',
+    showInNav: false,
+    title: 'Unix Timestamp Converter - Read Epoch Time Fast',
+    description:
+      'Use a Unix timestamp converter online to read epoch time fast and turn seconds or milliseconds into readable dates.',
+    eyebrow: 'Epoch time decoding',
+    h1: 'Read Unix Timestamps Fast',
+    subtitle:
+      'Convert epoch time into readable output when logs, APIs, or exports give you raw Unix seconds or milliseconds.',
+    heroNote: 'Focused on people searching specifically for Unix timestamp conversion and epoch time reading.',
+    toolFocus: 'Epoch time reading',
+    introHeading: 'Why convert Unix timestamps?',
+    introBody:
+      'Unix timestamps are efficient for systems but awkward for humans. A converter makes them instantly readable so you can understand event timing without reaching for a terminal, library, or mental math.',
+    formHint: 'Paste Unix seconds or milliseconds here to see readable date output.',
+    quickFactsHeading: 'Use this page when you want to:',
+    quickFacts: [
+      'Read raw epoch values from logs or APIs.',
+      'Check whether a value is seconds or milliseconds.',
+      'See readable UTC and local time quickly.',
+    ],
+    sections: [
+      {
+        title: 'Seconds versus milliseconds matters',
+        body:
+          'One of the most common timestamp mistakes is confusing Unix seconds with milliseconds. A good converter helps catch that quickly because the wrong unit usually produces a wildly different date than expected.',
+      },
+      {
+        title: 'Helpful for logs and APIs',
+        body:
+          'If you are reading system logs, inspecting API responses, or reviewing exports, raw Unix time values can slow you down. A converter removes that friction and gets you to the real timeline faster.',
+      },
+      {
+        title: 'What this page focuses on',
+        body:
+          'This route leans into the Unix timestamp search intent while still using the same underlying conversion tool as the other timestamp pages. It is the same utility with surrounding copy shaped for clearer discoverability.',
+      },
+    ],
+  },
+  {
+    path: '/epoch-converter',
+    toolType: 'timestamp',
+    mode: 'format',
+    navLabel: 'Epoch Converter',
+    shortLabel: 'Epoch Converter',
+    showInNav: false,
+    title: 'Epoch Converter - Convert Epoch Time to Date',
+    description:
+      'Convert epoch time to readable date output online and inspect Unix seconds or milliseconds without extra setup.',
+    eyebrow: 'Epoch conversion',
+    h1: 'Convert Epoch Time To Date',
+    subtitle:
+      'Paste an epoch value and turn it into readable time so system events, records, and exports are easier to understand.',
+    heroNote: 'Geared toward people searching for epoch conversion rather than general timestamp help.',
+    toolFocus: 'Epoch to date conversion',
+    introHeading: 'What is epoch time?',
+    introBody:
+      'Epoch time is another common way people refer to Unix timestamps. The concept is the same: a numeric value representing time elapsed from a fixed starting point. This page helps turn that raw number into readable date output quickly.',
+    formHint: 'Paste an epoch value here to convert it into readable UTC, local, and ISO output.',
+    quickFactsHeading: 'Epoch conversion helps you:',
+    quickFacts: [
+      'Understand raw time fields in exports.',
+      'Compare machine time with readable calendar time.',
+      'Inspect event timing without writing code.',
+    ],
+    sections: [
+      {
+        title: 'Why “epoch” and “Unix timestamp” are often interchangeable',
+        body:
+          'In everyday development work, people often use “epoch time” and “Unix timestamp” to describe the same sort of numeric time value. That can vary a bit by system context, but for many practical workflows they point to the same conversion need.',
+      },
+      {
+        title: 'Useful during debugging and reporting',
+        body:
+          'Epoch conversion is especially useful when data comes from machines rather than interfaces designed for humans. Reports, event streams, and exports often store time numerically, so a converter helps bridge that gap quickly.',
+      },
+      {
+        title: 'Why a browser tool is enough for many cases',
+        body:
+          'A lot of timestamp work is one-off inspection. You only need to know what a value means right now. That makes a simple browser tool a practical option without the overhead of opening scripts or local utilities.',
+      },
+    ],
+  },
+  {
+    path: '/convert-timestamp',
+    toolType: 'timestamp',
+    mode: 'parse',
+    navLabel: 'Convert Timestamp',
+    shortLabel: 'Convert Timestamp',
+    showInNav: false,
+    title: 'Convert Timestamp Online - Date to Unix Timestamp Tool',
+    description:
+      'Convert a readable date into a Unix timestamp online and turn date-time values into epoch seconds or milliseconds fast.',
+    eyebrow: 'Date to timestamp',
+    h1: 'Convert Date To Unix Timestamp',
+    subtitle:
+      'Paste a readable date or date-time value and turn it into Unix seconds and milliseconds for APIs, payloads, and logs.',
+    heroNote: 'Focused on the reverse workflow: taking readable dates and converting them back into numeric timestamp values.',
+    toolFocus: 'Date to Unix timestamp conversion',
+    introHeading: 'Why convert a date into a timestamp?',
+    introBody:
+      'Sometimes the problem is not reading a timestamp, but generating one. If an API, database field, or event payload expects Unix time, a converter helps you turn human-readable dates into the numeric value your system needs.',
+    formHint: 'Paste a readable date or ISO date-time value here to convert it into Unix seconds and milliseconds.',
+    quickFactsHeading: 'This mode helps when you need to:',
+    quickFacts: [
+      'Prepare timestamps for APIs or event payloads.',
+      'Convert readable dates into Unix seconds quickly.',
+      'Check both milliseconds and seconds values side by side.',
+    ],
+    sections: [
+      {
+        title: 'Useful for API requests and payload prep',
+        body:
+          'Many APIs and systems expect numeric timestamps rather than readable dates. A converter helps you prepare those values correctly when building test requests, fixtures, scheduled jobs, or import data.',
+      },
+      {
+        title: 'Helpful for reverse debugging',
+        body:
+          'Sometimes you already know the intended human time and need to confirm what timestamp should represent it. This reverse conversion flow is useful when checking whether your app encoded a date correctly.',
+      },
+      {
+        title: 'Why both seconds and milliseconds matter',
+        body:
+          'Different systems expect different units. Showing both Unix seconds and Unix milliseconds helps you avoid one of the most common timestamp integration mistakes before the value ever leaves the page.',
+      },
+    ],
+  },
+  {
+    path: '/timestamp-to-date',
+    toolType: 'timestamp',
+    mode: 'format',
+    navLabel: 'Timestamp To Date',
+    shortLabel: 'Timestamp To Date',
+    showInNav: false,
+    title: 'Timestamp to Date Converter - Read Unix Time Online',
+    description:
+      'Convert timestamp to date online and read Unix time values in ISO, UTC, and local formats instantly.',
+    eyebrow: 'Readable dates',
+    h1: 'Convert Timestamp To Date',
+    subtitle:
+      'Turn raw Unix timestamps into readable date values so events, token claims, and log records are easier to inspect.',
+    heroNote: 'Best for users searching specifically for a timestamp-to-date conversion workflow.',
+    toolFocus: 'Readable date output',
+    introHeading: 'Why convert timestamp to date?',
+    introBody:
+      'Raw timestamps are efficient for machines, but readable dates are better for people. Converting timestamp to date is one of the simplest ways to make logs, claims, and data exports more understandable.',
+    formHint: 'Paste a raw timestamp here to convert it into readable date output.',
+    quickFactsHeading: 'This page is especially useful when you want to:',
+    quickFacts: [
+      'Read log timestamps quickly.',
+      'Check token or event timing without a script.',
+      'Compare ISO, UTC, and local date output in one place.',
+    ],
+    sections: [
+      {
+        title: 'Good for incident and log review',
+        body:
+          'During debugging, incident review, or operations work, you often need fast answers about when something happened. Converting timestamp to date removes a small but common source of friction in that workflow.',
+      },
+      {
+        title: 'Helpful for JWTs and payloads too',
+        body:
+          'Timestamps are not just for server logs. They also appear in JWT claims, analytics payloads, scheduled tasks, and background jobs. A readable converter makes all of those easier to inspect.',
+      },
+      {
+        title: 'What this route emphasizes',
+        body:
+          'This page is aimed at the specific “timestamp to date” search intent while still using the same underlying timestamp utility. The user experience stays consistent, but the surrounding content matches the query more clearly.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages].map((page) => [
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages].map((page) => [
     page.path,
     page,
   ])
@@ -1657,8 +1880,8 @@ export const pageMap = Object.fromEntries(
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages]
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages]
   .filter((page) => page.path !== '/' && page.showInNav !== false)
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages]
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages]
   .filter((page) => page.path !== '/')

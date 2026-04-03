@@ -9,6 +9,7 @@ const base64Service = require('./base64Service')
 const urlService = require('./urlService')
 const uuidService = require('./uuidService')
 const jwtService = require('./jwtService')
+const timestampService = require('./timestampService')
 const { detectIpVersion, getRequestIp } = require('./ipService')
 
 const createApp = (services = {}) => {
@@ -43,6 +44,10 @@ const createApp = (services = {}) => {
   }
   const { decodeJwt } = {
     ...jwtService,
+    ...services,
+  }
+  const { formatTimestamp, parseDateInput } = {
+    ...timestampService,
     ...services,
   }
   const app = express()
@@ -101,6 +106,11 @@ const createApp = (services = {}) => {
       '/jwt-parser',
       '/jwt-inspector',
       '/jwt-decoder-online',
+      '/timestamp-converter',
+      '/unix-timestamp-converter',
+      '/epoch-converter',
+      '/convert-timestamp',
+      '/timestamp-to-date',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -264,6 +274,34 @@ ${paths
 
     try {
       return res.status(200).json(decodeJwt(input))
+    } catch (error) {
+      return res.status(400).json({ error: error.message })
+    }
+  })
+
+  app.post('/api/timestamp/format', (req, res) => {
+    const input = typeof req.body?.input === 'string' ? req.body.input : ''
+
+    if (!input.trim()) {
+      return res.status(400).json({ error: 'Input required' })
+    }
+
+    try {
+      return res.status(200).json(formatTimestamp(input))
+    } catch (error) {
+      return res.status(400).json({ error: error.message })
+    }
+  })
+
+  app.post('/api/timestamp/parse', (req, res) => {
+    const input = typeof req.body?.input === 'string' ? req.body.input : ''
+
+    if (!input.trim()) {
+      return res.status(400).json({ error: 'Input required' })
+    }
+
+    try {
+      return res.status(200).json(parseDateInput(input))
     } catch (error) {
       return res.status(400).json({ error: error.message })
     }

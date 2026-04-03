@@ -22,6 +22,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/uuid-v4-generator').shortLabel).toBe('UUID v4')
     expect(getRouteForPath('/jwt-decoder').toolType).toBe('jwt')
     expect(getRouteForPath('/jwt-parser').shortLabel).toBe('JWT Parser')
+    expect(getRouteForPath('/timestamp-converter').toolType).toBe('timestamp')
+    expect(getRouteForPath('/convert-timestamp').mode).toBe('parse')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

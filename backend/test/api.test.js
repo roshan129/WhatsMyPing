@@ -6,6 +6,7 @@ const base64Service = require('../base64Service')
 const urlService = require('../urlService')
 const uuidService = require('../uuidService')
 const jwtService = require('../jwtService')
+const timestampService = require('../timestampService')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
@@ -19,6 +20,8 @@ describe('backend API', () => {
   let decodeUrlMock
   let generateMultipleUUIDsMock
   let decodeJwtMock
+  let formatTimestampMock
+  let parseDateInputMock
   let app
 
   beforeEach(() => {
@@ -32,6 +35,8 @@ describe('backend API', () => {
     decodeUrlMock = vi.fn()
     generateMultipleUUIDsMock = vi.fn()
     decodeJwtMock = vi.fn()
+    formatTimestampMock = vi.fn()
+    parseDateInputMock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
@@ -40,6 +45,7 @@ describe('backend API', () => {
       ...urlService,
       ...uuidService,
       ...jwtService,
+      ...timestampService,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
@@ -50,6 +56,8 @@ describe('backend API', () => {
       decodeUrl: decodeUrlMock,
       generateMultipleUUIDs: generateMultipleUUIDsMock,
       decodeJwt: decodeJwtMock,
+      formatTimestamp: formatTimestampMock,
+      parseDateInput: parseDateInputMock,
     })
   })
 
@@ -514,7 +522,77 @@ describe('backend API', () => {
     })
   })
 
-  it('includes the IP, DNS, JSON, URL, UUID, and JWT pages in the sitemap output', async () => {
+  it('formats a timestamp into readable date values through the API', async () => {
+    formatTimestampMock.mockReturnValue({
+      iso: '2024-03-09T16:00:00.000Z',
+      utc: 'Sat, 09 Mar 2024 16:00:00 GMT',
+      local: 'Sat Mar 09 2024 16:00:00 GMT+0000 (Coordinated Universal Time)',
+      unixSeconds: 1710000000,
+      unixMilliseconds: 1710000000000,
+    })
+
+    const response = await request(app)
+      .post('/api/timestamp/format')
+      .send({ input: '1710000000' })
+
+    expect(response.status).toBe(200)
+    expect(formatTimestampMock).toHaveBeenCalledWith('1710000000')
+    expect(response.body).toMatchObject({
+      iso: '2024-03-09T16:00:00.000Z',
+      unixSeconds: 1710000000,
+      unixMilliseconds: 1710000000000,
+    })
+  })
+
+  it('parses a date into timestamp values through the API', async () => {
+    parseDateInputMock.mockReturnValue({
+      iso: '2024-03-09T16:00:00.000Z',
+      utc: 'Sat, 09 Mar 2024 16:00:00 GMT',
+      local: 'Sat Mar 09 2024 16:00:00 GMT+0000 (Coordinated Universal Time)',
+      unixSeconds: 1710000000,
+      unixMilliseconds: 1710000000000,
+    })
+
+    const response = await request(app)
+      .post('/api/timestamp/parse')
+      .send({ input: '2024-03-09T16:00:00.000Z' })
+
+    expect(response.status).toBe(200)
+    expect(parseDateInputMock).toHaveBeenCalledWith('2024-03-09T16:00:00.000Z')
+    expect(response.body).toMatchObject({
+      iso: '2024-03-09T16:00:00.000Z',
+      unixSeconds: 1710000000,
+    })
+  })
+
+  it('rejects empty timestamp conversion input', async () => {
+    const response = await request(app)
+      .post('/api/timestamp/format')
+      .send({ input: '   ' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Input required',
+    })
+    expect(formatTimestampMock).not.toHaveBeenCalled()
+  })
+
+  it('returns a stable error for invalid timestamp input', async () => {
+    formatTimestampMock.mockImplementation(() => {
+      throw new Error('Enter a valid Unix timestamp in seconds or milliseconds.')
+    })
+
+    const response = await request(app)
+      .post('/api/timestamp/format')
+      .send({ input: 'bad-value' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Enter a valid Unix timestamp in seconds or milliseconds.',
+    })
+  })
+
+  it('includes the IP, DNS, JSON, URL, UUID, JWT, and timestamp pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
     expect(response.status).toBe(200)
@@ -550,5 +628,10 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/jwt-parser</loc>')
     expect(response.text).toContain('<loc>http://example.com/jwt-inspector</loc>')
     expect(response.text).toContain('<loc>http://example.com/jwt-decoder-online</loc>')
+    expect(response.text).toContain('<loc>http://example.com/timestamp-converter</loc>')
+    expect(response.text).toContain('<loc>http://example.com/unix-timestamp-converter</loc>')
+    expect(response.text).toContain('<loc>http://example.com/epoch-converter</loc>')
+    expect(response.text).toContain('<loc>http://example.com/convert-timestamp</loc>')
+    expect(response.text).toContain('<loc>http://example.com/timestamp-to-date</loc>')
   })
 })

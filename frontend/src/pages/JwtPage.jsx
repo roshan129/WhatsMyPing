@@ -367,6 +367,12 @@ function JwtPage({ page }) {
                 Encode callback URLs or parameter values when your auth debugging flow moves from tokens into redirects.
               </span>
             </AppLink>
+            <AppLink href="/timestamp-converter" className="tool-card">
+              <span className="tool-card-title">Timestamp Converter</span>
+              <span className="tool-card-copy">
+                Convert `iat`, `nbf`, and `exp` values into readable dates when you want to inspect JWT timing claims faster.
+              </span>
+            </AppLink>
           </div>
         </div>
 

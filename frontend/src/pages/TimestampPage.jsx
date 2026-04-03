@@ -39,23 +39,31 @@ const AppLink = ({ href, children, className }) => {
 }
 
 const MODE_ROUTE_MAP = {
-  encode: '/url-encode',
-  decode: '/url-decode',
+  format: '/timestamp-converter',
+  parse: '/convert-timestamp',
 }
 
-function UrlPage({ page }) {
+const buildCopyText = (result) =>
+  [
+    `ISO: ${result.iso}`,
+    `UTC: ${result.utc}`,
+    `Local: ${result.local}`,
+    `Unix seconds: ${result.unixSeconds}`,
+    `Unix milliseconds: ${result.unixMilliseconds}`,
+  ].join('\n')
+
+function TimestampPage({ page }) {
   const [input, setInput] = useState('')
-  const [output, setOutput] = useState('')
+  const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [copyLabel, setCopyLabel] = useState('Copy Output')
+  const [copyLabel, setCopyLabel] = useState('Copy Results')
   const apiBase = import.meta.env.VITE_API_BASE_URL || ''
-  const isEncodeMode = page.mode === 'encode'
-  const inputLabel = isEncodeMode ? 'Text or URL input' : 'URL-encoded input'
-  const outputLabel = isEncodeMode ? 'URL-encoded output' : 'Decoded URL output'
-  const inputPlaceholder = isEncodeMode
-    ? 'Paste your text or URL here'
-    : 'Paste your URL-encoded text here'
+  const isFormatMode = page.mode !== 'parse'
+  const inputLabel = isFormatMode ? 'Unix timestamp input' : 'Date or date-time input'
+  const inputPlaceholder = isFormatMode ? '1710000000 or 1710000000000' : '2026-04-03T10:30:00Z'
+  const primaryOutputLabel = isFormatMode ? 'ISO output' : 'Unix seconds output'
+  const primaryOutputValue = result ? (isFormatMode ? result.iso : String(result.unixSeconds)) : ''
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
@@ -63,10 +71,10 @@ function UrlPage({ page }) {
 
   useEffect(() => {
     setInput('')
-    setOutput('')
+    setResult(null)
     setError(null)
     setIsLoading(false)
-    setCopyLabel('Copy Output')
+    setCopyLabel('Copy Results')
   }, [page.path])
 
   const handleModeChange = (mode) => {
@@ -80,19 +88,19 @@ function UrlPage({ page }) {
   }
 
   const handleConvert = async () => {
-    if (!input.length) {
-      setError(isEncodeMode ? 'Paste text or a URL to encode first.' : 'Paste URL-encoded text to decode first.')
-      setOutput('')
+    if (!input.trim()) {
+      setError(isFormatMode ? 'Paste a Unix timestamp to convert it first.' : 'Paste a date or date-time value to convert it first.')
+      setResult(null)
       return
     }
 
     setIsLoading(true)
     setError(null)
-    setOutput('')
-    setCopyLabel('Copy Output')
+    setResult(null)
+    setCopyLabel('Copy Results')
 
     try {
-      const endpoint = isEncodeMode ? '/api/url/encode' : '/api/url/decode'
+      const endpoint = isFormatMode ? '/api/timestamp/format' : '/api/timestamp/parse'
       const response = await fetch(`${apiBase}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -106,10 +114,10 @@ function UrlPage({ page }) {
         throw new Error(data.error || `Server responded with ${response.status}`)
       }
 
-      setOutput(data.output || '')
+      setResult(data)
     } catch (err) {
       console.error(err)
-      setError(err.message || 'Could not convert the URL input right now.')
+      setError(err.message || 'Could not convert the timestamp value right now.')
     } finally {
       setIsLoading(false)
     }
@@ -117,18 +125,18 @@ function UrlPage({ page }) {
 
   const handleClear = () => {
     setInput('')
-    setOutput('')
+    setResult(null)
     setError(null)
-    setCopyLabel('Copy Output')
+    setCopyLabel('Copy Results')
   }
 
   const handleCopy = async () => {
-    if (!output) {
+    if (!result) {
       return
     }
 
     try {
-      await navigator.clipboard.writeText(output)
+      await navigator.clipboard.writeText(buildCopyText(result))
       setCopyLabel('Copied')
     } catch (err) {
       console.error(err)
@@ -164,32 +172,32 @@ function UrlPage({ page }) {
         </div>
         <div className="hero-card">
           <p className="hero-label">Tool focus</p>
-          <p className="hero-value">{page.toolFocus || 'URL encode and decode'}</p>
+          <p className="hero-value">{page.toolFocus || 'Unix time conversion'}</p>
           <p className="hero-meta">{page.heroNote}</p>
         </div>
       </header>
 
-      <section className="card" aria-label="URL conversion tool">
+      <section className="card" aria-label="Timestamp converter tool">
         <div className="controls">
           <button
-            onClick={() => handleModeChange('encode')}
-            className={`secondary-button ${isEncodeMode ? 'active' : ''}`}
+            onClick={() => handleModeChange('format')}
+            className={`secondary-button ${isFormatMode ? 'active' : ''}`}
           >
-            Encode
+            Timestamp to Date
           </button>
           <button
-            onClick={() => handleModeChange('decode')}
-            className={`secondary-button ${!isEncodeMode ? 'active' : ''}`}
+            onClick={() => handleModeChange('parse')}
+            className={`secondary-button ${!isFormatMode ? 'active' : ''}`}
           >
-            Decode
+            Date to Timestamp
           </button>
           <button onClick={handleConvert} disabled={isLoading} className="primary-button">
-            {isLoading ? 'Converting…' : isEncodeMode ? 'Encode URL Text' : 'Decode URL Text'}
+            {isLoading ? 'Converting…' : isFormatMode ? 'Convert Timestamp' : 'Convert Date'}
           </button>
           <button onClick={handleClear} className="secondary-button">
             Clear
           </button>
-          <button onClick={handleCopy} className="secondary-button" disabled={!output}>
+          <button onClick={handleCopy} className="secondary-button" disabled={!result}>
             {copyLabel}
           </button>
         </div>
@@ -214,52 +222,61 @@ function UrlPage({ page }) {
 
           <div className="json-panel">
             <div className="json-panel-header">
-              <h2>{outputLabel}</h2>
-              <p>{output ? 'Ready to copy or review.' : 'Run the converter to see output here.'}</p>
+              <h2>{primaryOutputLabel}</h2>
+              <p>{result ? 'Primary converted value is ready to copy or review.' : 'Run the converter to see the main output here.'}</p>
             </div>
-            <pre className="json-output" aria-label={outputLabel}>
-              {output || 'Converted output will appear here.'}
+            <pre className="json-output" aria-label={primaryOutputLabel}>
+              {primaryOutputValue || 'Converted output will appear here.'}
             </pre>
           </div>
         </div>
 
+        {result && (
+          <div className="results-grid">
+            <div className="results" data-reveal="1">
+              <p className="ping-label">UTC</p>
+              <p className="hero-meta">{result.utc}</p>
+            </div>
+            <div className="results" data-reveal="2">
+              <p className="ping-label">Local</p>
+              <p className="hero-meta">{result.local}</p>
+            </div>
+            <div className="results" data-reveal="3">
+              <p className="ping-label">Unix Seconds</p>
+              <p className="ip-value">{result.unixSeconds}</p>
+            </div>
+            <div className="results" data-reveal="3">
+              <p className="ping-label">Unix Milliseconds</p>
+              <p className="ip-value">{result.unixMilliseconds}</p>
+            </div>
+          </div>
+        )}
+
         <div className="related-links">
           <h2>Related checks</h2>
           <div className="tool-grid">
-            <AppLink href="/base64-encode" className="tool-card">
-              <span className="tool-card-title">Base64 Encoder</span>
-              <span className="tool-card-copy">
-                Switch into Base64 encoding when your workflow moves from percent-encoded text into transport-safe string handling.
-              </span>
-            </AppLink>
             <AppLink href="/json-formatter" className="tool-card">
               <span className="tool-card-title">Format JSON</span>
               <span className="tool-card-copy">
-                Clean up decoded query values or API payload fragments once the URL-safe characters are converted back to readable text.
-              </span>
-            </AppLink>
-            <AppLink href="/dns-lookup" className="tool-card">
-              <span className="tool-card-title">Run A DNS Lookup</span>
-              <span className="tool-card-copy">
-                Keep debugging moving when encoded URLs are only one part of a larger routing or domain issue.
+                Clean up payloads that include timestamp fields before sending them to APIs or test fixtures.
               </span>
             </AppLink>
             <AppLink href="/uuid-generator" className="tool-card">
               <span className="tool-card-title">UUID Generator</span>
               <span className="tool-card-copy">
-                Generate UUID v4 values before encoding them into query strings, redirect parameters, or request payloads.
+                Generate IDs alongside timestamp values when you are preparing events, records, or import data.
               </span>
             </AppLink>
             <AppLink href="/jwt-decoder" className="tool-card">
               <span className="tool-card-title">JWT Decoder</span>
               <span className="tool-card-copy">
-                Inspect auth tokens alongside redirect parameters when login or callback debugging spans both JWTs and URLs.
+                Inspect `iat`, `nbf`, and `exp` claims and compare them with readable timestamps during auth debugging.
               </span>
             </AppLink>
-            <AppLink href="/timestamp-converter" className="tool-card">
-              <span className="tool-card-title">Timestamp Converter</span>
+            <AppLink href="/url-encode" className="tool-card">
+              <span className="tool-card-title">URL Encoder</span>
               <span className="tool-card-copy">
-                Convert date values and Unix timestamps before sending them through links, callbacks, or encoded query strings.
+                Encode converted timestamps when they need to travel inside URLs, redirects, or query parameters.
               </span>
             </AppLink>
           </div>
@@ -310,4 +327,4 @@ function UrlPage({ page }) {
   )
 }
 
-export default UrlPage
+export default TimestampPage

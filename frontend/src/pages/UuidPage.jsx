@@ -274,6 +274,12 @@ function UuidPage({ page }) {
                 Inspect JWT claims when generated UUIDs end up inside auth subjects, request IDs, or fixture tokens.
               </span>
             </AppLink>
+            <AppLink href="/timestamp-converter" className="tool-card">
+              <span className="tool-card-title">Timestamp Converter</span>
+              <span className="tool-card-copy">
+                Pair generated IDs with readable event times when you are preparing records, fixtures, or message payloads.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

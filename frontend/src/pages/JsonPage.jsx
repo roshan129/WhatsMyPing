@@ -252,6 +252,12 @@ function JsonPage({ page }) {
                 Decode JWT headers and claims into readable JSON when auth debugging overlaps with API payload inspection.
               </span>
             </AppLink>
+            <AppLink href="/timestamp-converter" className="tool-card">
+              <span className="tool-card-title">Timestamp Converter</span>
+              <span className="tool-card-copy">
+                Convert Unix timestamps and readable dates when JSON payloads include event times, expirations, or audit fields.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>
