@@ -5,6 +5,7 @@ const jsonService = require('../jsonService')
 const base64Service = require('../base64Service')
 const urlService = require('../urlService')
 const uuidService = require('../uuidService')
+const jwtService = require('../jwtService')
 const pingService = require('../pingService')
 
 describe('backend API', () => {
@@ -17,6 +18,7 @@ describe('backend API', () => {
   let encodeUrlMock
   let decodeUrlMock
   let generateMultipleUUIDsMock
+  let decodeJwtMock
   let app
 
   beforeEach(() => {
@@ -29,6 +31,7 @@ describe('backend API', () => {
     encodeUrlMock = vi.fn()
     decodeUrlMock = vi.fn()
     generateMultipleUUIDsMock = vi.fn()
+    decodeJwtMock = vi.fn()
     app = createApp({
       ...pingService,
       ...dnsService,
@@ -36,6 +39,7 @@ describe('backend API', () => {
       ...base64Service,
       ...urlService,
       ...uuidService,
+      ...jwtService,
       measurePing: measurePingMock,
       measureTarget: measureTargetMock,
       lookupDnsRecords: lookupDnsRecordsMock,
@@ -45,6 +49,7 @@ describe('backend API', () => {
       encodeUrl: encodeUrlMock,
       decodeUrl: decodeUrlMock,
       generateMultipleUUIDs: generateMultipleUUIDsMock,
+      decodeJwt: decodeJwtMock,
     })
   })
 
@@ -455,7 +460,61 @@ describe('backend API', () => {
     expect(response.body.uuids).toHaveLength(20)
   })
 
-  it('includes the IP, DNS, JSON, URL, and UUID pages in the sitemap output', async () => {
+  it('decodes valid JWT input through the API', async () => {
+    decodeJwtMock.mockReturnValue({
+      header: { alg: 'HS256', typ: 'JWT' },
+      payload: { sub: '123' },
+      meta: {
+        algorithm: 'HS256',
+        type: 'JWT',
+        issuedAt: null,
+        notBefore: null,
+        expiresAt: null,
+        hasSignature: true,
+      },
+    })
+
+    const response = await request(app)
+      .post('/api/jwt/decode')
+      .send({ input: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMifQ.signature' })
+
+    expect(response.status).toBe(200)
+    expect(decodeJwtMock).toHaveBeenCalledWith('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMifQ.signature')
+    expect(response.body).toMatchObject({
+      header: { alg: 'HS256', typ: 'JWT' },
+      payload: { sub: '123' },
+      meta: { hasSignature: true },
+    })
+  })
+
+  it('rejects empty JWT input before decoding', async () => {
+    const response = await request(app)
+      .post('/api/jwt/decode')
+      .send({ input: '   ' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Input required',
+    })
+    expect(decodeJwtMock).not.toHaveBeenCalled()
+  })
+
+  it('returns a stable error for malformed JWT input', async () => {
+    decodeJwtMock.mockImplementation(() => {
+      throw new Error('Enter a valid JWT with header, payload, and signature.')
+    })
+
+    const response = await request(app)
+      .post('/api/jwt/decode')
+      .send({ input: 'not-a-jwt' })
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      error: 'Enter a valid JWT with header, payload, and signature.',
+    })
+  })
+
+  it('includes the IP, DNS, JSON, URL, UUID, and JWT pages in the sitemap output', async () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
     expect(response.status).toBe(200)
@@ -486,5 +545,10 @@ describe('backend API', () => {
     expect(response.text).toContain('<loc>http://example.com/uuid-v4-generator</loc>')
     expect(response.text).toContain('<loc>http://example.com/random-uuid-generator</loc>')
     expect(response.text).toContain('<loc>http://example.com/uuid-generator-online</loc>')
+    expect(response.text).toContain('<loc>http://example.com/jwt-decoder</loc>')
+    expect(response.text).toContain('<loc>http://example.com/decode-jwt</loc>')
+    expect(response.text).toContain('<loc>http://example.com/jwt-parser</loc>')
+    expect(response.text).toContain('<loc>http://example.com/jwt-inspector</loc>')
+    expect(response.text).toContain('<loc>http://example.com/jwt-decoder-online</loc>')
   })
 })

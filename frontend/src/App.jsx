@@ -4,6 +4,7 @@ import Base64Page from './pages/Base64Page'
 import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
+import JwtPage from './pages/JwtPage'
 import PingPage from './pages/PingPage'
 import UuidPage from './pages/UuidPage'
 import UrlPage from './pages/UrlPage'
@@ -63,6 +64,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'uuid') {
     return <UuidPage page={page} />
+  }
+
+  if (page.toolType === 'jwt') {
+    return <JwtPage page={page} />
   }
 
   return <PingPage page={page} />

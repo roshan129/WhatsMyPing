@@ -20,6 +20,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/url-decode').mode).toBe('decode')
     expect(getRouteForPath('/uuid-generator').toolType).toBe('uuid')
     expect(getRouteForPath('/uuid-v4-generator').shortLabel).toBe('UUID v4')
+    expect(getRouteForPath('/jwt-decoder').toolType).toBe('jwt')
+    expect(getRouteForPath('/jwt-parser').shortLabel).toBe('JWT Parser')
     expect(getRouteForPath('/').path).toBe('/')
   })
 
