@@ -6,6 +6,7 @@ import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
 import JwtPage from './pages/JwtPage'
 import PingPage from './pages/PingPage'
+import TimestampPage from './pages/TimestampPage'
 import UuidPage from './pages/UuidPage'
 import UrlPage from './pages/UrlPage'
 import { getRouteForPath } from './routes'
@@ -68,6 +69,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'jwt') {
     return <JwtPage page={page} />
+  }
+
+  if (page.toolType === 'timestamp') {
+    return <TimestampPage page={page} />
   }
 
   return <PingPage page={page} />

@@ -46,6 +46,11 @@ export const prerenderRoutes = [
   '/jwt-parser',
   '/jwt-inspector',
   '/jwt-decoder-online',
+  '/timestamp-converter',
+  '/unix-timestamp-converter',
+  '/epoch-converter',
+  '/convert-timestamp',
+  '/timestamp-to-date',
 ]
 
 export function render(url) {
