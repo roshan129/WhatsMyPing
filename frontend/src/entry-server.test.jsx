@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prerenderRoutes, render } from './entry-server'
 
 describe('prerenderRoutes', () => {
-  it('includes the SEO IP, DNS, JSON, URL, UUID, and JWT routes', () => {
+  it('includes the SEO IP, DNS, JSON, URL, UUID, JWT, and timestamp routes', () => {
     expect(prerenderRoutes).toContain('/what-is-my-ip')
     expect(prerenderRoutes).toContain('/ip-check')
     expect(prerenderRoutes).toContain('/check-my-ip')
@@ -35,6 +35,11 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/jwt-parser')
     expect(prerenderRoutes).toContain('/jwt-inspector')
     expect(prerenderRoutes).toContain('/jwt-decoder-online')
+    expect(prerenderRoutes).toContain('/timestamp-converter')
+    expect(prerenderRoutes).toContain('/unix-timestamp-converter')
+    expect(prerenderRoutes).toContain('/epoch-converter')
+    expect(prerenderRoutes).toContain('/convert-timestamp')
+    expect(prerenderRoutes).toContain('/timestamp-to-date')
   })
 })
 
@@ -107,5 +112,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Decode JWT tokens online instantly')
     expect(result.appHtml).toContain('Decode JWT Tokens Instantly')
+  })
+
+  it('returns the expected metadata for a timestamp page', () => {
+    const result = render('/timestamp-converter')
+
+    expect(result.head).toMatchObject({
+      title: 'Timestamp Converter - Convert Unix Timestamp Online',
+    })
+    expect(result.head.description).toContain('Convert Unix timestamps online instantly')
+    expect(result.appHtml).toContain('Convert Unix Timestamps Instantly')
   })
 })
