@@ -93,7 +93,7 @@ describe('TimestampPage', () => {
     expect(await screen.findByText('Enter a valid Unix timestamp in seconds or milliseconds.')).toBeInTheDocument()
   })
 
-  it('supports copying the conversion results', async () => {
+  it('supports copying the primary conversion result', async () => {
     fetch.mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -114,15 +114,7 @@ describe('TimestampPage', () => {
 
     await screen.findByLabelText('ISO output')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Copy Results' }))
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-      [
-        'ISO: 2024-03-09T16:00:00.000Z',
-        'UTC: Sat, 09 Mar 2024 16:00:00 GMT',
-        'Local: Sat Mar 09 2024 16:00:00 GMT+0000 (Coordinated Universal Time)',
-        'Unix seconds: 1710000000',
-        'Unix milliseconds: 1710000000000',
-      ].join('\n')
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Copy ISO' }))
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('2024-03-09T16:00:00.000Z')
   })
 })

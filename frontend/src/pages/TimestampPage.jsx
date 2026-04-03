@@ -43,15 +43,6 @@ const MODE_ROUTE_MAP = {
   parse: '/convert-timestamp',
 }
 
-const buildCopyText = (result) =>
-  [
-    `ISO: ${result.iso}`,
-    `UTC: ${result.utc}`,
-    `Local: ${result.local}`,
-    `Unix seconds: ${result.unixSeconds}`,
-    `Unix milliseconds: ${result.unixMilliseconds}`,
-  ].join('\n')
-
 function TimestampPage({ page }) {
   const [input, setInput] = useState('')
   const [result, setResult] = useState(null)
@@ -64,6 +55,7 @@ function TimestampPage({ page }) {
   const inputPlaceholder = isFormatMode ? '1710000000 or 1710000000000' : '2026-04-03T10:30:00Z'
   const primaryOutputLabel = isFormatMode ? 'ISO output' : 'Unix seconds output'
   const primaryOutputValue = result ? (isFormatMode ? result.iso : String(result.unixSeconds)) : ''
+  const copyButtonLabel = isFormatMode ? 'Copy ISO' : 'Copy Unix Seconds'
 
   useEffect(() => {
     updateMetadata(page.title, page.description)
@@ -136,7 +128,7 @@ function TimestampPage({ page }) {
     }
 
     try {
-      await navigator.clipboard.writeText(buildCopyText(result))
+      await navigator.clipboard.writeText(primaryOutputValue)
       setCopyLabel('Copied')
     } catch (err) {
       console.error(err)
@@ -198,7 +190,7 @@ function TimestampPage({ page }) {
             Clear
           </button>
           <button onClick={handleCopy} className="secondary-button" disabled={!result}>
-            {copyLabel}
+            {copyLabel === 'Copy Results' ? copyButtonLabel : copyLabel}
           </button>
         </div>
 
@@ -243,11 +235,11 @@ function TimestampPage({ page }) {
             </div>
             <div className="results" data-reveal="3">
               <p className="ping-label">Unix Seconds</p>
-              <p className="ip-value">{result.unixSeconds}</p>
+              <p className="timestamp-value">{result.unixSeconds}</p>
             </div>
             <div className="results" data-reveal="3">
               <p className="ping-label">Unix Milliseconds</p>
-              <p className="ip-value">{result.unixMilliseconds}</p>
+              <p className="timestamp-value">{result.unixMilliseconds}</p>
             </div>
           </div>
         )}
