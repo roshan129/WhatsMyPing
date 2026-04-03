@@ -246,6 +246,12 @@ function JsonPage({ page }) {
                 Create UUID v4 values for JSON payloads, test data, or API request bodies without leaving the same workflow.
               </span>
             </AppLink>
+            <AppLink href="/jwt-decoder" className="tool-card">
+              <span className="tool-card-title">JWT Decoder</span>
+              <span className="tool-card-copy">
+                Decode JWT headers and claims into readable JSON when auth debugging overlaps with API payload inspection.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

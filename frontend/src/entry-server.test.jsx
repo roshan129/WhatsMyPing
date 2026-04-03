@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prerenderRoutes, render } from './entry-server'
 
 describe('prerenderRoutes', () => {
-  it('includes the SEO IP, DNS, JSON, URL, and UUID routes', () => {
+  it('includes the SEO IP, DNS, JSON, URL, UUID, and JWT routes', () => {
     expect(prerenderRoutes).toContain('/what-is-my-ip')
     expect(prerenderRoutes).toContain('/ip-check')
     expect(prerenderRoutes).toContain('/check-my-ip')
@@ -30,6 +30,11 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/uuid-v4-generator')
     expect(prerenderRoutes).toContain('/random-uuid-generator')
     expect(prerenderRoutes).toContain('/uuid-generator-online')
+    expect(prerenderRoutes).toContain('/jwt-decoder')
+    expect(prerenderRoutes).toContain('/decode-jwt')
+    expect(prerenderRoutes).toContain('/jwt-parser')
+    expect(prerenderRoutes).toContain('/jwt-inspector')
+    expect(prerenderRoutes).toContain('/jwt-decoder-online')
   })
 })
 
@@ -92,5 +97,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Generate UUID v4 values online instantly')
     expect(result.appHtml).toContain('Generate UUID v4 Values Instantly')
+  })
+
+  it('returns the expected metadata for a JWT page', () => {
+    const result = render('/jwt-decoder')
+
+    expect(result.head).toMatchObject({
+      title: 'JWT Decoder - Decode JWT Tokens Online',
+    })
+    expect(result.head.description).toContain('Decode JWT tokens online instantly')
+    expect(result.appHtml).toContain('Decode JWT Tokens Instantly')
   })
 })

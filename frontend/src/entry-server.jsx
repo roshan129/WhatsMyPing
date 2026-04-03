@@ -41,6 +41,11 @@ export const prerenderRoutes = [
   '/uuid-v4-generator',
   '/random-uuid-generator',
   '/uuid-generator-online',
+  '/jwt-decoder',
+  '/decode-jwt',
+  '/jwt-parser',
+  '/jwt-inspector',
+  '/jwt-decoder-online',
 ]
 
 export function render(url) {

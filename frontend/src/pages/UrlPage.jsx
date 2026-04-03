@@ -250,6 +250,12 @@ function UrlPage({ page }) {
                 Generate UUID v4 values before encoding them into query strings, redirect parameters, or request payloads.
               </span>
             </AppLink>
+            <AppLink href="/jwt-decoder" className="tool-card">
+              <span className="tool-card-title">JWT Decoder</span>
+              <span className="tool-card-copy">
+                Inspect auth tokens alongside redirect parameters when login or callback debugging spans both JWTs and URLs.
+              </span>
+            </AppLink>
           </div>
         </div>
       </section>

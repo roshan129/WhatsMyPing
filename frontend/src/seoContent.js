@@ -1430,8 +1430,226 @@ export const uuidPages = [
   },
 ]
 
+export const jwtPages = [
+  {
+    path: '/jwt-decoder',
+    toolType: 'jwt',
+    navLabel: 'JWT Decoder',
+    shortLabel: 'JWT Decoder',
+    showInNav: true,
+    title: 'JWT Decoder - Decode JWT Tokens Online',
+    description:
+      'Decode JWT tokens online instantly, inspect header and payload JSON, and review common claims like exp, iat, and nbf.',
+    eyebrow: 'Token inspection',
+    h1: 'Decode JWT Tokens Instantly',
+    subtitle:
+      'Paste a JWT, inspect the decoded header and payload, and review the token metadata without leaving the browser.',
+    heroNote: 'Version 1 is a decode-only JWT inspector for fast token debugging and claim review.',
+    toolFocus: 'JWT header and payload decoding',
+    introHeading: 'Why use a JWT decoder?',
+    introBody:
+      'JWTs often show up in auth flows, API testing, browser storage, and backend debugging. A dedicated decoder helps you inspect what the token actually contains without mentally parsing Base64URL segments or opening a separate script.',
+    formHint: 'Paste a JWT with header, payload, and signature sections to decode it safely.',
+    quickFactsHeading: 'This decoder helps you:',
+    quickFacts: [
+      'Inspect JWT header and payload JSON quickly.',
+      'Review common time claims like exp, iat, and nbf.',
+      'Catch malformed JWT input with a stable validation error.',
+    ],
+    sections: [
+      {
+        title: 'What a JWT contains',
+        body:
+          'A JWT usually contains three dot-separated parts: a header, a payload, and a signature. The header describes the token format, the payload carries claims, and the signature is used by the issuing system to protect integrity.',
+      },
+      {
+        title: 'Why decoding is useful during debugging',
+        body:
+          'When auth requests fail or sessions behave unexpectedly, the first useful step is often inspecting the token contents. A decoder helps you confirm the algorithm, token type, subject, and timing claims quickly so you can narrow down where the issue might be.',
+      },
+      {
+        title: 'What this tool does not do',
+        body:
+          'This version focuses on decoding only. It helps you read the token, but it does not verify the signature or confirm that the token is trustworthy. That distinction is important when debugging auth flows safely.',
+      },
+    ],
+  },
+  {
+    path: '/decode-jwt',
+    toolType: 'jwt',
+    navLabel: 'Decode JWT',
+    shortLabel: 'Decode JWT',
+    showInNav: false,
+    title: 'Decode JWT Online - Read JWT Claims Fast',
+    description:
+      'Decode JWT online fast so you can read token claims, inspect the header, and understand auth payload contents clearly.',
+    eyebrow: 'Readable claims',
+    h1: 'Decode JWT Claims Fast',
+    subtitle:
+      'Turn a JWT into readable header and payload JSON so you can inspect auth claims, subjects, and timing fields more easily.',
+    heroNote: 'Focused on the practical workflow of reading JWT contents quickly during auth debugging.',
+    toolFocus: 'Readable JWT claims',
+    introHeading: 'Why decode a JWT?',
+    introBody:
+      'Many JWT tasks are really inspection tasks. You want to know what claims are inside the token, whether it looks expired, or which algorithm and type it declares. This page focuses on that quick decode-and-read workflow.',
+    formHint: 'Paste the full token string here to inspect its claims and metadata.',
+    quickFactsHeading: 'Use this page when you want to:',
+    quickFacts: [
+      'Read JWT claims without opening a script.',
+      'Check whether exp, iat, or nbf are present.',
+      'Inspect auth tokens copied from logs, storage, or API tools.',
+    ],
+    sections: [
+      {
+        title: 'Helpful for auth troubleshooting',
+        body:
+          'JWT decoding is especially helpful when login flows, refresh flows, or protected routes are not behaving as expected. Reading the token directly often reveals whether the issue is missing claims, unexpected values, or simple timing problems.',
+      },
+      {
+        title: 'Why a browser tool helps',
+        body:
+          'Sometimes you only need to inspect one token quickly. A browser-based decoder is faster than switching into a local script, especially during QA, support, or browser-first debugging sessions.',
+      },
+      {
+        title: 'What to review first',
+        body:
+          'Start with the header algorithm and type, then move into the payload claims that matter most to your app, such as subject, audience, issuer, and expiry. That order usually gets you to the main problem faster.',
+      },
+    ],
+  },
+  {
+    path: '/jwt-parser',
+    toolType: 'jwt',
+    navLabel: 'JWT Parser',
+    shortLabel: 'JWT Parser',
+    showInNav: false,
+    title: 'JWT Parser - Parse JWT Header and Payload Online',
+    description:
+      'Parse JWT tokens online to inspect header fields, payload claims, and common metadata in a readable JSON view.',
+    eyebrow: 'Structured parsing',
+    h1: 'Parse JWT Header and Payload',
+    subtitle:
+      'Break a JWT into readable sections so header fields, claims, and token timing data are easier to inspect.',
+    heroNote: 'Geared toward developers searching for a JWT parser rather than a general token explainer.',
+    toolFocus: 'Structured JWT parsing',
+    introHeading: 'Why use a JWT parser?',
+    introBody:
+      'A parser view is useful when you want structure, not just raw decoding. Splitting the token into header, payload, and metadata makes it easier to reason about what the token declares and how your app may be interpreting it.',
+    formHint: 'Paste a JWT here to parse its sections into readable JSON and token metadata.',
+    quickFactsHeading: 'Parsing helps you:',
+    quickFacts: [
+      'Separate header and payload clearly.',
+      'Inspect token metadata in a more structured way.',
+      'Spot missing or unexpected fields faster.',
+    ],
+    sections: [
+      {
+        title: 'Why structure matters',
+        body:
+          'JWT strings are compact by design, but that compactness makes them harder to inspect manually. A parser turns the compressed representation back into something easier to review, compare, and discuss during debugging.',
+      },
+      {
+        title: 'Useful during backend and frontend work',
+        body:
+          'JWT parsing helps across the stack. Frontend teams may inspect tokens from storage or redirects, while backend teams often review claims in API requests, service-to-service calls, or local test fixtures.',
+      },
+      {
+        title: 'What this page emphasizes',
+        body:
+          'This route is tailored to the search intent around parsing JWTs, while still using the same underlying decode service as the other JWT pages. The goal is the same tool with surrounding content shaped for clearer discovery.',
+      },
+    ],
+  },
+  {
+    path: '/jwt-inspector',
+    toolType: 'jwt',
+    navLabel: 'JWT Inspector',
+    shortLabel: 'JWT Inspector',
+    showInNav: false,
+    title: 'JWT Inspector - Inspect Token Claims and Metadata',
+    description:
+      'Inspect JWT claims and token metadata online, including common auth fields like exp, iat, nbf, alg, and typ.',
+    eyebrow: 'Claim inspection',
+    h1: 'Inspect JWT Claims and Metadata',
+    subtitle:
+      'Review a token’s claims, timing fields, and header values in one clear decode-only inspection view.',
+    heroNote: 'Best for claim review when your main goal is understanding what a token says rather than verifying it.',
+    toolFocus: 'JWT claim inspection',
+    introHeading: 'Why inspect JWT metadata?',
+    introBody:
+      'JWT issues often come down to claims and timing. A token may be structurally valid but still fail because it is expired, not yet valid, or missing the fields your application expects. An inspection-focused page helps you review those details quickly.',
+    formHint: 'Paste a JWT here to inspect timing claims, header details, and payload values.',
+    quickFactsHeading: 'Inspection is useful when you need to:',
+    quickFacts: [
+      'Check whether a token looks expired.',
+      'Review auth metadata without verifying the signature yet.',
+      'Understand why a token might be rejected by an app.',
+    ],
+    sections: [
+      {
+        title: 'Timing claims are often the key',
+        body:
+          'Fields like exp, iat, and nbf can explain a surprising number of auth problems. If a token is expired, issued unexpectedly, or not yet valid, your app may reject it even when the rest of the claims look correct.',
+      },
+      {
+        title: 'Header values still matter',
+        body:
+          'The header can also reveal important context, such as the declared algorithm and token type. Those fields help you understand what kind of token you are looking at and whether it matches your application expectations.',
+      },
+      {
+        title: 'Decode first, verify separately',
+        body:
+          'Inspection is a useful early step because it is quick and low friction. Once you understand the token contents, you can move into separate verification workflows if you need to confirm trust, issuer configuration, or signing keys.',
+      },
+    ],
+  },
+  {
+    path: '/jwt-decoder-online',
+    toolType: 'jwt',
+    navLabel: 'JWT Decoder Online',
+    shortLabel: 'JWT Online',
+    showInNav: false,
+    title: 'JWT Decoder Online - Read Token Payloads in Browser',
+    description:
+      'Use an online JWT decoder to read token payloads, inspect claims, and view auth metadata directly in the browser.',
+    eyebrow: 'Online token tool',
+    h1: 'Use an Online JWT Decoder',
+    subtitle:
+      'Decode JWT tokens directly in the browser when you need to inspect auth claims, headers, and timing fields fast.',
+    heroNote: 'Designed for online token inspection when speed matters more than local setup.',
+    toolFocus: 'Online JWT inspection',
+    introHeading: 'Why use an online JWT decoder?',
+    introBody:
+      'An online JWT decoder is useful when you want fast inspection without switching into a local script or app-specific tooling. It keeps auth debugging lightweight and accessible during development, QA, and support workflows.',
+    formHint: 'Paste a JWT here to decode it in-browser and review the contents quickly.',
+    quickFactsHeading: 'This page is especially useful when you want to:',
+    quickFacts: [
+      'Inspect a token quickly during QA or support work.',
+      'Stay in the browser while debugging login flows.',
+      'Read claims and metadata without extra setup.',
+    ],
+    sections: [
+      {
+        title: 'Good for browser-first workflows',
+        body:
+          'Not every auth debugging session starts in an IDE. Sometimes the token comes from browser storage, a redirect, or an API client. An online decoder fits that workflow naturally by making inspection immediate.',
+      },
+      {
+        title: 'Useful across teams',
+        body:
+          'Developers are not the only people who inspect tokens. QA, support, and product teams may also need to confirm what a token contains during reproduction or triage. A browser-based decoder lowers the friction for those situations.',
+      },
+      {
+        title: 'What this route is for',
+        body:
+          'This page leans into the search intent around online token decoding while keeping the same underlying tool experience. It is the same decoder with content framed for people looking specifically for a browser-based solution.',
+      },
+    ],
+  },
+]
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages].map((page) => [
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages].map((page) => [
     page.path,
     page,
   ])
@@ -1439,8 +1657,8 @@ export const pageMap = Object.fromEntries(
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages]
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages]
   .filter((page) => page.path !== '/' && page.showInNav !== false)
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages]
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages]
   .filter((page) => page.path !== '/')
