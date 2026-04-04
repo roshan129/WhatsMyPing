@@ -117,7 +117,7 @@ const createApp = (services = {}) => {
 ${paths
   .map(
     (routePath) => `  <url>
-    <loc>${baseUrl}${routePath}</loc>
+    <loc>${baseUrl}${routePath === '/' ? '/' : `${routePath}/`}</loc>
   </url>`
   )
   .join('\n')}
