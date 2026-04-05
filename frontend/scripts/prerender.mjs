@@ -7,24 +7,45 @@ const __dirname = path.dirname(__filename)
 const frontendDir = path.resolve(__dirname, '..')
 const distDir = path.join(frontendDir, 'dist')
 const serverEntryUrl = pathToFileURL(path.join(distDir, 'server', 'entry-server.js')).href
+const siteUrl = (process.env.SITE_URL || 'https://roswag.com').replace(/\/+$/, '')
 
 const { prerenderRoutes, render } = await import(serverEntryUrl)
 const template = await fs.readFile(path.join(distDir, 'index.html'), 'utf8')
 
-const injectDocument = (html, { title, description }) =>
-  html
-    .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
-    .replace(
-      /<meta[\s\S]*?name="description"[\s\S]*?content="[^"]*"[\s\S]*?\/>/,
-      `<meta name="description" content="${description}" />`
-    )
-    .replace('<div id="root"></div>', `<div id="root">${htmlContentPlaceholder}</div>`)
+const ensureTrailingSlashRoute = (route) => (route === '/' ? '/' : `${route.replace(/\/+$/, '')}/`)
+
+const canonicalForRoute = (route) => `${siteUrl}${ensureTrailingSlashRoute(route)}`
+
+const injectCanonical = (html, canonicalUrl) => {
+  const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`
+
+  if (/<link[^>]*rel="canonical"[^>]*>/i.test(html)) {
+    return html.replace(/<link[^>]*rel="canonical"[^>]*>/i, canonicalTag)
+  }
+
+  return html.replace('</head>', `  ${canonicalTag}\n  </head>`)
+}
+
+const injectDocument = (html, { title, description }, canonicalUrl) =>
+  injectCanonical(
+    html
+      .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+      .replace(
+        /<meta[\s\S]*?name="description"[\s\S]*?content="[^"]*"[\s\S]*?\/>/,
+        `<meta name="description" content="${description}" />`
+      )
+      .replace('<div id="root"></div>', `<div id="root">${htmlContentPlaceholder}</div>`),
+    canonicalUrl
+  )
 
 const htmlContentPlaceholder = '__PRERENDERED_APP__'
 
 for (const route of prerenderRoutes) {
   const { appHtml, head } = render(route)
-  const documentHtml = injectDocument(template, head).replace(htmlContentPlaceholder, appHtml)
+  const documentHtml = injectDocument(template, head, canonicalForRoute(route)).replace(
+    htmlContentPlaceholder,
+    appHtml
+  )
   const outputPath =
     route === '/'
       ? path.join(distDir, 'index.html')

@@ -596,42 +596,48 @@ describe('backend API', () => {
     const response = await request(app).get('/sitemap.xml').set('Host', 'example.com')
 
     expect(response.status).toBe(200)
-    expect(response.text).toContain('<loc>http://example.com/what-is-my-ip</loc>')
-    expect(response.text).toContain('<loc>http://example.com/ip-check</loc>')
-    expect(response.text).toContain('<loc>http://example.com/check-my-ip</loc>')
-    expect(response.text).toContain('<loc>http://example.com/my-ip-address</loc>')
-    expect(response.text).toContain('<loc>http://example.com/ip-lookup</loc>')
-    expect(response.text).toContain('<loc>http://example.com/dns-lookup</loc>')
-    expect(response.text).toContain('<loc>http://example.com/dns-check</loc>')
-    expect(response.text).toContain('<loc>http://example.com/check-dns-records</loc>')
-    expect(response.text).toContain('<loc>http://example.com/mx-lookup</loc>')
-    expect(response.text).toContain('<loc>http://example.com/txt-lookup</loc>')
-    expect(response.text).toContain('<loc>http://example.com/json-formatter</loc>')
-    expect(response.text).toContain('<loc>http://example.com/json-pretty-print</loc>')
-    expect(response.text).toContain('<loc>http://example.com/json-validator</loc>')
-    expect(response.text).toContain('<loc>http://example.com/json-viewer</loc>')
-    expect(response.text).toContain('<loc>http://example.com/base64-encode</loc>')
-    expect(response.text).toContain('<loc>http://example.com/base64-decode</loc>')
-    expect(response.text).toContain('<loc>http://example.com/text-to-base64</loc>')
-    expect(response.text).toContain('<loc>http://example.com/base64-to-text</loc>')
-    expect(response.text).toContain('<loc>http://example.com/url-encode</loc>')
-    expect(response.text).toContain('<loc>http://example.com/url-decode</loc>')
-    expect(response.text).toContain('<loc>http://example.com/encode-url</loc>')
-    expect(response.text).toContain('<loc>http://example.com/decode-url</loc>')
-    expect(response.text).toContain('<loc>http://example.com/uuid-generator</loc>')
-    expect(response.text).toContain('<loc>http://example.com/generate-uuid</loc>')
-    expect(response.text).toContain('<loc>http://example.com/uuid-v4-generator</loc>')
-    expect(response.text).toContain('<loc>http://example.com/random-uuid-generator</loc>')
-    expect(response.text).toContain('<loc>http://example.com/uuid-generator-online</loc>')
-    expect(response.text).toContain('<loc>http://example.com/jwt-decoder</loc>')
-    expect(response.text).toContain('<loc>http://example.com/decode-jwt</loc>')
-    expect(response.text).toContain('<loc>http://example.com/jwt-parser</loc>')
-    expect(response.text).toContain('<loc>http://example.com/jwt-inspector</loc>')
-    expect(response.text).toContain('<loc>http://example.com/jwt-decoder-online</loc>')
-    expect(response.text).toContain('<loc>http://example.com/timestamp-converter</loc>')
-    expect(response.text).toContain('<loc>http://example.com/unix-timestamp-converter</loc>')
-    expect(response.text).toContain('<loc>http://example.com/epoch-converter</loc>')
-    expect(response.text).toContain('<loc>http://example.com/convert-timestamp</loc>')
-    expect(response.text).toContain('<loc>http://example.com/timestamp-to-date</loc>')
+    const expectedPaths = [
+      '/what-is-my-ip/',
+      '/ip-check/',
+      '/check-my-ip/',
+      '/my-ip-address/',
+      '/ip-lookup/',
+      '/dns-lookup/',
+      '/dns-check/',
+      '/check-dns-records/',
+      '/mx-lookup/',
+      '/txt-lookup/',
+      '/json-formatter/',
+      '/json-pretty-print/',
+      '/json-validator/',
+      '/json-viewer/',
+      '/base64-encode/',
+      '/base64-decode/',
+      '/text-to-base64/',
+      '/base64-to-text/',
+      '/url-encode/',
+      '/url-decode/',
+      '/encode-url/',
+      '/decode-url/',
+      '/uuid-generator/',
+      '/generate-uuid/',
+      '/uuid-v4-generator/',
+      '/random-uuid-generator/',
+      '/uuid-generator-online/',
+      '/jwt-decoder/',
+      '/decode-jwt/',
+      '/jwt-parser/',
+      '/jwt-inspector/',
+      '/jwt-decoder-online/',
+      '/timestamp-converter/',
+      '/unix-timestamp-converter/',
+      '/epoch-converter/',
+      '/convert-timestamp/',
+      '/timestamp-to-date/',
+    ]
+
+    expectedPaths.forEach((routePath) => {
+      expect(response.text).toContain(`<loc>http://example.com${routePath}</loc>`)
+    })
   })
 })
