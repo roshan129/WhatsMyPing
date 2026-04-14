@@ -364,6 +364,29 @@ ${paths
     path.join(__dirname, '..', 'frontend', 'dist')
 
   if (process.env.SERVE_FRONTEND === 'true') {
+    app.use((req, res, next) => {
+      const isPageRequest = req.method === 'GET' || req.method === 'HEAD'
+      if (!isPageRequest) {
+        return next()
+      }
+
+      const skipRedirect =
+        req.path === '/' ||
+        req.path.endsWith('/') ||
+        req.path === '/health' ||
+        req.path === '/sitemap.xml' ||
+        req.path === '/robots.txt' ||
+        req.path.startsWith('/api/') ||
+        path.extname(req.path)
+
+      if (skipRedirect) {
+        return next()
+      }
+
+      const query = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''
+      return res.redirect(301, `${req.path}/${query}`)
+    })
+
     app.use(express.static(FRONTEND_DIST_PATH))
     app.get(/.*/, (req, res) => {
       res.sendFile(path.join(FRONTEND_DIST_PATH, 'index.html'))
