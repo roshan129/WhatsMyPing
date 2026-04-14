@@ -13,7 +13,17 @@ const updateMetadata = (title, description) => {
   meta.setAttribute('content', description)
 }
 
+const toTrailingSlashPath = (value) => {
+  if (!value || value === '/') {
+    return '/'
+  }
+
+  return `${value.replace(/\/+$/, '')}/`
+}
+
 const AppLink = ({ href, children, className }) => {
+  const canonicalHref = toTrailingSlashPath(href)
+
   const handleClick = (event) => {
     if (
       event.defaultPrevented ||
@@ -27,12 +37,12 @@ const AppLink = ({ href, children, className }) => {
     }
 
     event.preventDefault()
-    window.history.pushState({}, '', href)
+    window.history.pushState({}, '', canonicalHref)
     window.dispatchEvent(new PopStateEvent('popstate'))
   }
 
   return (
-    <a href={href} onClick={handleClick} className={className}>
+    <a href={canonicalHref} onClick={handleClick} className={className}>
       {children}
     </a>
   )
@@ -75,7 +85,7 @@ function Base64Page({ page }) {
       return
     }
 
-    window.history.pushState({}, '', nextPath)
+    window.history.pushState({}, '', toTrailingSlashPath(nextPath))
     window.dispatchEvent(new PopStateEvent('popstate'))
   }
 
