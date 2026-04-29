@@ -1871,8 +1871,1156 @@ export const timestampPages = [
   },
 ]
 
+export const blogPages = [
+  {
+    path: '/blog/what-is-a-ping-test',
+    toolType: 'blog',
+    navLabel: 'Ping Test Blog',
+    showInNav: false,
+    title: 'What is a Ping Test How It Works and How to Check Your Internet Speed',
+    description:
+      'Learn what a ping test is how it works and how to check your internet latency packet loss and connection stability using a simple ping test tool.',
+    keywords:
+      'ping test, what is ping, check ping, internet latency, packet loss, network test, ping meaning, how to test ping, low ping, high ping fix',
+    eyebrow: 'Network guide',
+    h1: 'What is a Ping Test How It Works and Why It Matters',
+    subtitle:
+      'If your internet feels slow or websites are taking too long to load, a ping test is one of the easiest ways to understand what is going on.',
+    intro: [
+      'In this guide, you will learn what a ping test is how it works and how to use it to check your network performance.',
+    ],
+    sections: [
+      {
+        heading: 'What is a Ping Test',
+        paragraphs: [
+          'A ping test is a simple network tool that checks whether a server or website is reachable and how fast your connection is.',
+          'In simple terms, it sends a small request and measures how quickly it gets a reply.',
+        ],
+        listItems: [
+          'Response time between your device and a server',
+          'Network stability',
+          'Packet loss',
+        ],
+      },
+      {
+        heading: 'How Does Ping Work',
+        paragraphs: [
+          'Ping works using a protocol called ICMP which stands for Internet Control Message Protocol.',
+          'This time is called latency and it is measured in milliseconds.',
+        ],
+        orderedItems: [
+          'Your device sends a small data packet to a server',
+          'The server receives the packet and sends it back',
+          'Your device measures how long the round trip took',
+        ],
+      },
+      {
+        heading: 'Understanding Ping Results',
+        paragraphs: ['When you run a ping test you will see a few important values.'],
+      },
+      {
+        heading: 'Latency in milliseconds',
+        listItems: [
+          '0 to 20 ms is excellent',
+          '20 to 50 ms is good',
+          '50 to 100 ms is average',
+          'Above 100 ms is slow',
+          'Lower latency means faster response time',
+        ],
+      },
+      {
+        heading: 'Packet Loss',
+        paragraphs: ['Packet loss happens when some data does not reach the server.'],
+        listItems: [
+          '0 percent is ideal',
+          '1 to 2 percent is acceptable',
+          'Above 5 percent indicates a problem',
+        ],
+      },
+      {
+        heading: 'Jitter',
+        paragraphs: ['Jitter is the variation in latency over time.'],
+        listItems: [
+          'Low jitter means a stable connection',
+          'High jitter means an unstable connection',
+        ],
+      },
+      {
+        heading: 'Why Ping is Important',
+        paragraphs: ['Ping is useful in many real situations:'],
+        listItems: [
+          'Online gaming where fast response is important',
+          'Video calls where delays cause interruptions',
+          'Streaming where buffering can occur',
+          'Debugging network issues',
+        ],
+      },
+      {
+        heading: 'When Should You Use a Ping Test',
+        paragraphs: ['You should run a ping test if:'],
+        listItems: [
+          'Your internet feels slow',
+          'Websites are not loading properly',
+          'Games are lagging',
+          'You suspect network issues',
+        ],
+      },
+      {
+        heading: 'Common Causes of High Ping',
+        paragraphs: ['High ping can be caused by:'],
+        listItems: [
+          'Weak WiFi signal',
+          'Too many connected devices',
+          'Server location far from you',
+          'Internet service provider issues',
+          'Background downloads',
+        ],
+      },
+      {
+        heading: 'How to Improve Ping',
+        paragraphs: ['Here are some simple ways to reduce ping:'],
+        listItems: [
+          'Switch to a wired connection',
+          'Restart your router',
+          'Close unnecessary apps',
+          'Connect to a nearby server',
+          'Upgrade your internet plan if needed',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'A ping test is a simple but powerful way to understand your internet performance. It helps you identify delays stability issues and connection problems in seconds.',
+          'If you are facing slow internet, running a ping test is the best place to start.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try the Ping Test Tool',
+      body: 'Use it to measure latency in real time, run continuous ping, and detect network issues quickly.',
+      label: 'Open Ping Test Tool',
+      href: '/ping-test',
+    },
+  },
+  {
+    path: '/blog/what-is-dns',
+    toolType: 'blog',
+    navLabel: 'DNS Blog',
+    showInNav: false,
+    title: 'What is DNS and How It Works Complete Guide to DNS Lookup',
+    description:
+      'Learn what DNS is how it works and how DNS lookup translates domain names into IP addresses. Understand DNS servers caching and how to troubleshoot DNS issues.',
+    keywords:
+      'what is dns, dns lookup, how dns works, domain name system, dns server, dns meaning, dns explained, check dns, dns troubleshooting',
+    eyebrow: 'Network guide',
+    h1: 'What is DNS and How It Works',
+    subtitle:
+      'When you type a website like roswag.com into your browser, you do not actually connect using that name. Computers communicate using IP addresses. DNS makes this possible by converting domain names into IP addresses.',
+    intro: [
+      'In this guide, you will learn what DNS is how it works and why it is essential for the internet.',
+    ],
+    sections: [
+      {
+        heading: 'What is DNS',
+        paragraphs: [
+          'DNS stands for Domain Name System. It is a system that translates human readable domain names into machine readable IP addresses.',
+          'For example: roswag.com -> 142.250.xxx.xxx',
+          'Without DNS, you would need to remember numbers instead of simple website names.',
+        ],
+      },
+      {
+        heading: 'Why DNS is Important',
+        paragraphs: ['DNS plays a critical role in how the internet works:'],
+        listItems: [
+          'Makes websites easy to access',
+          'Connects users to the correct server',
+          'Improves browsing speed through caching',
+          'Enables scalable internet infrastructure',
+          'Without DNS, using the internet would be much harder',
+        ],
+      },
+      {
+        heading: 'How DNS Works Step by Step',
+        paragraphs: ['Here is a simplified flow of what happens during a DNS lookup:'],
+        orderedItems: [
+          'You enter a domain name in your browser',
+          'Your device checks local DNS cache',
+          'If not found, it queries a DNS resolver',
+          'The resolver contacts root servers',
+          'Then it queries TLD servers such as .com',
+          'Finally it reaches the authoritative DNS server',
+          'The IP address is returned to your browser',
+        ],
+      },
+      {
+        heading: 'Types of DNS Servers',
+        paragraphs: ['DNS involves multiple types of servers working together.'],
+      },
+      {
+        heading: 'DNS Resolver',
+        listItems: [
+          'First stop for your request',
+          'Often provided by your ISP or public DNS services',
+        ],
+      },
+      {
+        heading: 'Root Name Server',
+        listItems: ['Directs requests to the correct TLD server'],
+      },
+      {
+        heading: 'TLD Server',
+        listItems: ['Handles domain extensions like .com or .org'],
+      },
+      {
+        heading: 'Authoritative Name Server',
+        listItems: ['Stores the actual DNS records for a domain'],
+      },
+      {
+        heading: 'What is DNS Lookup',
+        paragraphs: [
+          'A DNS lookup is the process of finding the IP address linked to a domain name.',
+          'You can perform a DNS lookup to verify domain configuration, debug website issues, and check DNS records.',
+        ],
+      },
+      {
+        heading: 'Common DNS Record Types',
+        paragraphs: ['DNS records store important information about a domain:'],
+        listItems: [
+          'A record maps domain to IPv4 address',
+          'AAAA record maps domain to IPv6 address',
+          'CNAME maps one domain to another',
+          'MX handles email routing',
+          'TXT stores verification and metadata',
+        ],
+      },
+      {
+        heading: 'Common DNS Issues',
+        paragraphs: ['You may face DNS problems such as:'],
+        listItems: [
+          'DNS not resolving',
+          'Incorrect IP mapping',
+          'Slow DNS response',
+          'Cached outdated records',
+        ],
+      },
+      {
+        heading: 'How to Fix DNS Issues',
+        paragraphs: ['Here are some simple solutions:'],
+        listItems: [
+          'Clear your DNS cache',
+          'Change DNS server to Google or Cloudflare',
+          'Check domain configuration',
+          'Wait for DNS propagation',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'DNS is one of the core systems that keeps the internet running smoothly. It translates domain names into IP addresses so users can access websites easily.',
+          'Understanding DNS helps you troubleshoot issues faster and build better applications.',
+          'If you want to debug a domain, start with a DNS lookup to see how it resolves.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try the DNS Lookup Tool',
+      body: 'Use it to verify domain records, troubleshoot resolution issues, and inspect DNS results quickly.',
+      label: 'Open DNS Lookup Tool',
+      href: '/dns-lookup',
+    },
+  },
+  {
+    path: '/blog/what-is-an-ip-address',
+    toolType: 'blog',
+    navLabel: 'IP Address Blog',
+    showInNav: false,
+    title: 'What is an IP Address and How It Works Complete Beginner Guide',
+    description:
+      'Learn what an IP address is how it works and how to find your IP address. Understand IPv4 vs IPv6 types of IP addresses and how they are used on the internet.',
+    keywords:
+      'what is ip address, find my ip, ipv4 vs ipv6, public ip, private ip, ip address meaning, check ip address, how ip works',
+    eyebrow: 'Network guide',
+    h1: 'What is an IP Address and How It Works',
+    subtitle:
+      'Every device connected to the internet has a unique identifier called an IP address. It allows devices to communicate with each other and exchange data.',
+    intro: [
+      'In this guide, you will learn what an IP address is how it works and how you can find your own IP address.',
+    ],
+    sections: [
+      {
+        heading: 'What is an IP Address',
+        paragraphs: [
+          'An IP address stands for Internet Protocol address. It is a unique number assigned to each device on a network.',
+          'It works like a home address for your device so data knows where to go.',
+        ],
+        listItems: ['192.168.1.1', '142.250.xxx.xxx'],
+      },
+      {
+        heading: 'Why IP Address is Important',
+        paragraphs: ['IP addresses are essential for:'],
+        listItems: [
+          'Identifying devices on a network',
+          'Sending and receiving data',
+          'Connecting to websites and servers',
+          'Enabling communication between systems',
+          'Without IP addresses, the internet would not function',
+        ],
+      },
+      {
+        heading: 'Types of IP Addresses',
+        paragraphs: ['There are different types of IP addresses used for different purposes.'],
+      },
+      {
+        heading: 'Public IP Address',
+        listItems: [
+          'Assigned by your internet service provider',
+          'Used to identify your network on the internet',
+        ],
+      },
+      {
+        heading: 'Private IP Address',
+        listItems: ['Used within local networks', 'Assigned by routers to devices'],
+      },
+      {
+        heading: 'Static IP Address',
+        listItems: ['Does not change over time', 'Used for servers and hosting'],
+      },
+      {
+        heading: 'Dynamic IP Address',
+        listItems: ['Changes periodically', 'Common for home users'],
+      },
+      {
+        heading: 'IPv4 vs IPv6',
+        paragraphs: ['There are two main versions of IP addresses.'],
+      },
+      {
+        heading: 'IPv4',
+        listItems: ['Format: 192.168.1.1', 'Limited number of addresses'],
+      },
+      {
+        heading: 'IPv6',
+        listItems: [
+          'Format: 2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+          'Much larger address space',
+          'Designed to replace IPv4',
+        ],
+      },
+      {
+        heading: 'How IP Addresses Work',
+        paragraphs: ['When you visit a website:'],
+        orderedItems: [
+          'You enter a domain name like roswag.com',
+          'DNS translates it into an IP address',
+          'Your device connects to that IP address',
+          'The server responds with the website data',
+        ],
+      },
+      {
+        heading: 'How to Find Your IP Address',
+        paragraphs: [
+          'You can quickly check your IP address using our tool: https://roswag.com/what-is-my-ip/',
+          'This tool shows your public IP address, location details, and network information.',
+        ],
+      },
+      {
+        heading: 'Common Uses of IP Address',
+        paragraphs: ['IP addresses are used in many real scenarios:'],
+        listItems: [
+          'Accessing websites',
+          'Online gaming connections',
+          'Network security and firewalls',
+          'Tracking and analytics',
+          'Server communication',
+        ],
+      },
+      {
+        heading: 'Security and Privacy',
+        paragraphs: [
+          'Your IP address can reveal general information like your location and ISP.',
+          'To protect your privacy, use a VPN, avoid suspicious networks, and keep your system secure.',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'An IP address is a fundamental part of how the internet works. It allows devices to identify each other and communicate efficiently.',
+          'Understanding IP addresses helps you troubleshoot network issues and better understand how online systems operate.',
+          'If you want to check your current IP address, try the tool linked above.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Check Your IP Instantly',
+      body: 'See your public IP address and key connection details in seconds.',
+      label: 'Open What Is My IP Tool',
+      href: '/what-is-my-ip',
+    },
+  },
+  {
+    path: '/blog/what-is-json-and-how-to-format-json',
+    toolType: 'blog',
+    navLabel: 'JSON Blog',
+    showInNav: false,
+    title: 'What is JSON and How to Format JSON Complete Beginner Guide',
+    description:
+      'Learn what JSON is how it works and how to format JSON data. Understand JSON syntax examples and how to fix and beautify JSON using a formatter.',
+    keywords:
+      'what is json, json format, json formatter, json syntax, format json online, json example, json beautifier, json parser',
+    eyebrow: 'Developer guide',
+    h1: 'What is JSON and How to Format JSON',
+    subtitle:
+      'JSON is one of the most commonly used data formats on the internet. It is used to send and receive data between applications especially in web and mobile development.',
+    intro: [
+      'In this guide, you will learn what JSON is how it works and how to format JSON for better readability.',
+    ],
+    sections: [
+      {
+        heading: 'What is JSON',
+        paragraphs: [
+          'JSON stands for JavaScript Object Notation. It is a lightweight data format used to store and exchange data.',
+          'It is easy for humans to read and write and easy for machines to parse.',
+          'Example of JSON:',
+        ],
+        codeBlocks: [
+          {
+            title: 'JSON Example',
+            code: `{
+  "name": "Roswag",
+  "type": "tool",
+  "active": true
+}`,
+          },
+        ],
+      },
+      {
+        heading: 'Why JSON is Important',
+        paragraphs: ['JSON is widely used because:'],
+        listItems: [
+          'It is simple and readable',
+          'It works across different programming languages',
+          'It is lightweight compared to other formats',
+          'It is used in APIs and web applications',
+        ],
+      },
+      {
+        heading: 'JSON Syntax Basics',
+        paragraphs: [
+          'JSON follows a simple structure:',
+          'Data is stored in key value pairs. Keys are strings. Values can be string number boolean array or object.',
+          'Example:',
+        ],
+        codeBlocks: [
+          {
+            title: 'Nested Object Example',
+            code: `{
+  "user": {
+    "name": "John",
+    "age": 25
+  },
+  "skills": ["JavaScript", "Kotlin"]
+}`,
+          },
+        ],
+      },
+      {
+        heading: 'What is JSON Formatting',
+        paragraphs: [
+          'JSON formatting means organizing JSON data in a readable structure.',
+          'Formatted JSON is easier to read debug and maintain.',
+        ],
+        codeBlocks: [
+          {
+            title: 'Unformatted JSON',
+            code: `{"name":"John","age":25,"city":"New York"}`,
+          },
+          {
+            title: 'Formatted JSON',
+            code: `{
+  "name": "John",
+  "age": 25,
+  "city": "New York"
+}`,
+          },
+        ],
+      },
+      {
+        heading: 'How to Format JSON',
+        paragraphs: ['You can format JSON using tools that:'],
+        listItems: [
+          'Add proper spacing and indentation',
+          'Highlight syntax',
+          'Detect errors',
+        ],
+      },
+      {
+        heading: 'Common JSON Errors',
+        paragraphs: ['You may encounter errors such as:'],
+        listItems: [
+          'Missing commas',
+          'Invalid quotes',
+          'Extra brackets',
+          'Incorrect data types',
+        ],
+      },
+      {
+        heading: 'JSON vs Other Formats',
+        paragraphs: [
+          'JSON is often compared with XML.',
+          'JSON is more compact, easier to read, and faster to parse.',
+          'That is why JSON is preferred in modern applications.',
+        ],
+      },
+      {
+        heading: 'Where JSON is Used',
+        paragraphs: ['JSON is used in many areas:'],
+        listItems: [
+          'APIs and web services',
+          'Mobile applications',
+          'Configuration files',
+          'Data storage and exchange',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'JSON is a simple and powerful data format that is essential for modern development. Knowing how to read and format JSON makes it easier to work with APIs and debug applications.',
+          'If you work with data regularly, using a JSON formatter will save time and reduce errors.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try the JSON Formatter Tool',
+      body: 'Format, validate, and beautify JSON instantly in your browser.',
+      label: 'Open JSON Formatter',
+      href: '/json-formatter',
+    },
+  },
+  {
+    path: '/blog/what-is-base64-encoding-and-decoding',
+    toolType: 'blog',
+    navLabel: 'Base64 Blog',
+    showInNav: false,
+    title: 'What is Base64 Encoding and Decoding Complete Beginner Guide',
+    description:
+      'Learn what Base64 encoding and decoding is how it works and when to use it. Understand Base64 examples and convert data using an online Base64 encoder and decoder.',
+    keywords:
+      'base64 encoding, base64 decoding, what is base64, base64 encode decode, base64 example, convert base64, base64 string, base64 tool',
+    eyebrow: 'Developer guide',
+    h1: 'What is Base64 Encoding and Decoding',
+    subtitle:
+      'Base64 encoding is a method used to convert binary data into a text format that can be safely transmitted over the internet. It is commonly used in web development APIs and data transfer.',
+    intro: [
+      'In this guide, you will learn what Base64 encoding and decoding is how it works and when to use it.',
+    ],
+    sections: [
+      {
+        heading: 'What is Base64',
+        paragraphs: [
+          'Base64 is an encoding technique that converts binary data into a string of text using a set of 64 characters.',
+          'These characters include uppercase letters, lowercase letters, numbers, and two special symbols.',
+          'This makes Base64 safe to use in systems that only support text.',
+        ],
+      },
+      {
+        heading: 'Why Base64 is Used',
+        paragraphs: ['Base64 is useful because:'],
+        listItems: [
+          'It allows binary data to be sent as text',
+          'It avoids issues with special characters',
+          'It works across different systems and protocols',
+          'It is widely used in APIs and web applications',
+        ],
+      },
+      {
+        heading: 'How Base64 Encoding Works',
+        paragraphs: ['Base64 encoding works by:'],
+        orderedItems: [
+          'Taking binary data',
+          'Splitting it into small chunks',
+          'Converting each chunk into a Base64 character',
+          'Producing a text string',
+        ],
+        codeBlocks: [
+          {
+            title: 'Plain Text',
+            code: 'Hello',
+          },
+          {
+            title: 'Encoded',
+            code: 'SGVsbG8=',
+          },
+        ],
+      },
+      {
+        heading: 'What is Base64 Decoding',
+        paragraphs: [
+          'Base64 decoding is the reverse process. It converts the encoded string back into its original data.',
+        ],
+        codeBlocks: [
+          {
+            title: 'Encoded',
+            code: 'SGVsbG8=',
+          },
+          {
+            title: 'Decoded',
+            code: 'Hello',
+          },
+        ],
+      },
+      {
+        heading: 'When to Use Base64',
+        paragraphs: ['Base64 is commonly used in:'],
+        listItems: [
+          'Sending images in APIs',
+          'Embedding data in HTML or CSS',
+          'Email attachments',
+          'Storing binary data as text',
+          'Authentication tokens',
+        ],
+      },
+      {
+        heading: 'Base64 is Not Encryption',
+        paragraphs: ['It is important to understand that Base64 is not secure.'],
+        listItems: [
+          'It does not hide data',
+          'It can be easily decoded',
+          'It should not be used for sensitive information',
+          'If you need security, use encryption instead',
+        ],
+      },
+      {
+        heading: 'Common Use Cases',
+        paragraphs: ['Base64 is often used by developers when working with:'],
+        listItems: [
+          'APIs and JSON data',
+          'File uploads and downloads',
+          'Image embedding',
+          'Tokens and authentication',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'Base64 encoding is a simple way to convert binary data into text for safe transmission. While it is not secure, it is extremely useful in many development scenarios.',
+          'Understanding how Base64 works helps you handle data more effectively in web and mobile applications.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try Base64 Encoding and Decoding',
+      body: 'Convert text to Base64, decode Base64 to original data, and debug API responses quickly.',
+      label: 'Open Base64 Tool',
+      href: '/base64-encode',
+    },
+  },
+  {
+    path: '/blog/what-is-jwt-and-how-jwt-works',
+    toolType: 'blog',
+    navLabel: 'JWT Blog',
+    showInNav: false,
+    title: 'What is JWT and How JWT Works Complete Beginner Guide',
+    description:
+      'Learn what JWT is how it works and how JSON Web Tokens are used for authentication. Understand JWT structure header payload signature and how to decode JWT tokens.',
+    keywords:
+      'what is jwt, jwt token, json web token, jwt authentication, jwt structure, decode jwt, jwt example, jwt header payload signature',
+    eyebrow: 'Developer guide',
+    h1: 'What is JWT and How JWT Works',
+    subtitle:
+      'JWT stands for JSON Web Token. It is a compact and secure way to transmit information between two parties as a JSON object.',
+    intro: [
+      'JWT is widely used in authentication systems where users log in and access protected resources.',
+      'In this guide, you will learn what JWT is how it works and how it is used in real applications.',
+    ],
+    sections: [
+      {
+        heading: 'What is JWT',
+        paragraphs: [
+          'A JSON Web Token is a string that contains encoded information. It is used to verify identity and securely transmit data.',
+          'A typical JWT looks like this:',
+        ],
+        codeBlocks: [
+          {
+            title: 'JWT Example',
+            code: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiSm9obiIsImlhdCI6MTY5MDAwMDAwMH0.signature',
+          },
+        ],
+      },
+      {
+        heading: 'Structure of JWT',
+        paragraphs: ['A JWT consists of three parts:'],
+        listItems: ['Header', 'Payload', 'Signature'],
+      },
+      {
+        heading: 'Header',
+        paragraphs: ['The header contains information about the token type and algorithm.'],
+        codeBlocks: [
+          {
+            title: 'Header Example',
+            code: `{
+  "alg": "HS256",
+  "typ": "JWT"
+}`,
+          },
+        ],
+      },
+      {
+        heading: 'Payload',
+        paragraphs: ['The payload contains the actual data also called claims.'],
+        codeBlocks: [
+          {
+            title: 'Payload Example',
+            code: `{
+  "user": "John",
+  "role": "admin"
+}`,
+          },
+        ],
+      },
+      {
+        heading: 'Signature',
+        paragraphs: [
+          'The signature is used to verify that the token has not been altered.',
+          'It is created using header, payload, and a secret key.',
+        ],
+      },
+      {
+        heading: 'How JWT Works',
+        paragraphs: ['Here is a simple flow of JWT authentication:'],
+        orderedItems: [
+          'User logs in with credentials',
+          'Server verifies the credentials',
+          'Server generates a JWT',
+          'Client stores the token',
+          'Client sends the token with each request',
+          'Server verifies the token before responding',
+        ],
+      },
+      {
+        heading: 'Why JWT is Used',
+        paragraphs: ['JWT is popular because:'],
+        listItems: [
+          'It is compact and easy to send',
+          'It is stateless so no session storage is required',
+          'It works well for APIs and mobile apps',
+          'It is widely supported',
+        ],
+      },
+      {
+        heading: 'How to Decode JWT',
+        paragraphs: [
+          'You can decode a JWT to view its header and payload.',
+          'This helps you inspect token data, debug authentication issues, and understand API responses.',
+        ],
+      },
+      {
+        heading: 'JWT is Not Encryption',
+        paragraphs: ['JWT is often misunderstood.'],
+        listItems: [
+          'It is encoded not encrypted',
+          'Anyone can decode it',
+          'Sensitive data should not be stored in payload',
+          'If security is required, use encryption along with JWT',
+        ],
+      },
+      {
+        heading: 'Common Use Cases',
+        paragraphs: ['JWT is used in:'],
+        listItems: [
+          'User authentication systems',
+          'API authorization',
+          'Single sign on',
+          'Secure data exchange',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'JWT is a powerful method for handling authentication in modern applications. It allows secure and efficient communication between client and server.',
+          'Understanding JWT helps you build better authentication systems and debug issues more effectively.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try the JWT Decoder Tool',
+      body: 'Decode token header and payload instantly to inspect claims and debug auth flows.',
+      label: 'Open JWT Decoder',
+      href: '/jwt-decoder',
+    },
+  },
+  {
+    path: '/blog/what-is-url-encoding-and-decoding',
+    toolType: 'blog',
+    navLabel: 'URL Blog',
+    showInNav: false,
+    title: 'What is URL Encoding and Decoding and How It Works Complete Guide',
+    description:
+      'Learn what URL encoding and decoding is how it works and why it is used in web development. Encode and decode URLs safely using an online tool.',
+    keywords:
+      'url encoding, url decoding, what is url encode, percent encoding, encode url online, decode url, url encode example, url encoding characters',
+    eyebrow: 'Developer guide',
+    h1: 'What is URL Encoding and Decoding and How It Works',
+    subtitle:
+      'When you use the internet, URLs often contain special characters like spaces or symbols. These characters cannot always be sent directly in a URL. That is where URL encoding comes in.',
+    intro: [
+      'In this guide, you will learn what URL encoding and decoding is how it works and when to use it.',
+    ],
+    sections: [
+      {
+        heading: 'What is URL Encoding',
+        paragraphs: [
+          'URL encoding is a method of converting special characters into a format that can be safely transmitted over the internet.',
+          'It replaces unsafe characters with a percent symbol followed by two hexadecimal digits.',
+        ],
+        codeBlocks: [
+          {
+            title: 'Plain Text',
+            code: 'Hello World',
+          },
+          {
+            title: 'Encoded',
+            code: 'Hello%20World',
+          },
+        ],
+      },
+      {
+        heading: 'Why URL Encoding is Important',
+        paragraphs: ['URL encoding is important because:'],
+        listItems: [
+          'URLs can only contain certain characters',
+          'Spaces and special symbols can break URLs',
+          'Encoding ensures data is transmitted correctly',
+          'It is required for query parameters in APIs',
+        ],
+      },
+      {
+        heading: 'How URL Encoding Works',
+        paragraphs: [
+          'URL encoding converts characters into a standard format.',
+          'Each encoded value represents the ASCII value of the character in hexadecimal form.',
+        ],
+        listItems: [
+          'Space becomes %20',
+          'Exclamation mark becomes %21',
+          'Slash becomes %2F',
+        ],
+      },
+      {
+        heading: 'What is URL Decoding',
+        paragraphs: [
+          'URL decoding is the reverse process. It converts encoded characters back into their original form.',
+        ],
+        codeBlocks: [
+          {
+            title: 'Encoded',
+            code: 'Hello%20World',
+          },
+          {
+            title: 'Decoded',
+            code: 'Hello World',
+          },
+        ],
+      },
+      {
+        heading: 'When to Use URL Encoding',
+        paragraphs: ['You should use URL encoding when:'],
+        listItems: [
+          'Sending query parameters in APIs',
+          'Passing user input in URLs',
+          'Handling special characters in links',
+          'Working with web forms',
+        ],
+      },
+      {
+        heading: 'Common Use Cases',
+        paragraphs: ['URL encoding is widely used in:'],
+        listItems: [
+          'Web applications',
+          'API requests',
+          'Form submissions',
+          'Redirect URLs',
+        ],
+      },
+      {
+        heading: 'Common Mistakes',
+        paragraphs: ['Some common mistakes include:'],
+        listItems: [
+          'Not encoding spaces',
+          'Double encoding values',
+          'Forgetting to decode on the server',
+          'Mixing encoded and raw values',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'URL encoding ensures that data is transmitted safely across the web. It is a simple but essential concept for developers working with APIs and web applications.',
+          'Understanding URL encoding and decoding helps you avoid bugs and handle data correctly in URLs.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try URL Encoding and Decoding',
+      body: 'Encode special characters, decode URL values, and debug API requests quickly.',
+      label: 'Open URL Encoder Tool',
+      href: '/url-encode',
+    },
+  },
+  {
+    path: '/blog/what-is-uuid',
+    toolType: 'blog',
+    navLabel: 'UUID Blog',
+    showInNav: false,
+    title: 'What is UUID and How UUID Generation Works Complete Guide',
+    description:
+      'Learn what a UUID is how it works and how to generate UUIDs. Understand UUID versions format and how to use UUIDs in applications and databases.',
+    keywords:
+      'what is uuid, uuid generator, uuid meaning, generate uuid, uuid format, uuid example, uuid v4, unique identifier',
+    eyebrow: 'Developer guide',
+    h1: 'What is UUID and How UUID Generation Works',
+    subtitle:
+      'UUID stands for Universally Unique Identifier. It is a unique value used to identify information in computer systems.',
+    intro: [
+      'UUIDs are commonly used in databases APIs and distributed systems where unique identification is important.',
+      'In this guide, you will learn what a UUID is how it works and how to generate one.',
+    ],
+    sections: [
+      {
+        heading: 'What is UUID',
+        paragraphs: [
+          'A UUID is a 128 bit number used to uniquely identify objects or records.',
+          'It is designed to be unique across systems without requiring a central authority.',
+        ],
+        codeBlocks: [
+          {
+            title: 'UUID Example',
+            code: '550e8400-e29b-41d4-a716-446655440000',
+          },
+        ],
+      },
+      {
+        heading: 'Why UUID is Important',
+        paragraphs: ['UUIDs are important because:'],
+        listItems: [
+          'They provide unique identifiers',
+          'They work across distributed systems',
+          'They do not require coordination',
+          'They are widely used in databases and APIs',
+        ],
+      },
+      {
+        heading: 'UUID Format',
+        paragraphs: [
+          'A UUID is typically represented as a string of 36 characters including hyphens.',
+          'It consists of hexadecimal digits grouped into sections.',
+        ],
+        codeBlocks: [
+          {
+            title: 'UUID Structure',
+            code: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          },
+        ],
+      },
+      {
+        heading: 'UUID Versions',
+        paragraphs: ['There are different versions of UUIDs based on how they are generated.'],
+      },
+      {
+        heading: 'UUID v1',
+        listItems: [
+          'Based on timestamp and machine information',
+          'Can reveal system details',
+        ],
+      },
+      {
+        heading: 'UUID v4',
+        listItems: [
+          'Generated using random numbers',
+          'Most commonly used',
+          'Does not expose system information',
+        ],
+      },
+      {
+        heading: 'How UUID Generation Works',
+        paragraphs: ['For UUID v4:'],
+        orderedItems: [
+          'Random numbers are generated',
+          'Certain bits are fixed to define version',
+          'The result is formatted into UUID structure',
+        ],
+      },
+      {
+        heading: 'When to Use UUID',
+        paragraphs: ['UUIDs are used in:'],
+        listItems: [
+          'Database primary keys',
+          'API request identifiers',
+          'Session tracking',
+          'Distributed systems',
+        ],
+      },
+      {
+        heading: 'UUID vs Auto Increment IDs',
+        paragraphs: ['UUID:'],
+        listItems: [
+          'Globally unique',
+          'Works across systems',
+          'Harder to guess',
+        ],
+      },
+      {
+        heading: 'Auto Increment ID',
+        listItems: [
+          'Simple and sequential',
+          'Easier to manage',
+          'Not globally unique',
+        ],
+      },
+      {
+        heading: 'Common Use Cases',
+        paragraphs: ['UUIDs are widely used in:'],
+        listItems: [
+          'Backend systems',
+          'Microservices architecture',
+          'Logging and tracing',
+          'Data synchronization',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'UUIDs provide a reliable way to generate unique identifiers without central coordination. They are essential in modern distributed applications and systems.',
+          'Understanding UUIDs helps you design scalable and robust systems.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try UUID Generator',
+      body: 'Generate single or bulk UUIDs instantly for development, testing, and production workflows.',
+      label: 'Open UUID Generator',
+      href: '/uuid-generator',
+    },
+  },
+  {
+    path: '/blog/what-is-a-timestamp',
+    toolType: 'blog',
+    navLabel: 'Timestamp Blog',
+    showInNav: false,
+    title: 'What is a Timestamp and How to Convert Timestamps Complete Guide',
+    description:
+      'Learn what a timestamp is how it works and how to convert timestamps to human readable dates. Understand Unix timestamps and use an online timestamp converter.',
+    keywords:
+      'what is timestamp, unix timestamp, timestamp converter, convert timestamp, epoch time, timestamp to date, current timestamp, timestamp meaning',
+    eyebrow: 'Developer guide',
+    h1: 'What is a Timestamp and How to Convert Timestamps',
+    subtitle:
+      'A timestamp is a way to track time in a format that computers can easily understand. It is widely used in programming databases and APIs to record events.',
+    intro: [
+      'In this guide, you will learn what a timestamp is how it works and how to convert timestamps into readable dates.',
+    ],
+    sections: [
+      {
+        heading: 'What is a Timestamp',
+        paragraphs: [
+          'A timestamp is a numeric value that represents a specific point in time.',
+          'The most common type is the Unix timestamp which counts the number of seconds since January 1 1970.',
+          'This number represents a specific date and time.',
+        ],
+        codeBlocks: [
+          {
+            title: 'Timestamp Example',
+            code: '1700000000',
+          },
+        ],
+      },
+      {
+        heading: 'Why Timestamps are Important',
+        paragraphs: ['Timestamps are used because:'],
+        listItems: [
+          'They provide a standard way to track time',
+          'They are easy for computers to process',
+          'They are consistent across systems',
+          'They are widely used in logs and databases',
+        ],
+      },
+      {
+        heading: 'What is Unix Timestamp',
+        paragraphs: [
+          'A Unix timestamp also called epoch time is the number of seconds that have passed since January 1 1970 UTC.',
+          'It is used in databases, APIs, logging systems, and backend services.',
+        ],
+      },
+      {
+        heading: 'How Timestamp Conversion Works',
+        paragraphs: ['Timestamp conversion means converting between timestamp to readable date and date to timestamp.'],
+        codeBlocks: [
+          {
+            title: 'Conversion Example',
+            code: '1700000000 -> Tue Nov 14 2023',
+          },
+        ],
+      },
+      {
+        heading: 'Common Use Cases',
+        paragraphs: ['Timestamps are used in:'],
+        listItems: [
+          'Logging events',
+          'Tracking user activity',
+          'Scheduling systems',
+          'API data exchange',
+        ],
+      },
+      {
+        heading: 'Common Mistakes',
+        paragraphs: ['Some common mistakes include:'],
+        listItems: [
+          'Confusing seconds with milliseconds',
+          'Ignoring time zones',
+          'Using incorrect formats',
+          'Misinterpreting UTC time',
+        ],
+      },
+      {
+        heading: 'Timestamp in Seconds vs Milliseconds',
+        paragraphs: ['Timestamps can be in:'],
+        listItems: [
+          'Seconds such as 1700000000',
+          'Milliseconds such as 1700000000000',
+          'It is important to know which format you are using',
+        ],
+      },
+      {
+        heading: 'Final Thoughts',
+        paragraphs: [
+          'Timestamps are a fundamental part of software systems. They allow precise tracking of time and events across applications.',
+          'Understanding timestamps helps you debug issues and work with time based data more effectively.',
+        ],
+      },
+    ],
+    cta: {
+      heading: 'Try Timestamp Converter',
+      body: 'Convert timestamp to date, date to timestamp, and inspect time values quickly.',
+      label: 'Open Timestamp Converter',
+      href: '/timestamp-converter',
+    },
+  },
+]
+
+export const blogIndexPage = {
+  path: '/blog',
+  toolType: 'blog-index',
+  navLabel: 'Blog',
+  showInNav: false,
+  title: 'Roswag Blog - Developer Guides for Network and Utility Tools',
+  description:
+    'Browse Roswag blog guides on ping, DNS, IP, JSON, Base64, JWT, URL encoding, UUIDs, and timestamps.',
+  eyebrow: 'Roswag blog',
+  h1: 'Developer Guides and Tutorials',
+  subtitle:
+    'Read practical guides behind each Roswag tool and learn core concepts with examples you can apply quickly.',
+}
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages].map((page) => [
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages, blogIndexPage].map((page) => [
     page.path,
     page,
   ])
@@ -1880,8 +3028,8 @@ export const pageMap = Object.fromEntries(
 
 export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path, page]))
 
-export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages]
+export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages]
   .filter((page) => page.path !== '/' && page.showInNav !== false)
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages]
+export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages]
   .filter((page) => page.path !== '/')

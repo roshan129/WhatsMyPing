@@ -24,6 +24,18 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/jwt-parser').shortLabel).toBe('JWT Parser')
     expect(getRouteForPath('/timestamp-converter').toolType).toBe('timestamp')
     expect(getRouteForPath('/convert-timestamp').mode).toBe('parse')
+    expect(getRouteForPath('/blog/what-is-a-ping-test').toolType).toBe(
+      'blog'
+    )
+    expect(getRouteForPath('/blog/what-is-dns').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-an-ip-address').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-json-and-how-to-format-json').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-base64-encoding-and-decoding').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-jwt-and-how-jwt-works').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-url-encoding-and-decoding').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-uuid').toolType).toBe('blog')
+    expect(getRouteForPath('/blog/what-is-a-timestamp').toolType).toBe('blog')
+    expect(getRouteForPath('/blog').toolType).toBe('blog-index')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

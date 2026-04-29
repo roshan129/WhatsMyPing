@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { navPages, toolPages } from '../seoContent'
+import { blogPages, navPages, toolPages } from '../seoContent'
 
 const FEATURED_TOOL_PATHS = ['/ping-test', '/what-is-my-ip', '/dns-lookup', '/json-formatter']
+const FEATURED_BLOG_PATHS = [
+  '/blog/what-is-a-ping-test',
+  '/blog/what-is-dns',
+  '/blog/what-is-an-ip-address',
+  '/blog/what-is-json-and-how-to-format-json',
+]
 
 const getPingQuality = (latencyMs) => {
   if (latencyMs == null) return null
@@ -187,6 +193,7 @@ function PingPage({ page }) {
       ? [[latestResult.target, latestResult.latencyMs]]
       : []
   const featuredTools = toolPages.filter((toolPage) => FEATURED_TOOL_PATHS.includes(toolPage.path))
+  const featuredBlogs = blogPages.filter((blogPage) => FEATURED_BLOG_PATHS.includes(blogPage.path))
   const toolLinkPages = isHomePage ? featuredTools : toolPages
 
   return (
@@ -236,6 +243,26 @@ function PingPage({ page }) {
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
                 <span className="tool-card-title">{toolPage.navLabel}</span>
                 <span className="tool-card-copy">{toolPage.description}</span>
+              </AppLink>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {isHomePage && featuredBlogs.length > 0 && (
+        <section className="card home-hub" aria-label="Developer guides">
+          <div className="learn-header home-hub-header">
+            <h2>Read Quick Developer Guides</h2>
+            <p>
+              Learn the fundamentals behind each tool with practical beginner guides, examples,
+              and common mistakes.
+            </p>
+          </div>
+          <div className="tool-grid">
+            {featuredBlogs.map((blogPage) => (
+              <AppLink key={blogPage.path} href={blogPage.path} className="tool-card">
+                <span className="tool-card-title">{blogPage.h1}</span>
+                <span className="tool-card-copy">{blogPage.description}</span>
               </AppLink>
             ))}
           </div>

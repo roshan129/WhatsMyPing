@@ -26,15 +26,31 @@ const injectCanonical = (html, canonicalUrl) => {
   return html.replace('</head>', `  ${canonicalTag}\n  </head>`)
 }
 
-const injectDocument = (html, { title, description }, canonicalUrl) =>
+const injectMetaKeywords = (html, keywords) => {
+  if (!keywords) {
+    return html
+  }
+
+  const tag = `<meta name="keywords" content="${keywords}" />`
+  if (/<meta[^>]*name="keywords"[^>]*>/i.test(html)) {
+    return html.replace(/<meta[^>]*name="keywords"[^>]*>/i, tag)
+  }
+
+  return html.replace('</head>', `  ${tag}\n  </head>`)
+}
+
+const injectDocument = (html, { title, description, keywords }, canonicalUrl) =>
   injectCanonical(
-    html
-      .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
-      .replace(
-        /<meta[\s\S]*?name="description"[\s\S]*?content="[^"]*"[\s\S]*?\/>/,
-        `<meta name="description" content="${description}" />`
-      )
-      .replace('<div id="root"></div>', `<div id="root">${htmlContentPlaceholder}</div>`),
+    injectMetaKeywords(
+      html
+        .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+        .replace(
+          /<meta[\s\S]*?name="description"[\s\S]*?content="[^"]*"[\s\S]*?\/>/,
+          `<meta name="description" content="${description}" />`
+        )
+        .replace('<div id="root"></div>', `<div id="root">${htmlContentPlaceholder}</div>`),
+      keywords
+    ),
     canonicalUrl
   )
 

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Base64Page from './pages/Base64Page'
+import BlogIndexPage from './pages/BlogIndexPage'
+import BlogPage from './pages/BlogPage'
 import DnsPage from './pages/DnsPage'
 import IpPage from './pages/IpPage'
 import JsonPage from './pages/JsonPage'
@@ -73,6 +75,14 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'timestamp') {
     return <TimestampPage page={page} />
+  }
+
+  if (page.toolType === 'blog') {
+    return <BlogPage page={page} />
+  }
+
+  if (page.toolType === 'blog-index') {
+    return <BlogIndexPage page={page} />
   }
 
   return <PingPage page={page} />
