@@ -111,6 +111,16 @@ const createApp = (services = {}) => {
       '/epoch-converter',
       '/convert-timestamp',
       '/timestamp-to-date',
+      '/blog',
+      '/blog/what-is-a-ping-test',
+      '/blog/what-is-dns',
+      '/blog/what-is-an-ip-address',
+      '/blog/what-is-json-and-how-to-format-json',
+      '/blog/what-is-base64-encoding-and-decoding',
+      '/blog/what-is-jwt-and-how-jwt-works',
+      '/blog/what-is-url-encoding-and-decoding',
+      '/blog/what-is-uuid',
+      '/blog/what-is-a-timestamp',
     ]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
