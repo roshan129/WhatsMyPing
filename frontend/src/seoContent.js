@@ -3005,8 +3005,22 @@ export const blogPages = [
   },
 ]
 
+export const blogIndexPage = {
+  path: '/blog',
+  toolType: 'blog-index',
+  navLabel: 'Blog',
+  showInNav: false,
+  title: 'Roswag Blog - Developer Guides for Network and Utility Tools',
+  description:
+    'Browse Roswag blog guides on ping, DNS, IP, JSON, Base64, JWT, URL encoding, UUIDs, and timestamps.',
+  eyebrow: 'Roswag blog',
+  h1: 'Developer Guides and Tutorials',
+  subtitle:
+    'Read practical guides behind each Roswag tool and learn core concepts with examples you can apply quickly.',
+}
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages].map((page) => [
+  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages, blogIndexPage].map((page) => [
     page.path,
     page,
   ])

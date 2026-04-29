@@ -40,6 +40,7 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/epoch-converter')
     expect(prerenderRoutes).toContain('/convert-timestamp')
     expect(prerenderRoutes).toContain('/timestamp-to-date')
+    expect(prerenderRoutes).toContain('/blog')
     expect(prerenderRoutes).toContain('/blog/what-is-a-ping-test')
     expect(prerenderRoutes).toContain('/blog/what-is-dns')
     expect(prerenderRoutes).toContain('/blog/what-is-an-ip-address')
@@ -221,5 +222,15 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Learn what a timestamp is how it works')
     expect(result.appHtml).toContain('What is a Timestamp and How to Convert Timestamps')
+  })
+
+  it('returns the expected metadata for the blog index page', () => {
+    const result = render('/blog')
+
+    expect(result.head).toMatchObject({
+      title: 'Roswag Blog - Developer Guides for Network and Utility Tools',
+    })
+    expect(result.head.description).toContain('Browse Roswag blog guides')
+    expect(result.appHtml).toContain('Developer Guides and Tutorials')
   })
 })

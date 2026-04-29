@@ -51,6 +51,7 @@ export const prerenderRoutes = [
   '/epoch-converter',
   '/convert-timestamp',
   '/timestamp-to-date',
+  '/blog',
   '/blog/what-is-a-ping-test',
   '/blog/what-is-dns',
   '/blog/what-is-an-ip-address',
