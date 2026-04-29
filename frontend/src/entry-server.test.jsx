@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { prerenderRoutes, render } from './entry-server'
 
 describe('prerenderRoutes', () => {
-  it('includes the SEO IP, DNS, JSON, URL, UUID, JWT, and timestamp routes', () => {
+  it('includes the SEO IP, DNS, JSON, URL, UUID, JWT, timestamp, and blog routes', () => {
     expect(prerenderRoutes).toContain('/what-is-my-ip')
     expect(prerenderRoutes).toContain('/ip-check')
     expect(prerenderRoutes).toContain('/check-my-ip')
@@ -40,6 +40,15 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/epoch-converter')
     expect(prerenderRoutes).toContain('/convert-timestamp')
     expect(prerenderRoutes).toContain('/timestamp-to-date')
+    expect(prerenderRoutes).toContain('/blog/what-is-a-ping-test')
+    expect(prerenderRoutes).toContain('/blog/what-is-dns')
+    expect(prerenderRoutes).toContain('/blog/what-is-an-ip-address')
+    expect(prerenderRoutes).toContain('/blog/what-is-json-and-how-to-format-json')
+    expect(prerenderRoutes).toContain('/blog/what-is-base64-encoding-and-decoding')
+    expect(prerenderRoutes).toContain('/blog/what-is-jwt-and-how-jwt-works')
+    expect(prerenderRoutes).toContain('/blog/what-is-url-encoding-and-decoding')
+    expect(prerenderRoutes).toContain('/blog/what-is-uuid')
+    expect(prerenderRoutes).toContain('/blog/what-is-a-timestamp')
   })
 })
 
@@ -122,5 +131,95 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Convert Unix timestamps online instantly')
     expect(result.appHtml).toContain('Convert Unix Timestamps Instantly')
+  })
+
+  it('returns the expected metadata for a blog page', () => {
+    const result = render('/blog/what-is-a-ping-test')
+
+    expect(result.head).toMatchObject({
+      title: 'What is a Ping Test How It Works and How to Check Your Internet Speed',
+    })
+    expect(result.head.description).toContain('Learn what a ping test is how it works')
+    expect(result.appHtml).toContain('What is a Ping Test How It Works and Why It Matters')
+  })
+
+  it('returns the expected metadata for the DNS blog page', () => {
+    const result = render('/blog/what-is-dns')
+
+    expect(result.head).toMatchObject({
+      title: 'What is DNS and How It Works Complete Guide to DNS Lookup',
+    })
+    expect(result.head.description).toContain('Learn what DNS is how it works')
+    expect(result.appHtml).toContain('What is DNS and How It Works')
+  })
+
+  it('returns the expected metadata for the IP blog page', () => {
+    const result = render('/blog/what-is-an-ip-address')
+
+    expect(result.head).toMatchObject({
+      title: 'What is an IP Address and How It Works Complete Beginner Guide',
+    })
+    expect(result.head.description).toContain('Learn what an IP address is how it works')
+    expect(result.appHtml).toContain('What is an IP Address and How It Works')
+  })
+
+  it('returns the expected metadata for the JSON blog page', () => {
+    const result = render('/blog/what-is-json-and-how-to-format-json')
+
+    expect(result.head).toMatchObject({
+      title: 'What is JSON and How to Format JSON Complete Beginner Guide',
+    })
+    expect(result.head.description).toContain('Learn what JSON is how it works')
+    expect(result.appHtml).toContain('What is JSON and How to Format JSON')
+  })
+
+  it('returns the expected metadata for the Base64 blog page', () => {
+    const result = render('/blog/what-is-base64-encoding-and-decoding')
+
+    expect(result.head).toMatchObject({
+      title: 'What is Base64 Encoding and Decoding Complete Beginner Guide',
+    })
+    expect(result.head.description).toContain('Learn what Base64 encoding and decoding is')
+    expect(result.appHtml).toContain('What is Base64 Encoding and Decoding')
+  })
+
+  it('returns the expected metadata for the JWT blog page', () => {
+    const result = render('/blog/what-is-jwt-and-how-jwt-works')
+
+    expect(result.head).toMatchObject({
+      title: 'What is JWT and How JWT Works Complete Beginner Guide',
+    })
+    expect(result.head.description).toContain('Learn what JWT is how it works')
+    expect(result.appHtml).toContain('What is JWT and How JWT Works')
+  })
+
+  it('returns the expected metadata for the URL blog page', () => {
+    const result = render('/blog/what-is-url-encoding-and-decoding')
+
+    expect(result.head).toMatchObject({
+      title: 'What is URL Encoding and Decoding and How It Works Complete Guide',
+    })
+    expect(result.head.description).toContain('Learn what URL encoding and decoding is')
+    expect(result.appHtml).toContain('What is URL Encoding and Decoding and How It Works')
+  })
+
+  it('returns the expected metadata for the UUID blog page', () => {
+    const result = render('/blog/what-is-uuid')
+
+    expect(result.head).toMatchObject({
+      title: 'What is UUID and How UUID Generation Works Complete Guide',
+    })
+    expect(result.head.description).toContain('Learn what a UUID is how it works')
+    expect(result.appHtml).toContain('What is UUID and How UUID Generation Works')
+  })
+
+  it('returns the expected metadata for the timestamp blog page', () => {
+    const result = render('/blog/what-is-a-timestamp')
+
+    expect(result.head).toMatchObject({
+      title: 'What is a Timestamp and How to Convert Timestamps Complete Guide',
+    })
+    expect(result.head.description).toContain('Learn what a timestamp is how it works')
+    expect(result.appHtml).toContain('What is a Timestamp and How to Convert Timestamps')
   })
 })

@@ -51,6 +51,15 @@ export const prerenderRoutes = [
   '/epoch-converter',
   '/convert-timestamp',
   '/timestamp-to-date',
+  '/blog/what-is-a-ping-test',
+  '/blog/what-is-dns',
+  '/blog/what-is-an-ip-address',
+  '/blog/what-is-json-and-how-to-format-json',
+  '/blog/what-is-base64-encoding-and-decoding',
+  '/blog/what-is-jwt-and-how-jwt-works',
+  '/blog/what-is-url-encoding-and-decoding',
+  '/blog/what-is-uuid',
+  '/blog/what-is-a-timestamp',
 ]
 
 export function render(url) {
@@ -66,6 +75,7 @@ export function render(url) {
     head: {
       title: page.title,
       description: escapeAttribute(page.description),
+      keywords: page.keywords ? escapeAttribute(page.keywords) : null,
     },
   }
 }
