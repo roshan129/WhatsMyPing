@@ -4,17 +4,17 @@ export const pingPages = [
     target: null,
     navLabel: 'Home',
     shortLabel: 'Ping Test',
-    title: 'Roswag - Fast, Free Online Tools for Developers',
+    title: 'Roswag - Every dev tool. One address.',
     description:
-      'Use Roswag for fast online developer and network tools including ping tests, IP lookup, DNS lookup, and JSON formatting in one place.',
+      'Roswag is a fast, private developer utility hub for ping, IP, DNS, JSON, Base64, URL, UUID, JWT, and timestamp tools.',
     eyebrow: 'Roswag utility hub',
-    h1: 'Fast, Free Online Tools for Developers',
+    h1: 'Every dev tool. One address.',
     subtitle:
-      'Start with ping, IP, DNS, and JSON utilities, then move into focused tool pages built for quick checks and lightweight troubleshooting.',
-    heroNote: 'Roswag is a growing multi-utility toolkit, with ping tests as one featured experience.',
-    introHeading: 'Why use Roswag?',
+      'Ping, DNS, IP, JSON, Base64, UUID, JWT, timestamps — open it, use it, close it. No accounts, no ads, no distractions.',
+    heroNote: '9 tools · no sign-up · client-side',
+    introHeading: 'One landing page for the tools you use most',
     introBody:
-      'Roswag is designed to keep useful web utilities in one clean place instead of spreading them across separate sites and tabs. You can start with a quick ping test, check your current IP, inspect DNS records, or format JSON without leaving the same shared tool hub.',
+      'Roswag keeps the essentials in one place so you can move from a quick ping check to JSON formatting, IP lookups, DNS records, and token inspection without hopping between separate sites.',
     sections: [
       {
         title: 'A simple multi-tool starting point',

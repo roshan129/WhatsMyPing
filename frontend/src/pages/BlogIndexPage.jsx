@@ -68,6 +68,11 @@ function BlogIndexPage({ page }) {
           <h1>{page.h1}</h1>
           <p>{page.subtitle}</p>
         </div>
+        <div className="blog-meta-strip" aria-label="Blog index highlights">
+          <span className="blog-chip">SEO-friendly guides</span>
+          <span className="blog-chip">Linked to tools</span>
+          <span className="blog-chip">Fast scanning layout</span>
+        </div>
         <div className="tool-grid">
           {blogPages.map((blog) => (
             <AppLink key={blog.path} href={blog.path} className="tool-card">

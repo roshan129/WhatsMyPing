@@ -75,6 +75,28 @@ function BlogPage({ page }) {
         <p className="eyebrow">{page.eyebrow}</p>
         <h1 className="blog-title">{page.h1}</h1>
         <p className="subtitle">{page.subtitle}</p>
+        <div className="blog-meta-strip" aria-label="Article highlights">
+          <span className="blog-chip">Developer guide</span>
+          <span className="blog-chip">Practical examples</span>
+          <span className="blog-chip">Tool linked at the end</span>
+        </div>
+
+        <div className="blog-lead-card">
+          <div>
+            <p className="hero-label">Quick summary</p>
+            <p className="blog-lead-copy">
+              Read the overview, scan the examples, and jump to the matching Roswag tool when you
+              want to try the workflow yourself.
+            </p>
+          </div>
+          <div className="blog-lead-cta">
+            <p className="hero-label">{page.cta.heading}</p>
+            <p className="hero-meta">{page.cta.body}</p>
+            <a className="secondary-button blog-cta-link" href={toTrailingSlashPath(page.cta.href)}>
+              {page.cta.label}
+            </a>
+          </div>
+        </div>
 
         {page.intro?.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>

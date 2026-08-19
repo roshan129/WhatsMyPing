@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { blogPages, navPages, toolPages } from '../seoContent'
+import { navPages, toolPages } from '../seoContent'
 
 const FEATURED_TOOL_PATHS = ['/ping-test', '/what-is-my-ip', '/dns-lookup', '/json-formatter']
-const FEATURED_BLOG_PATHS = [
-  '/blog/what-is-a-ping-test',
-  '/blog/what-is-dns',
-  '/blog/what-is-an-ip-address',
-  '/blog/what-is-json-and-how-to-format-json',
+const DISPLAY_FONT = { fontFamily: "'Bricolage Grotesque', sans-serif" }
+const HOME_TERMINAL_LINES = [
+  { text: '$ ping 8.8.8.8', type: 'cmd' },
+  { text: 'seq=1  time=11ms  ttl=57', type: 'ok' },
+  { text: 'seq=2  time=12ms  ttl=57', type: 'ok' },
+  { text: 'seq=3  time=9ms   ttl=57', type: 'ok' },
+  { text: '', type: 'blank' },
+  { text: '$ your-ip', type: 'cmd' },
+  { text: '203.0.113.47  IPv4  AS13335 Cloudflare', type: 'accent' },
+  { text: '', type: 'blank' },
+  { text: '$ json format', type: 'cmd' },
+  { text: '{ "status": "valid", "keys": 12 }', type: 'accent' },
 ]
 
 const getPingQuality = (latencyMs) => {
@@ -77,6 +84,26 @@ const AppLink = ({ href, children, className }) => {
     <a href={canonicalHref} onClick={handleClick} className={className}>
       {children}
     </a>
+  )
+}
+
+function TerminalPanel() {
+  return (
+    <div className="terminal-panel" aria-label="Roswag terminal preview">
+      <div className="terminal-panel-header">
+        <span className="terminal-dot" />
+        <span className="terminal-dot" />
+        <span className="terminal-dot" />
+        <span className="terminal-title">roswag - terminal</span>
+      </div>
+      <div className="terminal-lines">
+        {HOME_TERMINAL_LINES.map((line, index) => (
+          <div key={`${line.text}-${index}`} className={`terminal-line ${line.type}`}>
+            {line.text || '\u00a0'}
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -186,6 +213,8 @@ function PingPage({ page }) {
           max: Math.max(...history.map((entry) => entry.latency)),
         }
       : null
+  const latestHistoryLatency = history.length > 0 ? history[history.length - 1].latency : null
+  const chartRangeLabel = stats ? `${stats.min} - ${stats.max} ms` : 'No range yet'
 
   const targetBreakdown = latestResult?.targets
     ? Object.entries(latestResult.targets)
@@ -193,8 +222,22 @@ function PingPage({ page }) {
       ? [[latestResult.target, latestResult.latencyMs]]
       : []
   const featuredTools = toolPages.filter((toolPage) => FEATURED_TOOL_PATHS.includes(toolPage.path))
-  const featuredBlogs = blogPages.filter((blogPage) => FEATURED_BLOG_PATHS.includes(blogPage.path))
+  const homeToolPages = isHomePage ? toolPages : featuredTools
   const toolLinkPages = isHomePage ? featuredTools : toolPages
+  const heroStats = isHomePage
+    ? [
+        { label: 'Tools', value: '9' },
+        { label: 'Sign-up time', value: '0ms' },
+        { label: 'Client-side', value: '100%' },
+      ]
+    : [
+        {
+          label: 'Target',
+          value: page.target ? page.target.toUpperCase() : 'BLENDED',
+        },
+        { label: 'Mode', value: isContinuous ? 'Live' : 'Ready' },
+        { label: 'Trend', value: history.length > 0 ? `${history.length} samples` : 'Fresh start' },
+      ]
 
   return (
     <main className="app">
@@ -216,30 +259,72 @@ function PingPage({ page }) {
         </nav>
       </header>
 
-      <header className="hero">
-        <div className="hero-text">
-          <p className="eyebrow">{page.eyebrow}</p>
-          <h1>{page.h1}</h1>
-          <p className="subtitle">{page.subtitle}</p>
-        </div>
-        <div className="hero-card">
-          <p className="hero-label">Session status</p>
-          <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
-          <p className="hero-meta">{page.heroNote}</p>
-        </div>
+      <header className={isHomePage ? 'hero home-hero' : 'hero'}>
+        {isHomePage ? (
+          <>
+            <div className="home-hero-copy">
+              <div className="hero-badges" aria-label="Key product highlights">
+                <span className="hero-badge">9 tools · no sign-up</span>
+              </div>
+              <h1 className="home-hero-title">{page.h1}</h1>
+              <p className="home-hero-subtitle">{page.subtitle}</p>
+              <div className="home-hero-actions">
+                <button
+                  onClick={() => onNavigate('ping')}
+                  className="home-hero-primary"
+                  style={DISPLAY_FONT}
+                >
+                  Run Ping Test <span aria-hidden="true">→</span>
+                </button>
+                <button onClick={() => onNavigate('json')} className="home-hero-secondary">
+                  Format JSON
+                </button>
+              </div>
+            </div>
+            <div className="home-hero-visual" aria-label="Roswag terminal preview">
+              <TerminalPanel />
+            </div>
+            <div className="home-hero-stats" aria-label="Key product highlights">
+              {heroStats.map((stat) => (
+                <div key={stat.label} className="home-stat">
+                  <span className="home-stat-value">{stat.value}</span>
+                  <span className="home-stat-label">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="hero-text">
+              <p className="eyebrow">{page.eyebrow}</p>
+              <h1>{page.h1}</h1>
+              <p className="subtitle">{page.subtitle}</p>
+            </div>
+            <div className="hero-card ping-hero-card">
+              <p className="hero-label">Session status</p>
+              <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
+              <p className="hero-meta">{page.heroNote}</p>
+              <div className="hero-stat-grid">
+                {heroStats.map((stat) => (
+                  <div key={stat.label} className="hero-stat">
+                    <span className="hero-stat-label">{stat.label}</span>
+                    <span className="hero-stat-value">{stat.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </header>
 
       {isHomePage && (
-        <section className="card home-hub" aria-label="Featured Roswag tools">
+        <section className="card home-hub" aria-label="All Roswag tools">
           <div className="learn-header home-hub-header">
-            <h2>Fast, Free Online Tools for Developers</h2>
-            <p>
-              Roswag brings your most useful day-to-day checks into one place. Start with ping,
-              IP, DNS, or JSON tools, then jump into the exact page you need.
-            </p>
+            <h2>All Tools</h2>
+            <p>Open the exact utility you need without leaving the landing page.</p>
           </div>
           <div className="tool-grid">
-            {featuredTools.map((toolPage) => (
+            {homeToolPages.map((toolPage) => (
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
                 <span className="tool-card-title">{toolPage.navLabel}</span>
                 <span className="tool-card-copy">{toolPage.description}</span>
@@ -249,28 +334,8 @@ function PingPage({ page }) {
         </section>
       )}
 
-      {isHomePage && featuredBlogs.length > 0 && (
-        <section className="card home-hub" aria-label="Developer guides">
-          <div className="learn-header home-hub-header">
-            <h2>Read Quick Developer Guides</h2>
-            <p>
-              Learn the fundamentals behind each tool with practical beginner guides, examples,
-              and common mistakes.
-            </p>
-          </div>
-          <div className="tool-grid">
-            {featuredBlogs.map((blogPage) => (
-              <AppLink key={blogPage.path} href={blogPage.path} className="tool-card">
-                <span className="tool-card-title">{blogPage.h1}</span>
-                <span className="tool-card-copy">{blogPage.description}</span>
-              </AppLink>
-            ))}
-          </div>
-        </section>
-      )}
-
       <section className="card" aria-label="Ping controls and results">
-        {isHomePage && (
+        {!isHomePage && (
           <div className="section-intro">
             <p className="eyebrow">Featured tool</p>
             <h2>Start With A Ping Test</h2>
@@ -296,11 +361,19 @@ function PingPage({ page }) {
 
         <div className="results-grid">
           {latencyMs != null && !error && (
-            <div className="results" data-reveal="1">
+            <div className="results ping-results-card" data-reveal="1">
               <p className="ping-label">Current ping</p>
               <p className="ping-value">
                 <span>{latencyMs}</span> ms
               </p>
+              <div className="ping-status-row">
+                <span className="ping-quality-chip" style={{ color: quality?.color || undefined }}>
+                  {quality ? quality.label : 'Unknown'}
+                </span>
+                <span className="ping-status-copy">
+                  {isContinuous ? 'Live sampling is active' : 'Run a test or enable live sampling'}
+                </span>
+              </div>
               {quality && (
                 <p className="ping-quality">
                   Status:{' '}
@@ -311,8 +384,11 @@ function PingPage({ page }) {
           )}
 
           {stats && !error && (
-            <div className="stats" data-reveal="2">
-              <h2>Session stats ({stats.count} samples)</h2>
+            <div className="stats ping-stats-card" data-reveal="2">
+              <div className="stats-header">
+                <h2>Session stats</h2>
+                <span className="stats-count">{stats.count} samples</span>
+              </div>
               <ul>
                 <li>
                   <strong>Average:</strong> {stats.average} ms
@@ -322,6 +398,26 @@ function PingPage({ page }) {
                 </li>
                 <li>
                   <strong>Maximum:</strong> {stats.max} ms
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {!error && history.length > 0 && (
+            <div className="stats ping-chart-summary" data-reveal="2">
+              <div className="stats-header">
+                <h2>Latest trend</h2>
+                <span className="stats-count">Last sample</span>
+              </div>
+              <ul>
+                <li>
+                  <strong>Current trend:</strong> {latestHistoryLatency} ms
+                </li>
+                <li>
+                  <strong>Range:</strong> {chartRangeLabel}
+                </li>
+                <li>
+                  <strong>Mode:</strong> {isContinuous ? 'Continuous' : 'Single run'}
                 </li>
               </ul>
             </div>
@@ -343,8 +439,20 @@ function PingPage({ page }) {
         )}
 
         {history.length > 0 && !error && (
-          <div className="history" data-reveal="3">
-            <h2>Recent pings</h2>
+          <div className="history history-panel" data-reveal="3">
+            <div className="history-header">
+              <div>
+                <h2>Recent pings</h2>
+                <p className="history-copy">
+                  Tracking the last {Math.min(history.length, 60)} samples gives you a better sense
+                  of stability than any single number.
+                </p>
+              </div>
+              <div className="history-meta">
+                <span className="history-meta-pill">Range {chartRangeLabel}</span>
+                <span className="history-meta-pill">Average {stats?.average ?? '-'} ms</span>
+              </div>
+            </div>
             {history.length > 1 && (
               <div className="history-chart" role="img" aria-label="Ping history chart">
                 <svg viewBox="0 0 100 40" preserveAspectRatio="none">
@@ -383,7 +491,7 @@ function PingPage({ page }) {
                 </svg>
                 <div className="chart-legend">
                   <span>Last {Math.min(history.length, 60)} samples</span>
-                  <span>Range: {stats ? `${stats.min}-${stats.max} ms` : '-'}</span>
+                  <span>Range: {chartRangeLabel}</span>
                 </div>
               </div>
             )}
@@ -498,17 +606,19 @@ function PingPage({ page }) {
           ))}
         </div>
 
-        <div className="tool-links">
-          <h2>{isHomePage ? 'Explore Roswag Tools' : 'Popular Ping Tests'}</h2>
-          <div className="tool-grid">
-            {toolLinkPages.map((toolPage) => (
-              <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
-                <span className="tool-card-title">{toolPage.navLabel}</span>
-                <span className="tool-card-copy">{toolPage.description}</span>
-              </AppLink>
-            ))}
+        {!isHomePage && (
+          <div className="tool-links">
+            <h2>{isHomePage ? 'Explore Roswag Tools' : 'Popular Ping Tests'}</h2>
+            <div className="tool-grid">
+              {toolLinkPages.map((toolPage) => (
+                <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
+                  <span className="tool-card-title">{toolPage.navLabel}</span>
+                  <span className="tool-card-copy">{toolPage.description}</span>
+                </AppLink>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <footer className="footer">

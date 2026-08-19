@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  font-family: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -10,38 +10,64 @@
   -moz-osx-font-smoothing: grayscale;
 
   color-scheme: dark;
-  color: #eef2ff;
-  background-color: #0b1020;
+  color: #e7edf9;
+  background-color: #06070d;
 
-  --text: #eef2ff;
-  --muted: #a3b1cc;
-  --panel: rgba(15, 23, 42, 0.65);
-  --panel-strong: rgba(6, 10, 22, 0.72);
-  --panel-border: rgba(148, 163, 184, 0.25);
-  --panel-shadow: 0 24px 60px rgba(4, 7, 20, 0.45);
+  --text: #e7edf9;
+  --muted: #7d839a;
+  --panel: rgba(10, 12, 22, 0.72);
+  --panel-strong: rgba(6, 7, 13, 0.86);
+  --panel-soft: rgba(255, 255, 255, 0.025);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --panel-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  --accent: #a8ff40;
+  --accent-strong: #d8ff7a;
+  --accent-cyan: #40c8ff;
+  --accent-orange: #ff8c40;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 10%, rgba(94, 234, 212, 0.22), transparent 45%),
-    radial-gradient(circle at 80% 20%, rgba(248, 113, 113, 0.25), transparent 40%),
-    radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.25), transparent 50%),
-    #0b1020;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(168, 255, 64, 0.12), transparent 30%),
+    radial-gradient(circle at 86% 14%, rgba(64, 200, 255, 0.11), transparent 24%),
+    radial-gradient(circle at 78% 84%, rgba(255, 140, 64, 0.08), transparent 26%),
+    linear-gradient(180deg, #080910 0%, #06070d 100%);
   color: var(--text);
+  position: relative;
 }
 
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: linear-gradient(120deg, rgba(3, 7, 18, 0.9), rgba(2, 6, 23, 0.4));
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.035), transparent 26%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.015), transparent 40%, rgba(255, 255, 255, 0.01));
   pointer-events: none;
+  z-index: -1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at center, black 42%, transparent 100%);
   z-index: -1;
 }
 
@@ -54,4 +80,9 @@ button,
 select,
 input {
   font-family: inherit;
+}
+
+::selection {
+  background: rgba(168, 255, 64, 0.24);
+  color: #f7ffe2;
 }
