@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  font-family: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -10,15 +10,23 @@
   -moz-osx-font-smoothing: grayscale;
 
   color-scheme: dark;
-  color: #eef2ff;
-  background-color: #0b1020;
+  color: #e4e6f0;
+  background-color: #06070d;
 
-  --text: #eef2ff;
-  --muted: #a3b1cc;
-  --panel: rgba(15, 23, 42, 0.65);
-  --panel-strong: rgba(6, 10, 22, 0.72);
-  --panel-border: rgba(148, 163, 184, 0.25);
-  --panel-shadow: 0 24px 60px rgba(4, 7, 20, 0.45);
+  --text: #e4e6f0;
+  --muted: rgba(228, 230, 240, 0.38);
+  --muted-strong: rgba(228, 230, 240, 0.62);
+  --panel: rgba(255, 255, 255, 0.018);
+  --panel-strong: #0b0c16;
+  --panel-border: rgba(255, 255, 255, 0.07);
+  --panel-border-hover: rgba(255, 255, 255, 0.12);
+  --panel-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+  --accent: #a8ff40;
+  --accent-hover: #bfff5a;
+  --accent-ink: #06070d;
+  --danger: #ff4060;
+  --display: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
 * {
@@ -29,20 +37,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 10%, rgba(94, 234, 212, 0.22), transparent 45%),
-    radial-gradient(circle at 80% 20%, rgba(248, 113, 113, 0.25), transparent 40%),
-    radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.25), transparent 50%),
-    #0b1020;
+  background: radial-gradient(circle at 72% 8%, rgba(168, 255, 64, 0.035), transparent 25rem), #06070d;
   color: var(--text);
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(120deg, rgba(3, 7, 18, 0.9), rgba(2, 6, 23, 0.4));
-  pointer-events: none;
-  z-index: -1;
 }
 
 a {
