@@ -3031,5 +3031,6 @@ export const pingPageMap = Object.fromEntries(pingPages.map((page) => [page.path
 export const navPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages]
   .filter((page) => page.path !== '/' && page.showInNav !== false)
 
-export const toolPages = [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages]
-  .filter((page) => page.path !== '/')
+// Alias routes remain in pageMap for direct access and prerendering. Repeated
+// UI grids only surface the nine canonical utilities.
+export const toolPages = navPages
