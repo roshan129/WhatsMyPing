@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { blogPages, navPages, toolPages } from '../seoContent'
 
-const FEATURED_TOOL_PATHS = ['/ping-test', '/what-is-my-ip', '/dns-lookup', '/json-formatter']
+const FEATURED_TOOL_PATHS = [
+  '/ping-test',
+  '/what-is-my-ip',
+  '/dns-lookup',
+  '/json-formatter',
+  '/base64-encode',
+  '/url-encode',
+  '/uuid-generator',
+  '/jwt-decoder',
+  '/timestamp-converter',
+]
 const FEATURED_BLOG_PATHS = [
   '/blog/what-is-a-ping-test',
   '/blog/what-is-dns',
@@ -222,10 +232,32 @@ function PingPage({ page }) {
           <h1>{page.h1}</h1>
           <p className="subtitle">{page.subtitle}</p>
         </div>
-        <div className="hero-card">
-          <p className="hero-label">Session status</p>
-          <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
-          <p className="hero-meta">{page.heroNote}</p>
+        <div className={`hero-card ${isHomePage ? 'terminal-card' : ''}`}>
+          {isHomePage ? (
+            <>
+              <div className="terminal-bar">
+                <span />
+                <span />
+                <span />
+                <small>roswag — terminal</small>
+              </div>
+              <div className="terminal-lines" aria-label="Roswag tool preview">
+                <p><b>$</b> ping 8.8.8.8</p>
+                <p>seq=1&nbsp; time=11ms&nbsp; ttl=57</p>
+                <p><b>$</b> your-ip</p>
+                <p>203.0.113.47&nbsp; IPv4</p>
+                <p><b>$</b> uuid generate</p>
+                <p className="terminal-accent">7f8e9d2c-4a3b-4f1e-8c6d</p>
+                <p className="terminal-prompt"><b>$</b> <i /></p>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="hero-label">Session status</p>
+              <p className="hero-value">{isContinuous ? 'Running' : 'Idle'}</p>
+              <p className="hero-meta">{page.heroNote}</p>
+            </>
+          )}
         </div>
       </header>
 
