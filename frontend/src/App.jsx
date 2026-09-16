@@ -9,6 +9,7 @@ import JsonPage from './pages/JsonPage'
 import JwtPage from './pages/JwtPage'
 import PingPage from './pages/PingPage'
 import TimestampPage from './pages/TimestampPage'
+import ToolsIndexPage from './pages/ToolsIndexPage'
 import UuidPage from './pages/UuidPage'
 import UrlPage from './pages/UrlPage'
 import { getRouteForPath } from './routes'
@@ -83,6 +84,10 @@ function App({ initialPath = null }) {
 
   if (page.toolType === 'blog-index') {
     return <BlogIndexPage page={page} />
+  }
+
+  if (page.toolType === 'tools-index') {
+    return <ToolsIndexPage page={page} />
   }
 
   return <PingPage page={page} />
