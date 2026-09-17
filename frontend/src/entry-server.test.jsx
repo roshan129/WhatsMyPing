@@ -40,6 +40,7 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/epoch-converter')
     expect(prerenderRoutes).toContain('/convert-timestamp')
     expect(prerenderRoutes).toContain('/timestamp-to-date')
+    expect(prerenderRoutes).toContain('/tools')
     expect(prerenderRoutes).toContain('/blog')
     expect(prerenderRoutes).toContain('/blog/what-is-a-ping-test')
     expect(prerenderRoutes).toContain('/blog/what-is-dns')
@@ -232,5 +233,26 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Browse Roswag blog guides')
     expect(result.appHtml).toContain('Developer Guides and Tutorials')
+  })
+
+  it('renders the tools directory with focused tool and blog links', () => {
+    const result = render('/tools')
+
+    expect(result.head).toMatchObject({
+      title: 'All Roswag Tools - Developer and Network Utilities',
+    })
+    expect(result.appHtml).toContain('All Developer and Network Tools')
+    expect(result.appHtml).toContain('href="/mx-lookup/"')
+    expect(result.appHtml).toContain('href="/jwt-parser/"')
+    expect(result.appHtml).toContain('href="/blog/"')
+  })
+
+  it('links tool variants to their related guide', () => {
+    const result = render('/dns-lookup')
+
+    expect(result.appHtml).toContain('href="/dns-check/"')
+    expect(result.appHtml).toContain('href="/mx-lookup/"')
+    expect(result.appHtml).toContain('href="/txt-lookup/"')
+    expect(result.appHtml).toContain('href="/blog/what-is-dns/"')
   })
 })

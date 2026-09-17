@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { navPages, toolPages } from '../seoContent'
+import { getGuideForToolType, getRelatedToolPages, navPages } from '../seoContent'
 
 const updateMetadata = (title, description) => {
   document.title = title
@@ -134,6 +134,8 @@ function UuidPage({ page }) {
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
         <nav className="top-nav" aria-label="Popular tools">
+          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link">Blog</AppLink>
           {navPages.map((toolPage) => (
             <AppLink
               key={toolPage.path}
@@ -323,14 +325,20 @@ function UuidPage({ page }) {
         </div>
 
         <div className="tool-links">
-          <h2>Popular Tools</h2>
+          <h2>Related UUID Tools and Guide</h2>
           <div className="tool-grid">
-            {toolPages.map((toolPage) => (
+            {getRelatedToolPages(page).map((toolPage) => (
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
                 <span className="tool-card-title">{toolPage.navLabel}</span>
                 <span className="tool-card-copy">{toolPage.description}</span>
               </AppLink>
             ))}
+            {getGuideForToolType(page.toolType) && (
+              <AppLink href={getGuideForToolType(page.toolType).path} className="tool-card">
+                <span className="tool-card-title">UUID Guide</span>
+                <span className="tool-card-copy">{getGuideForToolType(page.toolType).description}</span>
+              </AppLink>
+            )}
           </div>
         </div>
       </section>

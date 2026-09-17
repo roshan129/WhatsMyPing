@@ -69,6 +69,10 @@ function BlogPage({ page }) {
           <span className="brand">Roswag</span>
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
+        <nav className="top-nav" aria-label="Roswag navigation">
+          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link">Blog</AppLink>
+        </nav>
       </header>
 
       <article className="card blog-article">

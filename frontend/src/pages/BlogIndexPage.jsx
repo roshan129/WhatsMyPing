@@ -60,6 +60,10 @@ function BlogIndexPage({ page }) {
           <span className="brand">Roswag</span>
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
+        <nav className="top-nav" aria-label="Roswag navigation">
+          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link active">Blog</AppLink>
+        </nav>
       </header>
 
       <section className="card home-hub" aria-label="Roswag blog posts">
