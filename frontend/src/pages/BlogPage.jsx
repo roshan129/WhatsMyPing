@@ -72,6 +72,7 @@ function BlogPage({ page }) {
         <nav className="top-nav" aria-label="Roswag navigation">
           <AppLink href="/tools" className="nav-link">All Tools</AppLink>
           <AppLink href="/blog" className="nav-link">Blog</AppLink>
+          <AppLink href="/about" className="nav-link">About</AppLink>
         </nav>
       </header>
 

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import PingPage from './PingPage'
 import { pingPageMap } from '../seoContent'
@@ -51,15 +51,20 @@ describe('PingPage', () => {
     ).toBeInTheDocument()
   })
 
-  it('shows only the main tool entries in the top navigation', () => {
+  it('shows only the global destinations in the top navigation', () => {
     render(<PingPage page={pingPageMap['/ping-google']} />)
 
-    const nav = screen.getByRole('navigation', { name: 'Popular tools' })
+    const nav = screen.getByRole('navigation', { name: 'Roswag navigation' })
+    const navigation = within(nav)
 
-    expect(screen.getByRole('link', { name: 'Ping Test' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'What Is My IP' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'DNS Lookup' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'JSON Formatter' })).toBeInTheDocument()
+    expect(navigation.getByRole('link', { name: 'All Tools' })).toBeInTheDocument()
+    expect(navigation.getByRole('link', { name: 'Blog' })).toBeInTheDocument()
+    expect(navigation.getByRole('link', { name: 'About' })).toBeInTheDocument()
+    expect(navigation.getAllByRole('link')).toHaveLength(3)
+    expect(nav).not.toHaveTextContent('Ping Test')
+    expect(nav).not.toHaveTextContent('What Is My IP')
+    expect(nav).not.toHaveTextContent('DNS Lookup')
+    expect(nav).not.toHaveTextContent('JSON Formatter')
     expect(nav).not.toHaveTextContent('Ping Google')
     expect(nav).not.toHaveTextContent('Ping Cloudflare')
     expect(nav).not.toHaveTextContent('Ping Discord')

@@ -41,6 +41,7 @@ describe('prerenderRoutes', () => {
     expect(prerenderRoutes).toContain('/convert-timestamp')
     expect(prerenderRoutes).toContain('/timestamp-to-date')
     expect(prerenderRoutes).toContain('/tools')
+    expect(prerenderRoutes).toContain('/about')
     expect(prerenderRoutes).toContain('/blog')
     expect(prerenderRoutes).toContain('/blog/what-is-a-ping-test')
     expect(prerenderRoutes).toContain('/blog/what-is-dns')
@@ -245,6 +246,17 @@ describe('render', () => {
     expect(result.appHtml).toContain('href="/mx-lookup/"')
     expect(result.appHtml).toContain('href="/jwt-parser/"')
     expect(result.appHtml).toContain('href="/blog/"')
+  })
+
+  it('renders the About page with creator and support information', () => {
+    const result = render('/about')
+
+    expect(result.head).toMatchObject({
+      title: 'About Roswag - Free Developer and Network Tools',
+    })
+    expect(result.head.description).toContain('Learn why Roshan built Roswag')
+    expect(result.appHtml).toContain('Useful Tools, Built With Care')
+    expect(result.appHtml).toContain('mailto:support@roswag.com')
   })
 
   it('links tool variants to their related guide', () => {
