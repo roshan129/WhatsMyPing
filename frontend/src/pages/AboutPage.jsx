@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const supportEmail = import.meta.env.VITE_SUPPORT_EMAIL || 'support@roswag.com'
+const supportEmail = import.meta.env.VITE_SUPPORT_EMAIL || 'roswag369@gmail.com'
 const buyMeACoffeeUrl = import.meta.env.VITE_BUY_ME_A_COFFEE_URL || ''
 
 const updateMetadata = (title, description) => {

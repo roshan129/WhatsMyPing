@@ -256,7 +256,7 @@ describe('render', () => {
     })
     expect(result.head.description).toContain('Learn why Roshan built Roswag')
     expect(result.appHtml).toContain('Useful Tools, Built With Care')
-    expect(result.appHtml).toContain('mailto:support@roswag.com')
+    expect(result.appHtml).toContain('mailto:roswag369@gmail.com')
   })
 
   it('links tool variants to their related guide', () => {
