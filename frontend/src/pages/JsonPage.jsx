@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { navPages, toolPages } from '../seoContent'
+import { getGuideForToolType, getRelatedToolPages } from '../seoContent'
 
 const updateMetadata = (title, description) => {
   document.title = title
@@ -139,16 +139,10 @@ function JsonPage({ page }) {
           <span className="brand">Roswag</span>
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
-        <nav className="top-nav" aria-label="Popular tools">
-          {navPages.map((toolPage) => (
-            <AppLink
-              key={toolPage.path}
-              href={toolPage.path}
-              className={`nav-link ${toolPage.path === page.path ? 'active' : ''}`}
-            >
-              {toolPage.navLabel}
-            </AppLink>
-          ))}
+        <nav className="top-nav" aria-label="Roswag navigation">
+          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link">Blog</AppLink>
+          <AppLink href="/about" className="nav-link">About</AppLink>
         </nav>
       </header>
 
@@ -301,14 +295,20 @@ function JsonPage({ page }) {
         </div>
 
         <div className="tool-links">
-          <h2>Popular Tools</h2>
+          <h2>Related JSON Tools and Guide</h2>
           <div className="tool-grid">
-            {toolPages.map((toolPage) => (
+            {getRelatedToolPages(page).map((toolPage) => (
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
                 <span className="tool-card-title">{toolPage.navLabel}</span>
                 <span className="tool-card-copy">{toolPage.description}</span>
               </AppLink>
             ))}
+            {getGuideForToolType(page.toolType) && (
+              <AppLink href={getGuideForToolType(page.toolType).path} className="tool-card">
+                <span className="tool-card-title">JSON Guide</span>
+                <span className="tool-card-copy">{getGuideForToolType(page.toolType).description}</span>
+              </AppLink>
+            )}
           </div>
         </div>
       </section>

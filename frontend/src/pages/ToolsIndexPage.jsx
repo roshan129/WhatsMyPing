@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
-import { blogPages } from '../seoContent'
+import { toolGroups } from '../seoContent'
 
 const updateMetadata = (title, description) => {
   document.title = title
 
-  let descriptionMeta = document.querySelector('meta[name="description"]')
-  if (!descriptionMeta) {
-    descriptionMeta = document.createElement('meta')
-    descriptionMeta.setAttribute('name', 'description')
-    document.head.appendChild(descriptionMeta)
+  let meta = document.querySelector('meta[name="description"]')
+  if (!meta) {
+    meta = document.createElement('meta')
+    meta.setAttribute('name', 'description')
+    document.head.appendChild(meta)
   }
-  descriptionMeta.setAttribute('content', description)
+  meta.setAttribute('content', description)
 }
 
 const toTrailingSlashPath = (value) => {
@@ -48,7 +48,7 @@ const AppLink = ({ href, children, className }) => {
   )
 }
 
-function BlogIndexPage({ page }) {
+function ToolsIndexPage({ page }) {
   useEffect(() => {
     updateMetadata(page.title, page.description)
   }, [page.description, page.title])
@@ -61,29 +61,43 @@ function BlogIndexPage({ page }) {
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
         <nav className="top-nav" aria-label="Roswag navigation">
-          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
-          <AppLink href="/blog" className="nav-link active">Blog</AppLink>
+          <AppLink href="/tools" className="nav-link active">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link">Blog</AppLink>
           <AppLink href="/about" className="nav-link">About</AppLink>
         </nav>
       </header>
 
-      <section className="card home-hub" aria-label="Roswag blog posts">
+      <section className="card tools-directory" aria-label="All Roswag tools">
         <div className="learn-header home-hub-header">
           <p className="eyebrow">{page.eyebrow}</p>
           <h1>{page.h1}</h1>
           <p>{page.subtitle}</p>
         </div>
-        <div className="tool-grid">
-          {blogPages.map((blog) => (
-            <AppLink key={blog.path} href={blog.path} className="tool-card">
-              <span className="tool-card-title">{blog.h1}</span>
-              <span className="tool-card-copy">{blog.description}</span>
-            </AppLink>
-          ))}
+
+        {toolGroups.map((group) => (
+          <section key={group.toolType} className="tool-directory-section">
+            <h2>{group.label}</h2>
+            <div className="tool-grid">
+              {group.pages.map((toolPage) => (
+                <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
+                  <span className="tool-card-title">{toolPage.navLabel}</span>
+                  <span className="tool-card-copy">{toolPage.description}</span>
+                </AppLink>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <div className="blog-cta">
+          <h2>Learn how the tools work</h2>
+          <p>Read practical guides for the networking and developer concepts behind each utility.</p>
+          <AppLink href="/blog" className="primary-button blog-cta-link">
+            Browse the Roswag Blog
+          </AppLink>
         </div>
       </section>
     </main>
   )
 }
 
-export default BlogIndexPage
+export default ToolsIndexPage

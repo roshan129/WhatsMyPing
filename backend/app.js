@@ -111,6 +111,8 @@ const createApp = (services = {}) => {
       '/epoch-converter',
       '/convert-timestamp',
       '/timestamp-to-date',
+      '/tools',
+      '/about',
       '/blog',
       '/blog/what-is-a-ping-test',
       '/blog/what-is-dns',

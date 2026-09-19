@@ -36,6 +36,8 @@ describe('getRouteForPath', () => {
     expect(getRouteForPath('/blog/what-is-uuid').toolType).toBe('blog')
     expect(getRouteForPath('/blog/what-is-a-timestamp').toolType).toBe('blog')
     expect(getRouteForPath('/blog').toolType).toBe('blog-index')
+    expect(getRouteForPath('/tools').toolType).toBe('tools-index')
+    expect(getRouteForPath('/about').toolType).toBe('about')
     expect(getRouteForPath('/').path).toBe('/')
   })
 

@@ -3019,8 +3019,70 @@ export const blogIndexPage = {
     'Read practical guides behind each Roswag tool and learn core concepts with examples you can apply quickly.',
 }
 
+export const toolsIndexPage = {
+  path: '/tools',
+  toolType: 'tools-index',
+  navLabel: 'All Tools',
+  showInNav: false,
+  title: 'All Roswag Tools - Developer and Network Utilities',
+  description:
+    'Browse every Roswag developer and network utility, including ping, IP, DNS, JSON, Base64, URL, UUID, JWT, and timestamp tools.',
+  eyebrow: 'Roswag tools',
+  h1: 'All Developer and Network Tools',
+  subtitle:
+    'Choose a utility by category, including focused pages for the exact lookup, conversion, or debugging task you need.',
+}
+
+export const aboutPage = {
+  path: '/about',
+  toolType: 'about',
+  navLabel: 'About',
+  showInNav: false,
+  title: 'About Roswag - Free Developer and Network Tools',
+  description:
+    'Learn why Roshan built Roswag, how to send support and feedback, and how to support the continued development of its free online tools.',
+  eyebrow: 'About Roswag',
+  h1: 'Useful Tools, Built With Care',
+  subtitle:
+    'Roswag is an independent collection of fast, focused utilities for developers, troubleshooters, and curious people.',
+}
+
+export const toolGroups = [
+  { toolType: 'ping', label: 'Ping and Latency Tools', pages: pingPages.filter((page) => page.path !== '/') },
+  { toolType: 'ip', label: 'IP Address Tools', pages: ipPages },
+  { toolType: 'dns', label: 'DNS Tools', pages: dnsPages },
+  { toolType: 'json', label: 'JSON Tools', pages: jsonPages },
+  { toolType: 'base64', label: 'Base64 Tools', pages: base64Pages },
+  { toolType: 'url', label: 'URL Tools', pages: urlPages },
+  { toolType: 'uuid', label: 'UUID Tools', pages: uuidPages },
+  { toolType: 'jwt', label: 'JWT Tools', pages: jwtPages },
+  { toolType: 'timestamp', label: 'Timestamp Tools', pages: timestampPages },
+]
+
+export const allToolPages = toolGroups.flatMap((group) => group.pages)
+
+const guidePathByToolType = {
+  ping: '/blog/what-is-a-ping-test',
+  ip: '/blog/what-is-an-ip-address',
+  dns: '/blog/what-is-dns',
+  json: '/blog/what-is-json-and-how-to-format-json',
+  base64: '/blog/what-is-base64-encoding-and-decoding',
+  url: '/blog/what-is-url-encoding-and-decoding',
+  uuid: '/blog/what-is-uuid',
+  jwt: '/blog/what-is-jwt-and-how-jwt-works',
+  timestamp: '/blog/what-is-a-timestamp',
+}
+
+export const getRelatedToolPages = (page) =>
+  allToolPages.filter(
+    (toolPage) => toolPage.toolType === page.toolType && toolPage.path !== page.path
+  )
+
+export const getGuideForToolType = (toolType) =>
+  blogPages.find((page) => page.path === guidePathByToolType[toolType]) ?? null
+
 export const pageMap = Object.fromEntries(
-  [...pingPages, ...ipPages, ...dnsPages, ...jsonPages, ...base64Pages, ...urlPages, ...uuidPages, ...jwtPages, ...timestampPages, ...blogPages, blogIndexPage].map((page) => [
+  [...allToolPages, pingPages.find((page) => page.path === '/'), ...blogPages, blogIndexPage, toolsIndexPage, aboutPage].map((page) => [
     page.path,
     page,
   ])

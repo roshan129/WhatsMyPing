@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { blogPages, navPages, toolPages } from '../seoContent'
+import {
+  blogPages,
+  getGuideForToolType,
+  getRelatedToolPages,
+  toolPages,
+} from '../seoContent'
 
 const FEATURED_TOOL_PATHS = [
   '/ping-test',
@@ -204,7 +209,8 @@ function PingPage({ page }) {
       : []
   const featuredTools = toolPages.filter((toolPage) => FEATURED_TOOL_PATHS.includes(toolPage.path))
   const featuredBlogs = blogPages.filter((blogPage) => FEATURED_BLOG_PATHS.includes(blogPage.path))
-  const toolLinkPages = isHomePage ? featuredTools : toolPages
+  const toolLinkPages = isHomePage ? featuredTools : getRelatedToolPages(page)
+  const relatedGuide = getGuideForToolType(page.toolType)
 
   return (
     <main className="app">
@@ -213,16 +219,10 @@ function PingPage({ page }) {
           <span className="brand">Roswag</span>
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
-        <nav className="top-nav" aria-label="Popular tools">
-          {navPages.map((toolPage) => (
-            <AppLink
-              key={toolPage.path}
-              href={toolPage.path}
-              className={`nav-link ${toolPage.path === page.path ? 'active' : ''}`}
-            >
-              {toolPage.navLabel}
-            </AppLink>
-          ))}
+        <nav className="top-nav" aria-label="Roswag navigation">
+          <AppLink href="/tools" className="nav-link">All Tools</AppLink>
+          <AppLink href="/blog" className="nav-link">Blog</AppLink>
+          <AppLink href="/about" className="nav-link">About</AppLink>
         </nav>
       </header>
 
@@ -531,7 +531,7 @@ function PingPage({ page }) {
         </div>
 
         <div className="tool-links">
-          <h2>{isHomePage ? 'Explore Roswag Tools' : 'Popular Ping Tests'}</h2>
+          <h2>{isHomePage ? 'Explore Roswag Tools' : 'Related Ping Tests and Guide'}</h2>
           <div className="tool-grid">
             {toolLinkPages.map((toolPage) => (
               <AppLink key={toolPage.path} href={toolPage.path} className="tool-card">
@@ -539,6 +539,12 @@ function PingPage({ page }) {
                 <span className="tool-card-copy">{toolPage.description}</span>
               </AppLink>
             ))}
+            {!isHomePage && relatedGuide && (
+              <AppLink href={relatedGuide.path} className="tool-card">
+                <span className="tool-card-title">Ping Test Guide</span>
+                <span className="tool-card-copy">{relatedGuide.description}</span>
+              </AppLink>
+            )}
           </div>
         </div>
       </section>
