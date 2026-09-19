@@ -3033,6 +3033,20 @@ export const toolsIndexPage = {
     'Choose a utility by category, including focused pages for the exact lookup, conversion, or debugging task you need.',
 }
 
+export const aboutPage = {
+  path: '/about',
+  toolType: 'about',
+  navLabel: 'About',
+  showInNav: false,
+  title: 'About Roswag - Free Developer and Network Tools',
+  description:
+    'Learn why Roshan built Roswag, how to send support and feedback, and how to support the continued development of its free online tools.',
+  eyebrow: 'About Roswag',
+  h1: 'Useful Tools, Built With Care',
+  subtitle:
+    'Roswag is an independent collection of fast, focused utilities for developers, troubleshooters, and curious people.',
+}
+
 export const toolGroups = [
   { toolType: 'ping', label: 'Ping and Latency Tools', pages: pingPages.filter((page) => page.path !== '/') },
   { toolType: 'ip', label: 'IP Address Tools', pages: ipPages },
@@ -3068,7 +3082,7 @@ export const getGuideForToolType = (toolType) =>
   blogPages.find((page) => page.path === guidePathByToolType[toolType]) ?? null
 
 export const pageMap = Object.fromEntries(
-  [...allToolPages, pingPages.find((page) => page.path === '/'), ...blogPages, blogIndexPage, toolsIndexPage].map((page) => [
+  [...allToolPages, pingPages.find((page) => page.path === '/'), ...blogPages, blogIndexPage, toolsIndexPage, aboutPage].map((page) => [
     page.path,
     page,
   ])

@@ -14,8 +14,8 @@
   background-color: #06070d;
 
   --text: #e4e6f0;
-  --muted: rgba(228, 230, 240, 0.38);
-  --muted-strong: rgba(228, 230, 240, 0.62);
+  --muted: rgba(228, 230, 240, 0.64);
+  --muted-strong: rgba(228, 230, 240, 0.78);
   --panel: rgba(255, 255, 255, 0.018);
   --panel-strong: #0b0c16;
   --panel-border: rgba(255, 255, 255, 0.07);

@@ -3,7 +3,6 @@ import {
   blogPages,
   getGuideForToolType,
   getRelatedToolPages,
-  navPages,
   toolPages,
 } from '../seoContent'
 
@@ -220,18 +219,10 @@ function PingPage({ page }) {
           <span className="brand">Roswag</span>
           <span className="brand-subtitle">Developer &amp; Network Tools</span>
         </AppLink>
-        <nav className="top-nav" aria-label="Popular tools">
+        <nav className="top-nav" aria-label="Roswag navigation">
           <AppLink href="/tools" className="nav-link">All Tools</AppLink>
           <AppLink href="/blog" className="nav-link">Blog</AppLink>
-          {navPages.map((toolPage) => (
-            <AppLink
-              key={toolPage.path}
-              href={toolPage.path}
-              className={`nav-link ${toolPage.path === page.path ? 'active' : ''}`}
-            >
-              {toolPage.navLabel}
-            </AppLink>
-          ))}
+          <AppLink href="/about" className="nav-link">About</AppLink>
         </nav>
       </header>
 

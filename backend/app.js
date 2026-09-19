@@ -112,6 +112,7 @@ const createApp = (services = {}) => {
       '/convert-timestamp',
       '/timestamp-to-date',
       '/tools',
+      '/about',
       '/blog',
       '/blog/what-is-a-ping-test',
       '/blog/what-is-dns',

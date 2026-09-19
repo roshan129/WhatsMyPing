@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import AboutPage from './pages/AboutPage'
 import Base64Page from './pages/Base64Page'
 import BlogIndexPage from './pages/BlogIndexPage'
 import BlogPage from './pages/BlogPage'
@@ -28,6 +29,7 @@ const getInitialPathname = (initialPath) => {
 
 function App({ initialPath = null }) {
   const [pathname, setPathname] = useState(() => getInitialPathname(initialPath))
+  const previousPathname = useRef(pathname)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -44,7 +46,20 @@ function App({ initialPath = null }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || previousPathname.current === pathname) {
+      return
+    }
+
+    previousPathname.current = pathname
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+
   const page = getRouteForPath(pathname)
+
+  if (page.toolType === 'about') {
+    return <AboutPage page={page} />
+  }
 
   if (page.toolType === 'ip') {
     return <IpPage page={page} />
